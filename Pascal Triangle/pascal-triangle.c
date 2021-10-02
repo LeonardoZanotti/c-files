@@ -2,16 +2,23 @@
 
 int main()
 {
-    for (int i = 1; i < 10; i++)
+    int value = 1;
+
+    printf("%d \n", value);
+
+    for (int l = 1; l <= 5; l++)
     {
-        if (i % 2 == 0)
+        value = 1;
+
+        printf("%d \t", value);
+
+        for (int c = 1; c <= l; c++)
         {
-            printf("%d \n", i);
+            value = (value * (l - c + 1)) / c;
+            printf("%d \t", value);
         }
-        else
-        {
-            printf("\t %d \n", i);
-        }
+        printf("\n");
     }
+
     return 0;
 }
