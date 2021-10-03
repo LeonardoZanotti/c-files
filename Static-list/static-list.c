@@ -9,7 +9,7 @@ typedef struct Vetor
     int start, end;
 } List_type;
 
-// Auxiliar methods
+// Auxiliar method
 // Verify if list is full
 int full_list(List_type *v)
 {
@@ -18,6 +18,7 @@ int full_list(List_type *v)
     return (*v).end == MAX_VETOR;
 }
 
+// Auxiliar method
 // Verify if list is empty
 int empty_list(List_type *v)
 {
@@ -74,7 +75,7 @@ int insert_start(List_type *v, int data)
     return 0;
 }
 
-// Insert in the start of the list
+// Insert item sorted in the list
 int insert_sorted(List_type *v, int data)
 {
     if (!full_list(v))
@@ -100,13 +101,23 @@ int insert_sorted(List_type *v, int data)
 // Remove element from the start of the list
 int remove_start(List_type *v, int *data)
 {
-    return 0;
+    if (empty_list(v))
+    {
+        return 0;
+    }
+    (*v).end--;
+    return 1;
 }
 
 // Remove element from the end of the list
 int remove_end(List_type *v, int *data)
 {
-    return 0;
+    if (empty_list(v))
+    {
+        return 0;
+    }
+    (*v).end--;
+    return 1;
 }
 
 // Remove element from the middle of the list by index
@@ -250,9 +261,7 @@ int main()
     return 0;
 }
 
-// Inserir no meio(ordenado)
 // Remover do início
-// Remover do fim
 // Consultar pelo index
 
 // References
