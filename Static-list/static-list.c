@@ -9,6 +9,26 @@ typedef struct Vetor
     int start, end;
 } List_type;
 
+// Create list
+List_type *create_list(int data[MAX_VETOR], int start, int end)
+{
+    List_type *list = (List_type *)malloc(sizeof(List_type));
+
+    if (list != NULL)
+    {
+        (*list).start = 0;
+        (*list).end = 0;
+    }
+
+    return list;
+}
+
+// Free the memory allocated to the list
+void free_list(List_type *list)
+{
+    free(list);
+}
+
 // Insert in the end of the list
 int insert_end(List_type *v, int data)
 {
@@ -174,8 +194,6 @@ int main()
     return 0;
 }
 
-// Criar a lista
-// Liberar a lista
 // Verificar se lista cheia
 // Verifica se lista vazia
 // Inserir no início
