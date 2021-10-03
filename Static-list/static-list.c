@@ -126,7 +126,7 @@ int remove_start(List_type *v)
 
     (*v).end--;
 
-    print("Removed element from start of list");
+    printf("Removed element from start of list");
 
     return 1;
 }
@@ -141,7 +141,7 @@ int remove_end(List_type *v)
 
     (*v).end--;
 
-    print("Removed element from end of list");
+    printf("Removed element from end of list");
 
     return 1;
 }
@@ -292,7 +292,6 @@ int main()
             break;
         case 8:
             remove_middle(list, 1);
-            printf("8");
             break;
         case 9:
             printf("9");
