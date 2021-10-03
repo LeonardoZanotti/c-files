@@ -159,13 +159,24 @@ int remove_middle(List_type *v, int index)
     return 0;
 }
 
+// Find data by index
+int search_by_index(List_type *v, int *data, int index)
+{
+    if (v == NULL || index < 0 || index >= (*v).end)
+    {
+        return 0;
+    }
+    *data = (*v).data[index];
+    return 1;
+}
+
 // Find data by content
-int search_by_content(List_type v, int data, int *index)
+int search_by_content(List_type *v, int data, int *index)
 {
     int i, found = 0;
-    for (i = 0; i < v.end - 1; i++)
+    for (i = 0; i < (*v).end - 1; i++)
     {
-        if (v.data[i] == data)
+        if ((*v).data[i] == data)
         {
             *index = i;
             found = 1;
@@ -178,13 +189,13 @@ int search_by_content(List_type v, int data, int *index)
 }
 
 // Print all the list data
-int print_list(List_type v)
+int print_list(List_type *v)
 {
     int i;
-    if (!empty_list(&v))
+    if (!empty_list(v))
     {
-        for (i = 0; i < v.end; i++)
-            printf("\n%d", v.data[i]);
+        for (i = 0; i < (*v).end; i++)
+            printf("\n%d", (*v).data[i]);
         return 1;
     }
     return 0;
@@ -264,8 +275,6 @@ int main()
 
     return 0;
 }
-
-// Consultar pelo index
 
 // References
 // https://www.youtube.com/watch?v=_LWwqbHU8L0      Using OBS
