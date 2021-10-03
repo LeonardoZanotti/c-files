@@ -183,19 +183,6 @@ int remove_middle(List_type *v, int index)
     return 0;
 }
 
-// Find data by index
-int search_by_index(List_type *v, int *data, int index)
-{
-    if (v == NULL || index < 0 || index >= (*v).end)
-    {
-        return 0;
-    }
-
-    *data = (*v).data[index];
-
-    return 1;
-}
-
 // Find data by content
 int search_by_content(List_type *v, int data, int *index)
 {
@@ -215,6 +202,19 @@ int search_by_content(List_type *v, int data, int *index)
         return 1;
 
     return 0;
+}
+
+// Find data by index
+int search_by_index(List_type *v, int *data, int index)
+{
+    if (v == NULL || index < 0 || index >= (*v).end)
+    {
+        return 0;
+    }
+
+    *data = (*v).data[index];
+
+    return 1;
 }
 
 // Print all the list data
