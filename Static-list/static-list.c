@@ -80,17 +80,20 @@ int insert_sorted(List_type *v, int data)
 {
     if (!full_list(v))
     {
-        int k = 0, i;
+        int k = 0, i = 0;
 
         while (k < (*v).end && (*v).data[k] < data)
         {
             k++;
         }
 
-        for (i = (*v).end - 1; i >= k; i--)
-            (*v).data[i + 1] = (*v).data[i];
+        if (k != 0)
+        {
+            for (i = (*v).end - 1; i >= k; i--)
+                (*v).data[i + 1] = (*v).data[i];
+        }
 
-        (*v).data[i] = data;
+        (*v).data[k] = data;
         (*v).end++;
 
         return 1;
