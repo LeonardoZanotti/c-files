@@ -28,7 +28,7 @@ int empty_list(List_type *v)
 }
 
 // Create list
-List_type *create_list(int data[MAX_VETOR], int start, int end)
+List_type *create_list()
 {
     List_type *list = (List_type *)malloc(sizeof(List_type));
 
@@ -47,18 +47,6 @@ void free_list(List_type *v)
     free(v);
 }
 
-// Insert in the end of the list
-int insert_end(List_type *v, int data)
-{
-    if (!full_list(v))
-    {
-        (*v).data[(*v).end] = data;
-        (*v).end++;
-        return 1;
-    }
-    return 0;
-}
-
 // Insert in the start of the list
 int insert_start(List_type *v, int data)
 {
@@ -70,6 +58,18 @@ int insert_start(List_type *v, int data)
         (*v).data[0] = data;
         (*v).end++;
 
+        return 1;
+    }
+    return 0;
+}
+
+// Insert in the end of the list
+int insert_end(List_type *v, int data)
+{
+    if (!full_list(v))
+    {
+        (*v).data[(*v).end] = data;
+        (*v).end++;
         return 1;
     }
     return 0;
@@ -196,6 +196,7 @@ int print_list(List_type *v)
     {
         for (i = 0; i < (*v).end; i++)
             printf("\n%d", (*v).data[i]);
+        printf("\n");
         return 1;
     }
     return 0;
@@ -205,6 +206,7 @@ int main()
 {
     char option[3];
     int optionInt = 0;
+    List_type *list;
 
     while (optionInt != 12)
     {
@@ -233,19 +235,24 @@ int main()
         switch (optionInt)
         {
         case 1:
-            printf("1");
+            list = create_list();
+            printf("\nList created!\n");
             break;
         case 2:
-            printf("2");
+            free_list(list);
+            printf("\nCleared list from memory\n");
             break;
         case 3:
-            printf("3");
+            insert_start(list, 1);
+            printf("Inserted %d at the start of the list\n", 1);
             break;
         case 4:
-            printf("4");
+            insert_end(list, 2);
+            printf("Inserted %d at the end of the list\n", 2);
             break;
         case 5:
-            printf("5");
+            insert_sorted(list, 3);
+            printf("Inserted %d at in the list sorted\n", 3);
             break;
         case 6:
             printf("6");
@@ -263,10 +270,12 @@ int main()
             printf("10");
             break;
         case 11:
-            printf("11");
+            printf("\nList:");
+            print_list(list);
             break;
         case 12:
-            printf("12");
+            printf("\nClearing list from memory and exiting...\n");
+            free_list(list);
             break;
         default:
             break;
