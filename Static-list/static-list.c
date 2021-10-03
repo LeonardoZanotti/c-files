@@ -37,6 +37,16 @@ void print_search_result(int searchResult)
     }
 }
 
+// Auxiliar method
+// Read param value to use in the functions
+void read_param(int *param)
+{
+    char input[3];
+    printf("\nValue for the operation: ");
+    scanf("%s", input);
+    *param = atoi(input);
+}
+
 // Create list
 List_type *create_list()
 {
@@ -105,10 +115,13 @@ int insert_sorted(List_type *v, int data)
             k++;
         }
 
-        if (k != 0)
+        if ((*v).end != 0)
         {
             for (i = (*v).end - 1; i >= k; i--)
+            {
+                printf("%d", i);
                 (*v).data[i + 1] = (*v).data[i];
+            }
         }
 
         (*v).data[k] = data;
@@ -136,7 +149,7 @@ int remove_start(List_type *v)
 
     (*v).end--;
 
-    printf("Removed element from start of list");
+    printf("Removed element from start of list\n");
 
     return 1;
 }
@@ -151,7 +164,7 @@ int remove_end(List_type *v)
 
     (*v).end--;
 
-    printf("Removed element from end of list");
+    printf("Removed element from end of list\n");
 
     return 1;
 }
@@ -183,7 +196,7 @@ int remove_middle(List_type *v, int index)
 
                 (*v).end--;
 
-                printf("\nThe element %d has been removed from index %d", data, index);
+                printf("\nThe element %d has been removed from index %d\n", data, index);
 
                 return 1;
             }
@@ -253,6 +266,7 @@ int main()
     int optionInt = 0;
     List_type *list;
     int searchResult;
+    int param;
 
     while (optionInt != 12)
     {
@@ -287,13 +301,16 @@ int main()
             free_list(list);
             break;
         case 3:
-            insert_start(list, 1);
+            read_param(&param);
+            insert_start(list, param);
             break;
         case 4:
-            insert_end(list, 2);
+            read_param(&param);
+            insert_end(list, param);
             break;
         case 5:
-            insert_sorted(list, 3);
+            read_param(&param);
+            insert_sorted(list, param);
             break;
         case 6:
             remove_start(list);
@@ -302,14 +319,17 @@ int main()
             remove_end(list);
             break;
         case 8:
-            remove_middle(list, 1);
+            read_param(&param);
+            remove_middle(list, param);
             break;
         case 9:
-            search_by_content(list, 2, &searchResult);
+            read_param(&param);
+            search_by_content(list, param, &searchResult);
             print_search_result(searchResult);
             break;
         case 10:
-            search_by_index(list, &searchResult, 2);
+            read_param(&param);
+            search_by_index(list, &searchResult, param);
             print_search_result(searchResult);
             break;
         case 11:
