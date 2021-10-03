@@ -65,8 +65,33 @@ int insert_start(List_type *v, int data)
     {
         for (int i = (*v).end - 1; i >= 0; i--)
             (*v).data[i + 1] = (*v).data[i];
+
         (*v).data[0] = data;
         (*v).end++;
+
+        return 1;
+    }
+    return 0;
+}
+
+// Insert in the start of the list
+int insert_sorted(List_type *v, int data)
+{
+    if (!full_list(v))
+    {
+        int k = 0, i;
+
+        while (k < (*v).end && (*v).data[k] < data)
+        {
+            k++;
+        }
+
+        for (i = (*v).end - 1; i >= k; i--)
+            (*v).data[i + 1] = (*v).data[i];
+
+        (*v).data[i] = data;
+        (*v).end++;
+
         return 1;
     }
     return 0;
@@ -163,7 +188,7 @@ int main()
         printf("2) Free static list\n");
         printf("3) Insert at the start\n");
         printf("4) Insert at the end\n");
-        printf("5) Insert in the middle\n");
+        printf("5) Insert sorted\n");
         printf("6) Remove from the start\n");
         printf("7) Remove from the end\n");
         printf("8) Remove from the middle\n");
@@ -225,7 +250,6 @@ int main()
     return 0;
 }
 
-// Inserir no início
 // Inserir no meio(ordenado)
 // Remover do início
 // Remover do fim
