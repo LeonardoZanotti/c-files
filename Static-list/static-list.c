@@ -105,6 +105,10 @@ int remove_start(List_type *v, int *data)
     {
         return 0;
     }
+    for (int i = 0; i < (*v).end; i++)
+    {
+        (*v).data[i] = (*v).data[i + 1];
+    }
     (*v).end--;
     return 1;
 }
@@ -261,7 +265,6 @@ int main()
     return 0;
 }
 
-// Remover do início
 // Consultar pelo index
 
 // References
