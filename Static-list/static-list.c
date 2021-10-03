@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define MAX_VETOR 5
 
@@ -20,8 +21,20 @@ int insert_end(List_type *v, int data)
     return 0;
 }
 
-// Remove element from the list by index
-int remove_index(List_type *v, int index)
+// Remove element from the start of the list
+int remove_start(List_type *v, int *data)
+{
+    return 0;
+}
+
+// Remove element from the end of the list
+int remove_end(List_type *v, int *data)
+{
+    return 0;
+}
+
+// Remove element from the middle of the list by index
+int remove_middle(List_type *v, int index)
 {
     int i, data;
     if ((*v).end != 0)
@@ -30,13 +43,13 @@ int remove_index(List_type *v, int index)
         {
             if (index == 0)
             {
-                if (exclui_inicio_lista(v, &data) == 1)
+                if (remove_start(v, &data) == 1)
                     printf("\nThe element %d has been removed from index %d", data, index);
                 return 1;
             }
             else if (index == (*v).end - 1)
             {
-                if (exclui_fim_lista(v, &data) == 1)
+                if (remove_end(v, &data) == 1)
                     printf("\nThe element %d has been removed from index %d", data, index);
                 return 1;
             }
@@ -88,6 +101,76 @@ int print_list(List_type v)
 
 int main()
 {
+    char option[3];
+    int optionInt = 0;
+
+    while (optionInt != 12)
+    {
+        optionInt = 0;
+
+        printf("\n1) Create static list\n");
+        printf("2) Free static list\n");
+        printf("3) Insert at the start\n");
+        printf("4) Insert at the end\n");
+        printf("5) Insert in the middle\n");
+        printf("6) Remove from the start\n");
+        printf("7) Remove from the end\n");
+        printf("8) Remove from the middle\n");
+        printf("9) Find by content\n");
+        printf("10) Find by index\n");
+        printf("11) Print the list\n");
+        printf("12) Exit\n");
+
+        while (!(optionInt >= 1 && optionInt <= 12))
+        {
+            printf("\nChoose an option: ");
+            scanf("%s", option);
+            optionInt = atoi(option);
+        }
+
+        switch (optionInt)
+        {
+        case 1:
+            printf("1");
+            break;
+        case 2:
+            printf("2");
+            break;
+        case 3:
+            printf("3");
+            break;
+        case 4:
+            printf("4");
+            break;
+        case 5:
+            printf("5");
+            break;
+        case 6:
+            printf("6");
+            break;
+        case 7:
+            printf("7");
+            break;
+        case 8:
+            printf("8");
+            break;
+        case 9:
+            printf("9");
+            break;
+        case 10:
+            printf("10");
+            break;
+        case 11:
+            printf("11");
+            break;
+        case 12:
+            printf("12");
+            break;
+        default:
+            break;
+        }
+    }
+
     return 0;
 }
 
