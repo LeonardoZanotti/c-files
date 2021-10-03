@@ -9,6 +9,23 @@ typedef struct Vetor
     int start, end;
 } List_type;
 
+// Auxiliar methods
+// Verify if list is full
+int full_list(List_type *v)
+{
+    if (v == NULL)
+        return -1;
+    return (*v).end == MAX_VETOR;
+}
+
+// Verify if list is empty
+int empty_list(List_type *v)
+{
+    if (v == NULL)
+        return -1;
+    return (*v).end == 0;
+}
+
 // Create list
 List_type *create_list(int data[MAX_VETOR], int start, int end)
 {
@@ -24,15 +41,15 @@ List_type *create_list(int data[MAX_VETOR], int start, int end)
 }
 
 // Free the memory allocated to the list
-void free_list(List_type *list)
+void free_list(List_type *v)
 {
-    free(list);
+    free(v);
 }
 
 // Insert in the end of the list
 int insert_end(List_type *v, int data)
 {
-    if ((*v).end < MAX_VETOR)
+    if (!full_list(v))
     {
         (*v).data[(*v).end] = data;
         (*v).end++;
@@ -57,7 +74,7 @@ int remove_end(List_type *v, int *data)
 int remove_middle(List_type *v, int index)
 {
     int i, data;
-    if ((*v).end != 0)
+    if (!empty_list(v))
     {
         if ((index >= 0) && (index < (*v).end))
         {
@@ -110,7 +127,7 @@ int search_by_content(List_type v, int data, int *index)
 int print_list(List_type v)
 {
     int i;
-    if (v.end != 0)
+    if (!empty_list(&v))
     {
         for (i = 0; i < v.end; i++)
             printf("\n%d", v.data[i]);
@@ -194,13 +211,11 @@ int main()
     return 0;
 }
 
-// Verificar se lista cheia
-// Verifica se lista vazia
 // Inserir no início
 // Inserir no meio(ordenado)
 // Remover do início
 // Remover do fim
-// Consultar pelo conteúdo
+// Consultar pelo index
 
 // References
 // https://www.youtube.com/watch?v=_LWwqbHU8L0      Using OBS
@@ -212,3 +227,4 @@ int main()
 // https://www.youtube.com/watch?v=zO8JAxb1GmA&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=7
 // https://www.youtube.com/watch?v=IpL31ZkVZSI&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=8
 // https://www.youtube.com/watch?v=3KwG_OAB98g&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=9
+// https://www.youtube.com/watch?v=xFN6Nefpx0k&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=10
