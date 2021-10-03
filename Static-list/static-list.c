@@ -58,6 +58,20 @@ int insert_end(List_type *v, int data)
     return 0;
 }
 
+// Insert in the start of the list
+int insert_start(List_type *v, int data)
+{
+    if (!full_list(v))
+    {
+        for (int i = (*v).end - 1; i >= 0; i--)
+            (*v).data[i + 1] = (*v).data[i];
+        (*v).data[0] = data;
+        (*v).end++;
+        return 1;
+    }
+    return 0;
+}
+
 // Remove element from the start of the list
 int remove_start(List_type *v, int *data)
 {
