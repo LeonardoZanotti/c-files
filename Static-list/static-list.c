@@ -27,6 +27,16 @@ int empty_list(List_type *v)
     return (*v).end == 0;
 }
 
+// Auxiliar method
+// Verify if list is empty
+void print_search_result(int searchResult)
+{
+    if (searchResult != -1)
+    {
+        printf("Found item: %d\n", searchResult);
+    }
+}
+
 // Create list
 List_type *create_list()
 {
@@ -242,6 +252,7 @@ int main()
     char option[3];
     int optionInt = 0;
     List_type *list;
+    int searchResult;
 
     while (optionInt != 12)
     {
@@ -294,10 +305,12 @@ int main()
             remove_middle(list, 1);
             break;
         case 9:
-            printf("9");
+            search_by_content(list, 2, &searchResult);
+            print_search_result(searchResult);
             break;
         case 10:
-            printf("10");
+            search_by_index(list, &searchResult, 2);
+            print_search_result(searchResult);
             break;
         case 11:
             print_list(list);
