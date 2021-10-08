@@ -262,22 +262,22 @@ int search_by_index(List_type *v, int *data, int index)
 }
 
 // Print all the list data
-int print_list(List_type *v)
+int print_list(List *L)
 {
     int i;
 
-    if (!empty_list(v))
+    if (!empty_list(L))
     {
         printf("\nList:");
-
-        for (i = 0; i < (*v).end; i++)
-            printf("\n%d", (*v).data[i]);
-
+        NodeData *N = *L;
+        while (N != NULL)
+        {
+            printf("\n%d", (*N).data);
+            N = (*N).next;
+            return 1;
+        }
         printf("\n");
-
-        return 1;
     }
-
     return 0;
 }
 
@@ -285,7 +285,7 @@ int main()
 {
     char option[3];
     int optionInt = 0;
-    List_type *list;
+    List *list;
     int searchResult;
     int param;
 
@@ -370,12 +370,7 @@ int main()
 
 // References
 // https://www.youtube.com/watch?v=_LWwqbHU8L0      Using OBS
-// https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf        // book
-// https://www.youtube.com/watch?v=lKwEQgV6nZk&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=3
-// https://www.youtube.com/watch?v=S6rOYN-UiAA&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=4
-// https://www.youtube.com/watch?v=rxVrRdF0MTE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=5
-// https://www.youtube.com/watch?v=UCDCEjRDYrE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=6
-// https://www.youtube.com/watch?v=zO8JAxb1GmA&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=7
-// https://www.youtube.com/watch?v=IpL31ZkVZSI&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=8
-// https://www.youtube.com/watch?v=3KwG_OAB98g&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=9
-// https://www.youtube.com/watch?v=xFN6Nefpx0k&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=10
+// https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf       // book
+// https://www.youtube.com/watch?v=0BDMqra4D94&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=11
+// https://www.youtube.com/watch?v=wfC61zUVaos&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=12
+// https://www.youtube.com/watch?v=WvmBhiQjPZ0&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=13
