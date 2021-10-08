@@ -89,10 +89,14 @@ void free_list(List *L)
 // Insert in the start of the list
 int insert_start(List *L, int data)
 {
-    List *newList = create_list();
-    (*newList)->data = data;
-    (*newList)->next = *L;
-    L = newList;
+    if (L != NULL)
+        return 0;
+    NodeData *N = (NodeData *)malloc(sizeof(NodeData));
+    if (N == NULL)
+        return 0;
+    (*N).data = data;
+    (*N).next = *L;
+    *L = N;
     printf("Inserted %d at the start of the list\n", data);
     return 1;
 }
