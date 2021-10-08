@@ -228,18 +228,20 @@ int remove_middle(List_type *v, int index)
 }
 
 // Find data by content
-int search_by_content(List_type *v, int data, int *index)
+int search_by_content(List *L, int data, int *index)
 {
     int i, found = 0;
 
-    for (i = 0; i < (*v).end - 1; i++)
+    NodeData *N = *L;
+    for (i = 0; i < size_list(L) - 1; i++)
     {
-        if ((*v).data[i] == data)
+        if ((*N).data == data)
         {
             *index = i;
             found = 1;
             break;
         }
+        N = (*N).next;
     }
 
     if (found)
@@ -249,14 +251,18 @@ int search_by_content(List_type *v, int data, int *index)
 }
 
 // Find data by index
-int search_by_index(List_type *v, int *data, int index)
+int search_by_index(List *L, int *data, int index)
 {
-    if (v == NULL || index < 0 || index >= (*v).end)
+    if (L == NULL || index < 0 || index >= size_list(L))
     {
         return 0;
     }
 
-    *data = (*v).data[index];
+    NodeData *N = *L;
+    for (int i = 0; i < index; i++)
+        N = (*N).next;
+
+    *data = (*N).data;
 
     return 1;
 }
