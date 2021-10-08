@@ -1,34 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_VETOR 5
+typedef struct Node *List;
 
-typedef struct Vetor
+struct Node
 {
-    int data[MAX_VETOR];
-    int start, end;
-} List_type;
+    int data;
+    struct Node *next;
+};
+
+typedef struct Node NodeData;
 
 // Auxiliar method
-// Verify if list is full
-int full_list(List_type *v)
+void initialize_list(List **N)
 {
-    if (v == NULL)
-        return -1;
-    return (*v).end == MAX_VETOR;
+    *N = NULL;
 }
 
 // Auxiliar method
 // Verify if list is empty
-int empty_list(List_type *v)
+int empty_list(List *N)
 {
-    if (v == NULL)
-        return -1;
-    return (*v).end == 0;
+    if (N == NULL || (*N) == NULL)
+        return 1;
+    return 0;
 }
 
 // Auxiliar method
-// Verify if list is empty
+// Verify the size of the list
+int size_list(List *N)
+{
+    if (N == NULL)
+        return 0;
+    int count = 0;
+    List newList = *N;
+    while (newList != NULL)
+    {
+        count++;
+        newList = (*newList).next;
+    }
+    return count;
+}
+
+// Auxiliar method
+// Print the results of the search
 void print_search_result(int searchResult)
 {
     if (searchResult != -1)
@@ -48,25 +63,28 @@ void read_param(int *param)
 }
 
 // Create list
-List_type *create_list()
+List *create_list()
 {
-    List_type *list = (List_type *)malloc(sizeof(List_type));
-
-    if (list != NULL)
-    {
-        (*list).start = 0;
-        (*list).end = 0;
-    }
-
+    List *N = (List *)malloc(sizeof(List));
+    if (N != NULL)
+        initialize_list(N);
     printf("\nList created!\n");
-
-    return list;
+    return N;
 }
 
 // Free the memory allocated to the list
-void free_list(List_type *v)
+void free_list(List *N)
 {
-    free(v);
+    if (N != NULL)
+    {
+        while ((*N) != NULL)
+        {
+            NodeData *thisNode = *N;
+            *N = (*N)->next;
+            free(thisNode);
+        }
+        free(N);
+    }
     printf("\nCleared list from memory\n");
 }
 
@@ -89,18 +107,23 @@ int insert_start(List_type *v, int data)
 }
 
 // Insert in the end of the list
-int insert_end(List_type *v, int data)
+int insert_end(List **N, int data)
 {
-    if (!full_list(v))
+    List *newList, *auxList;
+    newList = create_list();
+    (*newList).data = data;
+    (*newList).next = NULL;
+    if (*N == NULL)
+        *N = newList;
+    else
     {
-        (*v).data[(*v).end] = data;
-        (*v).end++;
-
-        printf("Inserted %d at the end of the list\n", data);
-
-        return 1;
+        auxList = N;
+        while ((*auxList).next != NULL)
+            auxList = (*auxList).next;
+        (*auxList).next = newList;
     }
-    return 0;
+    printf("Inserted %d at the end of the list\n", data);
+    return 1;
 }
 
 // Insert item sorted in the list
