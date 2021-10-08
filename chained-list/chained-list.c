@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef NodeData *List;
 typedef struct Node NodeData;
+typedef NodeData *List;
 struct Node
 {
     int data;
@@ -91,7 +91,7 @@ int insert_start(List *L, int data)
 {
     List *newList = create_list();
     (*newList)->data = data;
-    (*newList)->next = L;
+    (*newList)->next = *L;
     L = newList;
     printf("Inserted %d at the start of the list\n", data);
     return 1;
@@ -110,8 +110,8 @@ int insert_end(List *L, int data)
     {
         auxList = L;
         while ((*auxList)->next != NULL)
-            auxList = (*auxList)->next;
-        (*auxList)->next = newList;
+            *auxList = (*auxList)->next;
+        (*auxList)->next = *newList;
     }
     printf("Inserted %d at the end of the list\n", data);
     return 1;
@@ -149,7 +149,7 @@ int insert_sorted(List *L, int data)
         else
         {
             (*newList)->next = (*previous).next;
-            (*previous).next = newList;
+            (*previous).next = *newList;
         }
     }
 
@@ -166,9 +166,9 @@ int remove_start(List *L)
         return 0;
     }
 
-    List *newList = (*L)->next;
+    NodeData *N = (*L)->next;
     free(*L);
-    L = newList;
+    *L = N;
 
     printf("Removed element from start of list\n");
     return 1;
@@ -186,8 +186,8 @@ int remove_end(List *L)
     NodeData *removeNode = (*newList)->next;
 
     while ((*newList)->next != NULL)
-        newList = (*newList)->next;
-    (*newList)->next = newList;
+        *newList = (*newList)->next;
+    (*newList)->next = *newList;
 
     printf("Removed element from end of list\n");
 
@@ -218,14 +218,14 @@ int remove_middle(List *L, int index)
     }
     else
     {
-        if (empty_list((*actual).next))
+        if ((*actual).next == NULL)
         {
             (*previous).next = NULL;
         }
         else
         {
             (*newList)->next = (*previous).next;
-            (*previous).next = newList;
+            (*previous).next = *newList;
         }
     }
 
@@ -299,8 +299,8 @@ int main()
     {
         optionInt = 0;
 
-        printf("\n1) Create static list\n");
-        printf("2) Free static list\n");
+        printf("\n1) Create chained list\n");
+        printf("2) Free chained list\n");
         printf("3) Insert at the start\n");
         printf("4) Insert at the end\n");
         printf("5) Insert sorted\n");
