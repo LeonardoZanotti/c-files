@@ -87,38 +87,31 @@ void free_list(List *L)
 }
 
 // Insert in the start of the list
-int insert_start(List_type *v, int data)
+int insert_start(List **L, int data)
 {
-    if (!full_list(v))
-    {
-        for (int i = (*v).end - 1; i >= 0; i--)
-            (*v).data[i + 1] = (*v).data[i];
-
-        (*v).data[0] = data;
-        (*v).end++;
-
-        printf("Inserted %d at the start of the list\n", data);
-
-        return 1;
-    }
-    return 0;
+    List *newList = create_list();
+    (*newList)->data = data;
+    (*newList)->next = L;
+    L = newList;
+    printf("Inserted %d at the start of the list\n", data);
+    return 1;
 }
 
 // Insert in the end of the list
-int insert_end(List **N, int data)
+int insert_end(List **L, int data)
 {
     List *newList, *auxList;
     newList = create_list();
-    (*newList).data = data;
-    (*newList).next = NULL;
-    if (*N == NULL)
-        *N = newList;
+    (*newList)->data = data;
+    (*newList)->next = NULL;
+    if (L == NULL)
+        L = newList;
     else
     {
-        auxList = N;
-        while ((*auxList).next != NULL)
-            auxList = (*auxList).next;
-        (*auxList).next = newList;
+        auxList = L;
+        while ((*auxList)->next != NULL)
+            auxList = (*auxList)->next;
+        (*auxList)->next = newList;
     }
     printf("Inserted %d at the end of the list\n", data);
     return 1;
@@ -156,22 +149,18 @@ int insert_sorted(List_type *v, int data)
 }
 
 // Remove element from the start of the list
-int remove_start(List_type *v)
+int remove_start(List *L)
 {
-    if (empty_list(v))
+    if (empty_list(L))
     {
         return 0;
     }
 
-    for (int i = 0; i < (*v).end; i++)
-    {
-        (*v).data[i] = (*v).data[i + 1];
-    }
-
-    (*v).end--;
+    List *newList = (*L)->next;
+    free(*L);
+    L = newList;
 
     printf("Removed element from start of list\n");
-
     return 1;
 }
 
