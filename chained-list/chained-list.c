@@ -1,43 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node *List;
-
+typedef NodeData *List;
+typedef struct Node NodeData;
 struct Node
 {
     int data;
     struct Node *next;
 };
 
-typedef struct Node NodeData;
-
 // Auxiliar method
-void initialize_list(List **N)
+void initialize_list(List **L)
 {
-    *N = NULL;
+    *L = NULL;
 }
 
 // Auxiliar method
 // Verify if list is empty
-int empty_list(List *N)
+int empty_list(List *L)
 {
-    if (N == NULL || (*N) == NULL)
+    if (L == NULL || (*L) == NULL)
         return 1;
     return 0;
 }
 
 // Auxiliar method
 // Verify the size of the list
-int size_list(List *N)
+int size_list(List *L)
 {
-    if (N == NULL)
+    if (L == NULL)
         return 0;
     int count = 0;
-    List newList = *N;
-    while (newList != NULL)
+    NodeData *N = *L;
+    while (N != NULL)
     {
         count++;
-        newList = (*newList).next;
+        N = (*N).next;
     }
     return count;
 }
@@ -65,25 +63,25 @@ void read_param(int *param)
 // Create list
 List *create_list()
 {
-    List *N = (List *)malloc(sizeof(List));
-    if (N != NULL)
-        initialize_list(N);
+    List *L = (List *)malloc(sizeof(List));
+    if (L != NULL)
+        initialize_list(L);
     printf("\nList created!\n");
-    return N;
+    return L;
 }
 
 // Free the memory allocated to the list
-void free_list(List *N)
+void free_list(List *L)
 {
-    if (N != NULL)
+    if (L != NULL)
     {
-        while ((*N) != NULL)
+        while ((*L) != NULL)
         {
-            NodeData *thisNode = *N;
-            *N = (*N)->next;
-            free(thisNode);
+            NodeData *N = *L;
+            *L = (*L)->next;
+            free(N);
         }
-        free(N);
+        free(L);
     }
     printf("\nCleared list from memory\n");
 }
