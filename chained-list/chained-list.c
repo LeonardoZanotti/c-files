@@ -191,7 +191,7 @@ int remove_end(List_type *v)
 }
 
 // Remove element from the middle of the list by index
-int remove_middle(List_type *v, int index)
+int remove_middle(List *v, int index)
 {
     int i, data;
     if (!empty_list(v))
@@ -270,18 +270,11 @@ int search_by_index(List *L, int *data, int index)
 // Print all the list data
 int print_list(List *L)
 {
-    int i;
-
     if (!empty_list(L))
     {
         printf("\nList:");
-        NodeData *N = *L;
-        while (N != NULL)
-        {
+        for (NodeData *N = *L; N != NULL; N = (*N).next)
             printf("\n%d", (*N).data);
-            N = (*N).next;
-            return 1;
-        }
         printf("\n");
     }
     return 0;
