@@ -118,34 +118,44 @@ int insert_end(List **L, int data)
 }
 
 // Insert item sorted in the list
-int insert_sorted(List_type *v, int data)
+int insert_sorted(List *L, int data)
 {
-    if (!full_list(v))
+    if (L == NULL)
+        return 0;
+
+    List *newList = create_list();
+    (*newList)->data = data;
+
+    if (empty_list(L))
     {
-        int k = 0, i = 0;
-
-        while (k < (*v).end && (*v).data[k] < data)
-        {
-            k++;
-        }
-
-        if ((*v).end != 0)
-        {
-            for (i = (*v).end - 1; i >= k; i--)
-            {
-                printf("%d", i);
-                (*v).data[i + 1] = (*v).data[i];
-            }
-        }
-
-        (*v).data[k] = data;
-        (*v).end++;
-
-        printf("Inserted %d at in the list sorted\n", data);
-
-        return 1;
+        (*newList)->next = *L;
+        L = newList;
     }
-    return 0;
+    else
+    {
+        NodeData *previous, *actual = *L;
+
+        while (actual != NULL && (*actual).data < data)
+        {
+            previous = actual;
+            actual = (*actual).next;
+        }
+
+        if (actual == *L)
+        {
+            (*newList)->next = *L;
+            L = newList;
+        }
+        else
+        {
+            (*newList)->next = (*previous).next;
+            (*previous).next = newList;
+        }
+    }
+
+    printf("Inserted %d at in the list sorted\n", data);
+
+    return 1;
 }
 
 // Remove element from the start of the list
@@ -165,14 +175,19 @@ int remove_start(List *L)
 }
 
 // Remove element from the end of the list
-int remove_end(List_type *v)
+int remove_end(List *L)
 {
-    if (empty_list(v))
+    if (empty_list(L))
     {
         return 0;
     }
 
-    (*v).end--;
+    List *newList = L;
+    NodeData *removeNode = (*newList)->next;
+
+    while ((*newList)->next != NULL)
+        newList = (*newList)->next;
+    (*newList)->next = newList;
 
     printf("Removed element from end of list\n");
 
