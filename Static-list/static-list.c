@@ -28,7 +28,7 @@ int empty_list(List_type *v)
 }
 
 // Auxiliar method
-// Verify if list is empty
+// Print the results of the search
 void print_search_result(int searchResult)
 {
     if (searchResult != -1)
