@@ -10,7 +10,7 @@ struct Node
 };
 
 // Auxiliar method
-void initialize_list(List **L)
+void initialize_list(List *L)
 {
     *L = NULL;
 }
@@ -87,7 +87,7 @@ void free_list(List *L)
 }
 
 // Insert in the start of the list
-int insert_start(List **L, int data)
+int insert_start(List *L, int data)
 {
     List *newList = create_list();
     (*newList)->data = data;
@@ -98,7 +98,7 @@ int insert_start(List **L, int data)
 }
 
 // Insert in the end of the list
-int insert_end(List **L, int data)
+int insert_end(List *L, int data)
 {
     List *newList, *auxList;
     newList = create_list();
@@ -195,40 +195,43 @@ int remove_end(List *L)
 }
 
 // Remove element from the middle of the list by index
-int remove_middle(List *v, int index)
+int remove_middle(List *L, int index)
 {
-    int i, data;
-    if (!empty_list(v))
+    if (empty_list(L))
     {
-        if ((index >= 0) && (index < (*v).end))
-        {
-            if (index == 0)
-            {
-                remove_start(v);
-                return 1;
-            }
-            else if (index == (*v).end - 1)
-            {
-                remove_end(v);
-                return 1;
-            }
-            else
-            {
-                data = (*v).data[index];
-
-                for (i = index; i < (*v).end; i++)
-                    (*v).data[i] = (*v).data[i + 1];
-
-                (*v).end--;
-
-                printf("\nThe element %d has been removed from index %d\n", data, index);
-
-                return 1;
-            }
-        }
-        return -1;
+        return 0;
     }
-    return 0;
+
+    List *newList = create_list();
+
+    NodeData *previous, *actual = *L;
+
+    for (int i = 0; i < index; i++)
+    {
+        previous = actual;
+        actual = (*actual).next;
+    }
+
+    if (actual == *L)
+    {
+        *L = NULL;
+    }
+    else
+    {
+        if (empty_list((*actual).next))
+        {
+            (*previous).next = NULL;
+        }
+        else
+        {
+            (*newList)->next = (*previous).next;
+            (*previous).next = newList;
+        }
+    }
+
+    printf("\nThe element %d has been removed from index %d\n", (*actual).data, index);
+
+    return 1;
 }
 
 // Find data by content
