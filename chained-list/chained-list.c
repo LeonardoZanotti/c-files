@@ -177,9 +177,9 @@ int remove_start(List *L)
         return 0;
     }
 
-    NodeData *N = (*L)->next;
-    free(*L);
-    *L = N;
+    NodeData *N = (*L);
+    *L = (*N).next;
+    free(N);
 
     printf("Removed element from start of list\n");
     return 1;
@@ -193,12 +193,20 @@ int remove_end(List *L)
         return 0;
     }
 
-    List *newList = L;
-    NodeData *removeNode = (*newList)->next;
+    NodeData *previous, *N = *L;
 
-    while ((*newList)->next != NULL)
-        *newList = (*newList)->next;
-    (*newList)->next = *newList;
+    while ((*N).next != NULL)
+    {
+        previous = N;
+        N = (*N).next;
+    }
+
+    if (N == (*L))
+        (*L) = (*N).next;
+    else
+        (*previous).next = (*N).next;
+
+    free(N);
 
     printf("Removed element from end of list\n");
 
@@ -208,39 +216,27 @@ int remove_end(List *L)
 // Remove element from the middle of the list by index
 int remove_middle(List *L, int index)
 {
-    if (empty_list(L))
+    if (empty_list(L) || index >= size_list(L))
     {
         return 0;
     }
 
-    List *newList = create_list();
-
-    NodeData *previous, *actual = *L;
+    NodeData *previous, *N = *L;
 
     for (int i = 0; i < index; i++)
     {
-        previous = actual;
-        actual = (*actual).next;
+        previous = N;
+        N = (*N).next;
     }
 
-    if (actual == *L)
-    {
-        *L = NULL;
-    }
+    if (N == (*L))
+        (*L) = (*N).next;
     else
-    {
-        if ((*actual).next == NULL)
-        {
-            (*previous).next = NULL;
-        }
-        else
-        {
-            (*newList)->next = (*previous).next;
-            (*previous).next = *newList;
-        }
-    }
+        (*previous).next = (*N).next;
 
-    printf("\nThe element %d has been removed from index %d\n", (*actual).data, index);
+    printf("\nThe element %d has been removed from index %d\n", (*N).data, index);
+
+    free(N);
 
     return 1;
 }
