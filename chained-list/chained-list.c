@@ -10,6 +10,7 @@ struct Node
 };
 
 // Auxiliar method
+// Initialize the list
 void initialize_list(List *L)
 {
     *L = NULL;
@@ -130,13 +131,16 @@ int insert_sorted(List *L, int data)
     if (L == NULL)
         return 0;
 
-    List *newList = create_list();
-    (*newList)->data = data;
+    NodeData *N = (NodeData *)malloc(sizeof(NodeData));
+    if (N == NULL)
+        return 0;
+
+    (*N).data = data;
 
     if (empty_list(L))
     {
-        (*newList)->next = *L;
-        L = newList;
+        (*N).next = *L;
+        *L = N;
     }
     else
     {
@@ -150,13 +154,13 @@ int insert_sorted(List *L, int data)
 
         if (actual == *L)
         {
-            (*newList)->next = *L;
-            L = newList;
+            (*N).next = *L;
+            *L = N;
         }
         else
         {
-            (*newList)->next = (*previous).next;
-            (*previous).next = *newList;
+            (*N).next = (*previous).next;
+            (*previous).next = N;
         }
     }
 
