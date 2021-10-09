@@ -88,9 +88,9 @@ void free_list(List *L)
 }
 
 // Insert in the start of the list
-int insert_start(List *L, int data)
+int insert_start(List *L, int data, int listLimit)
 {
-    if (L == NULL)
+    if (L == NULL || listLimit <= size_list(L))
         return 0;
     NodeData *N = (NodeData *)malloc(sizeof(NodeData));
     if (N == NULL)
@@ -103,9 +103,9 @@ int insert_start(List *L, int data)
 }
 
 // Insert in the end of the list
-int insert_end(List *L, int data)
+int insert_end(List *L, int data, int listLimit)
 {
-    if (L == NULL)
+    if (L == NULL || listLimit <= size_list(L))
         return 0;
     NodeData *N = (NodeData *)malloc(sizeof(NodeData));
     if (N == NULL)
@@ -126,9 +126,9 @@ int insert_end(List *L, int data)
 }
 
 // Insert item sorted in the list
-int insert_sorted(List *L, int data)
+int insert_sorted(List *L, int data, int listLimit)
 {
-    if (L == NULL)
+    if (L == NULL || listLimit <= size_list(L))
         return 0;
 
     NodeData *N = (NodeData *)malloc(sizeof(NodeData));
@@ -299,6 +299,7 @@ int main()
     char option[3];
     int optionInt = 0;
     List *list;
+    int listLimit;
     int searchResult;
     int param;
 
@@ -329,6 +330,8 @@ int main()
         switch (optionInt)
         {
         case 1:
+            read_param(&param);
+            listLimit = param;
             list = create_list();
             break;
         case 2:
@@ -336,15 +339,15 @@ int main()
             break;
         case 3:
             read_param(&param);
-            insert_start(list, param);
+            insert_start(list, param, listLimit);
             break;
         case 4:
             read_param(&param);
-            insert_end(list, param);
+            insert_end(list, param, listLimit);
             break;
         case 5:
             read_param(&param);
-            insert_sorted(list, param);
+            insert_sorted(list, param, listLimit);
             break;
         case 6:
             remove_start(list);
