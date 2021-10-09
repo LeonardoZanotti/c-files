@@ -42,12 +42,12 @@ int size_list(List *L)
 
 // Auxiliar method
 // Print the results of the search
-void print_search_result(int searchResult)
+void print_search_result(int searchResult, int response)
 {
-    if (searchResult != -1)
-    {
+    if (response)
         printf("Found item: %d\n", searchResult);
-    }
+    else
+        printf("Not found!\n");
 }
 
 // Auxiliar method
@@ -89,7 +89,7 @@ void free_list(List *L)
 // Insert in the start of the list
 int insert_start(List *L, int data)
 {
-    if (L != NULL)
+    if (L == NULL)
         return 0;
     NodeData *N = (NodeData *)malloc(sizeof(NodeData));
     if (N == NULL)
@@ -104,18 +104,21 @@ int insert_start(List *L, int data)
 // Insert in the end of the list
 int insert_end(List *L, int data)
 {
-    List *newList, *auxList;
-    newList = create_list();
-    (*newList)->data = data;
-    (*newList)->next = NULL;
     if (L == NULL)
-        L = newList;
+        return 0;
+    NodeData *N = (NodeData *)malloc(sizeof(NodeData));
+    if (N == NULL)
+        return 0;
+    (*N).data = data;
+    (*N).next = NULL;
+    if ((*L) == NULL)
+        *L = N;
     else
     {
-        auxList = L;
-        while ((*auxList)->next != NULL)
-            *auxList = (*auxList)->next;
-        (*auxList)->next = *newList;
+        NodeData *NAux = *L;
+        while ((*NAux).next != NULL)
+            NAux = (*NAux).next;
+        (*NAux).next = N;
     }
     printf("Inserted %d at the end of the list\n", data);
     return 1;
@@ -355,13 +358,13 @@ int main()
             break;
         case 9:
             read_param(&param);
-            search_by_content(list, param, &searchResult);
-            print_search_result(searchResult);
+            int contentResponse = search_by_content(list, param, &searchResult);
+            print_search_result(searchResult, contentResponse);
             break;
         case 10:
             read_param(&param);
-            search_by_index(list, &searchResult, param);
-            print_search_result(searchResult);
+            int indexResponse = search_by_index(list, &searchResult, param);
+            print_search_result(searchResult, indexResponse);
             break;
         case 11:
             print_list(list);
@@ -384,3 +387,6 @@ int main()
 // https://www.youtube.com/watch?v=0BDMqra4D94&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=11
 // https://www.youtube.com/watch?v=wfC61zUVaos&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=12
 // https://www.youtube.com/watch?v=WvmBhiQjPZ0&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=13
+// https://www.youtube.com/watch?v=fNP1GHLLKuY&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=14
+// https://www.youtube.com/watch?v=67KZx_Rcfgw&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=15
+// https://www.youtube.com/watch?v=rzPsfHZIlek&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=16
