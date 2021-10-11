@@ -2,29 +2,30 @@
 
 int main()
 {
-    int array[4];
-    int input, k = 0;
+    int array[3];
+    int i;
 
-    for (int i = 1; i < 4; i++)
+    for (i = 0; i < 3; i++)
     {
-        printf("Inform the %d° value: ", i);
-        scanf("%d", &input);
+        printf("Inform the %d° value: ", i + 1);
+        scanf("%d", &array[i]);
+    }
 
-        while (input > array[k])
+    for (i = 0; i < 3; i++)
+    {
+        for (int j = i + 1; j < 3; j++)
         {
-            k++;
+            if (array[i] > array[j])
+            {
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
         }
-
-        for (int i = 3; i >= k; i--)
-        {
-            array[i + 1] = array[i];
-        }
-
-        array[k] = input;
     }
 
     printf("Sorted:\n");
-    for (int i = 0; i < 3; i++)
+    for (i = 0; i < 3; i++)
     {
         printf("%d\n", array[i]);
     }
