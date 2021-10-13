@@ -119,7 +119,6 @@ int insert_sorted(List_type *v, int data)
         {
             for (i = (*v).end - 1; i >= k; i--)
             {
-                printf("%d", i);
                 (*v).data[i + 1] = (*v).data[i];
             }
         }
