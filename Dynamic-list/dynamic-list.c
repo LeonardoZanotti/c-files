@@ -54,6 +54,8 @@ List_type *create_list()
     {
         (*list).start = 0;
         (*list).end = 0;
+        read_param(&(*list).limit);
+        (*list).data = (int *)malloc(sizeof(int) * (*list).limit);
     }
 
     printf("\nList created!\n");
@@ -64,6 +66,7 @@ List_type *create_list()
 // Free the memory allocated to the list
 void free_list(List_type *v)
 {
+    free((*v).data);
     free(v);
     printf("\nCleared list from memory\n");
 }
