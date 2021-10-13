@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_VETOR 5
-
 typedef struct Vetor
 {
-    int data[MAX_VETOR];
-    int start, end;
+    int *data;
+    int start, end, limit;
 } List_type;
 
 // Auxiliar method
@@ -15,7 +13,7 @@ int full_list(List_type *v)
 {
     if (v == NULL)
         return -1;
-    return (*v).end == MAX_VETOR;
+    return (*v).end == (*v).limit;
 }
 
 // Auxiliar method
@@ -272,8 +270,8 @@ int main()
     {
         optionInt = 0;
 
-        printf("\n1) Create static list\n");
-        printf("2) Free static list\n");
+        printf("\n1) Create dynamic list\n");
+        printf("2) Free dynamic list\n");
         printf("3) Insert at the start\n");
         printf("4) Insert at the end\n");
         printf("5) Insert sorted\n");
@@ -350,11 +348,3 @@ int main()
 // References
 // https://www.youtube.com/watch?v=_LWwqbHU8L0      Using OBS
 // https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf        // book
-// https://www.youtube.com/watch?v=lKwEQgV6nZk&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=3
-// https://www.youtube.com/watch?v=S6rOYN-UiAA&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=4
-// https://www.youtube.com/watch?v=rxVrRdF0MTE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=5
-// https://www.youtube.com/watch?v=UCDCEjRDYrE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=6
-// https://www.youtube.com/watch?v=zO8JAxb1GmA&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=7
-// https://www.youtube.com/watch?v=IpL31ZkVZSI&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=8
-// https://www.youtube.com/watch?v=3KwG_OAB98g&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=9
-// https://www.youtube.com/watch?v=xFN6Nefpx0k&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=10
