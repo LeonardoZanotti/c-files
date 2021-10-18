@@ -247,7 +247,7 @@ int remove_middle(List *L, int index)
     if ((*N).previous == NULL)
         (*L) = (*N).next;
     else
-        (*(*N).previous).next = NULL;
+        (*(*N).previous).next = (*N).next;
 
     if ((*N).next != NULL)
         (*(*N).next).previous = (*N).previous;
@@ -265,14 +265,13 @@ int search_by_content(List *L, int data, int *index)
     if (empty_list(L))
         return 0;
 
-    int i, found = 0;
     *index = 0;
-
     NodeData *N = *L;
+
     while (N != NULL && (*N).data != data)
     {
         N = (*N).next;
-        *index++;
+        (*index)++;
     }
 
     if (N != NULL)
