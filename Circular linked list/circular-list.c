@@ -306,8 +306,8 @@ int main()
     {
         optionInt = 0;
 
-        printf("\n1) Create chained list\n");
-        printf("2) Free chained list\n");
+        printf("\n1) Create circular linked list\n");
+        printf("2) Free circular linked list\n");
         printf("3) Insert at the start\n");
         printf("4) Insert at the end\n");
         printf("5) Insert sorted\n");
