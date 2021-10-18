@@ -247,7 +247,7 @@ int search_by_content(List *L, int data, int *index)
     int i, found = 0;
 
     NodeData *N = *L;
-    for (i = 0; i < size_list(L) - 1; i++)
+    for (i = 0; i < size_list(L); i++)
     {
         if ((*N).data == data)
         {
