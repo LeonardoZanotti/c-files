@@ -29,7 +29,7 @@ int empty_list(List *L)
 // Verify the size of the list
 int size_list(List *L)
 {
-    if (!empty_list(L))
+    if (empty_list(L))
         return 0;
     int count = 0;
     NodeData *N = *L;
@@ -260,11 +260,10 @@ int remove_middle(List *L, int index)
 
     NodeData *N = *L;
 
-    if (!index) // index == 0
+    if (index == 0)
     {
-        if (N = (*N).next)
+        if (N == (*N).next)
         {
-            free(N);
             (*L) = NULL;
         }
         else
@@ -274,7 +273,6 @@ int remove_middle(List *L, int index)
                 last = (*last).next;
             (*last).next = (*L)->next;
             *L = (*L)->next;
-            free(N);
         }
     }
     else
@@ -282,17 +280,17 @@ int remove_middle(List *L, int index)
         NodeData *previous = N;
         N = (*N).next;
 
-        for (int i = 0; i < index; i++)
+        for (int i = 1; i < index; i++)
         {
             previous = N;
             N = (*N).next;
         }
 
         (*previous).next = (*N).next;
-        free(N);
     }
 
     printf("\nThe element %d has been removed from index %d\n", (*N).data, index);
+    free(N);
 
     return 1;
 }
@@ -346,8 +344,12 @@ int print_list(List *L)
     if (!empty_list(L))
     {
         printf("\nList:");
-        for (NodeData *N = *L; N != NULL; N = (*N).next)
+        NodeData *N = *L;
+        do
+        {
             printf("\n%d", (*N).data);
+            N = (*N).next;
+        } while (N != (*L));
         printf("\n");
     }
     return 0;
