@@ -29,15 +29,15 @@ int empty_list(List *L)
 // Verify the size of the list
 int size_list(List *L)
 {
-    if (L == NULL)
+    if (!empty_list(L))
         return 0;
     int count = 0;
     NodeData *N = *L;
-    while (N != NULL)
+    do
     {
         count++;
         N = (*N).next;
-    }
+    } while (N != (*L));
     return count;
 }
 
@@ -74,14 +74,16 @@ List *create_list()
 // Free the memory allocated to the list
 void free_list(List *L)
 {
-    if (L != NULL)
+    if (!empty_list(L))
     {
-        while ((*L) != NULL)
+        NodeData *NAux, *N = *L;
+        while ((*N).next != (*L))
         {
-            NodeData *N = *L;
-            *L = (*L)->next;
-            free(N);
+            NAux = N;
+            N = (*N).next;
+            free(NAux);
         }
+        free(N);
         free(L);
     }
     printf("\nCleared list from memory\n");
@@ -96,8 +98,20 @@ int insert_start(List *L, int data)
     if (N == NULL)
         return 0;
     (*N).data = data;
-    (*N).next = *L;
-    *L = N;
+    if ((*L) == NULL)
+    {
+        (*N).next = N;
+        *L = N;
+    }
+    else
+    {
+        NodeData *NAux = *L;
+        while ((*NAux).next != (*L))
+            NAux = (*NAux).next;
+        (*NAux).next = N;
+        (*N).next = (*L);
+        (*L) = N;
+    }
     printf("Inserted %d at the start of the list\n", data);
     return 1;
 }
@@ -111,15 +125,18 @@ int insert_end(List *L, int data)
     if (N == NULL)
         return 0;
     (*N).data = data;
-    (*N).next = NULL;
     if ((*L) == NULL)
+    {
         *L = N;
+        (*N).next = N;
+    }
     else
     {
         NodeData *NAux = *L;
-        while ((*NAux).next != NULL)
+        while ((*NAux).next != (*L))
             NAux = (*NAux).next;
         (*NAux).next = N;
+        (*N).next = *L;
     }
     printf("Inserted %d at the end of the list\n", data);
     return 1;
@@ -139,28 +156,30 @@ int insert_sorted(List *L, int data)
 
     if (empty_list(L))
     {
-        (*N).next = *L;
         *L = N;
+        (*N).next = N;
     }
     else
     {
-        NodeData *previous, *actual = *L;
-
-        while (actual != NULL && (*actual).data < data)
+        if ((*L)->data > data)
         {
-            previous = actual;
-            actual = (*actual).next;
-        }
-
-        if (actual == *L)
-        {
-            (*N).next = *L;
-            *L = N;
+            NodeData *actual = (*L);
+            while ((*actual).next != (*L))
+                actual = (*actual).next;
+            (*N).next = (*L);
+            (*actual).next = N;
+            (*L) = N;
         }
         else
         {
-            (*N).next = (*previous).next;
+            NodeData *previous = (*L), *actual = (*L)->next;
+            while (actual != (*L) && (*actual).data < data)
+            {
+                previous = actual;
+                actual = (*actual).next;
+            }
             (*previous).next = N;
+            (*N).next = actual;
         }
     }
 
@@ -177,10 +196,22 @@ int remove_start(List *L)
         return 0;
     }
 
-    NodeData *N = (*L);
-    *L = (*N).next;
-    free(N);
+    if ((*L) == (*L)->next)
+    {
+        free(*L);
+        (*L) = NULL;
+    }
+    else
+    {
+        NodeData *N = (*L), *actual = (*L);
 
+        while ((*actual).next != (*L))
+            actual = (*actual).next;
+
+        (*actual).next = (*N).next;
+        *L = (*N).next;
+        free(N);
+    }
     printf("Removed element from start of list\n");
     return 1;
 }
@@ -193,20 +224,26 @@ int remove_end(List *L)
         return 0;
     }
 
-    NodeData *previous, *N = *L;
-
-    while ((*N).next != NULL)
+    if ((*L) == (*L)->next)
     {
-        previous = N;
-        N = (*N).next;
+        free(*L);
+        (*L) = NULL;
     }
-
-    if (N == (*L))
-        (*L) = (*N).next;
     else
+    {
+
+        NodeData *previous, *N = *L;
+
+        while ((*N).next != (*L))
+        {
+            previous = N;
+            N = (*N).next;
+        }
+
         (*previous).next = (*N).next;
 
-    free(N);
+        free(N);
+    }
 
     printf("Removed element from end of list\n");
 
@@ -221,22 +258,41 @@ int remove_middle(List *L, int index)
         return 0;
     }
 
-    NodeData *previous, *N = *L;
+    NodeData *N = *L;
 
-    for (int i = 0; i < index; i++)
+    if (!index) // index == 0
     {
-        previous = N;
+        if (N = (*N).next)
+        {
+            free(N);
+            (*L) = NULL;
+        }
+        else
+        {
+            NodeData *last = *L;
+            while ((*last).next != *L)
+                last = (*last).next;
+            (*last).next = (*L)->next;
+            *L = (*L)->next;
+            free(N);
+        }
+    }
+    else
+    {
+        NodeData *previous = N;
         N = (*N).next;
+
+        for (int i = 0; i < index; i++)
+        {
+            previous = N;
+            N = (*N).next;
+        }
+
+        (*previous).next = (*N).next;
+        free(N);
     }
 
-    if (N == (*L))
-        (*L) = (*N).next;
-    else
-        (*previous).next = (*N).next;
-
     printf("\nThe element %d has been removed from index %d\n", (*N).data, index);
-
-    free(N);
 
     return 1;
 }
