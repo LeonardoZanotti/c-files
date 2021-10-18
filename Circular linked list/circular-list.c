@@ -244,6 +244,9 @@ int remove_middle(List *L, int index)
 // Find data by content
 int search_by_content(List *L, int data, int *index)
 {
+    if (empty_list(L))
+        return 0;
+
     int i, found = 0;
 
     NodeData *N = *L;
@@ -267,7 +270,7 @@ int search_by_content(List *L, int data, int *index)
 // Find data by index
 int search_by_index(List *L, int *data, int index)
 {
-    if (L == NULL || index < 0 || index >= size_list(L))
+    if (empty_list(L) || index < 0 || index >= size_list(L))
     {
         return 0;
     }
