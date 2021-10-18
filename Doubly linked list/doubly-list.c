@@ -5,6 +5,7 @@ typedef struct Node NodeData;
 typedef NodeData *List;
 struct Node
 {
+    struct Node *previous;
     int data;
     struct Node *next;
 };
@@ -96,7 +97,10 @@ int insert_start(List *L, int data)
     if (N == NULL)
         return 0;
     (*N).data = data;
+    (*N).previous = NULL;
     (*N).next = *L;
+    if ((*L) != NULL)
+        (*L)->previous = N;
     *L = N;
     printf("Inserted %d at the start of the list\n", data);
     return 1;
@@ -113,12 +117,16 @@ int insert_end(List *L, int data)
     (*N).data = data;
     (*N).next = NULL;
     if ((*L) == NULL)
+    {
+        (*N).previous = NULL;
         *L = N;
+    }
     else
     {
         NodeData *NAux = *L;
         while ((*NAux).next != NULL)
             NAux = (*NAux).next;
+        (*N).previous = NAux;
         (*NAux).next = N;
     }
     printf("Inserted %d at the end of the list\n", data);
@@ -139,7 +147,8 @@ int insert_sorted(List *L, int data)
 
     if (empty_list(L))
     {
-        (*N).next = *L;
+        (*N).previous = NULL;
+        (*N).next = NULL;
         *L = N;
     }
     else
@@ -154,13 +163,18 @@ int insert_sorted(List *L, int data)
 
         if (actual == *L)
         {
+            (*L)->previous = N;
+            (*N).previous = NULL;
             (*N).next = *L;
             *L = N;
         }
         else
         {
+            (*N).previous = previous;
             (*N).next = (*previous).next;
             (*previous).next = N;
+            if (actual != NULL)
+                (*actual).previous = N;
         }
     }
 
@@ -179,6 +193,9 @@ int remove_start(List *L)
 
     NodeData *N = (*L);
     *L = (*N).next;
+    if ((*N).next != NULL)
+        (*(*N).next).previous = NULL;
+
     free(N);
 
     printf("Removed element from start of list\n");
@@ -193,18 +210,17 @@ int remove_end(List *L)
         return 0;
     }
 
-    NodeData *previous, *N = *L;
+    NodeData *N = *L;
 
     while ((*N).next != NULL)
     {
-        previous = N;
         N = (*N).next;
     }
 
-    if (N == (*L))
+    if ((*N).previous == NULL)
         (*L) = (*N).next;
     else
-        (*previous).next = (*N).next;
+        (*(*N).previous).next = NULL;
 
     free(N);
 
@@ -221,18 +237,20 @@ int remove_middle(List *L, int index)
         return 0;
     }
 
-    NodeData *previous, *N = *L;
+    NodeData *N = *L;
 
     for (int i = 0; i < index; i++)
     {
-        previous = N;
         N = (*N).next;
     }
 
-    if (N == (*L))
+    if ((*N).previous == NULL)
         (*L) = (*N).next;
     else
-        (*previous).next = (*N).next;
+        (*(*N).previous).next = NULL;
+
+    if ((*N).next != NULL)
+        (*(*N).next).previous = (*N).previous;
 
     printf("\nThe element %d has been removed from index %d\n", (*N).data, index);
 
@@ -244,21 +262,20 @@ int remove_middle(List *L, int index)
 // Find data by content
 int search_by_content(List *L, int data, int *index)
 {
+    if (empty_list(L))
+        return 0;
+
     int i, found = 0;
+    *index = 0;
 
     NodeData *N = *L;
-    for (i = 0; i < size_list(L) - 1; i++)
+    while (N != NULL && (*N).data != data)
     {
-        if ((*N).data == data)
-        {
-            *index = i;
-            found = 1;
-            break;
-        }
         N = (*N).next;
+        *index++;
     }
 
-    if (found)
+    if (N != NULL)
         return 1;
 
     return 0;
@@ -267,7 +284,7 @@ int search_by_content(List *L, int data, int *index)
 // Find data by index
 int search_by_index(List *L, int *data, int index)
 {
-    if (L == NULL || index < 0 || index >= size_list(L))
+    if (empty_list(L) || index < 0 || index >= size_list(L))
     {
         return 0;
     }
@@ -306,8 +323,8 @@ int main()
     {
         optionInt = 0;
 
-        printf("\n1) Create chained list\n");
-        printf("2) Free chained list\n");
+        printf("\n1) Create doubly linked list\n");
+        printf("2) Free doubly linked list\n");
         printf("3) Insert at the start\n");
         printf("4) Insert at the end\n");
         printf("5) Insert sorted\n");
