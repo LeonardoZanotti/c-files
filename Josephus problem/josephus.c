@@ -143,6 +143,31 @@ int remove_middle(List *L, int index)
     return 1;
 }
 
+// Find data by content
+int search_by_content(List *L, char data[NAMES_SIZE])
+{
+    if (empty_list(L))
+        return 0;
+
+    int i, found = 0;
+
+    NodeData *N = *L;
+    for (i = 0; i < size_list(L); i++)
+    {
+        if (strcmp((*N).data, data) == 0)
+        {
+            found = 1;
+            break;
+        }
+        N = (*N).next;
+    }
+
+    if (found)
+        return 1;
+
+    return 0;
+}
+
 // Print all the list data
 int print_list(List *L)
 {
@@ -156,6 +181,17 @@ int print_list(List *L)
             N = (*N).next;
         } while (N != (*L));
         printf("\n");
+    }
+    return 0;
+}
+
+int chooseSoldier(List *L, char startSoldierName[NAMES_SIZE], int num)
+{
+    if (!empty_list(L))
+    {
+        print_list(L);
+        printf("%s %d", startSoldierName, num);
+        return 1;
     }
     return 0;
 }
@@ -190,10 +226,16 @@ int main()
         }
     }
 
-    print('\n');
-    printf("%d", sortNumber);
-    print_list(list);
+    do
+    {
+        printf("\nNumber of the start soldier: ");
+        fgets(soldierName, sizeof(soldierName), stdin);
+        soldierName[strlen(soldierName) - 1] = '\0';
+    } while (!search_by_content(list, soldierName));
+
+    chooseSoldier(list, soldierName, sortNumber);
     free_list(list);
+
     return 0;
 }
 
