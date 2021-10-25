@@ -94,7 +94,7 @@ int insert_end(List *L, char data[NAMES_SIZE])
         (*NAux).next = N;
         (*N).next = *L;
     }
-    printf("Inserted %s at the end of the list\n", data);
+    printf("Soldier %s added\n", data);
     return 1;
 }
 
@@ -137,7 +137,7 @@ int remove_middle(List *L, int index)
         (*previous).next = (*N).next;
     }
 
-    printf("\nThe element %s has been removed from index %d\n", (*N).data, index);
+    printf("\nThe soldier %s has been removed!", (*N).data);
     free(N);
 
     return 1;
@@ -169,23 +169,6 @@ int search_by_content(List *L, char data[NAMES_SIZE], int *index)
     return 0;
 }
 
-// Print all the list data
-int print_list(List *L)
-{
-    if (!empty_list(L))
-    {
-        printf("\nList:");
-        NodeData *N = *L;
-        do
-        {
-            printf("\n%s", (*N).data);
-            N = (*N).next;
-        } while (N != (*L));
-        printf("\n");
-    }
-    return 0;
-}
-
 int chooseSoldier(List *L, int startSoldierIndex, int num)
 {
     if (empty_list(L))
@@ -198,20 +181,20 @@ int chooseSoldier(List *L, int startSoldierIndex, int num)
     for (i = 0; i < startSoldierIndex; i++)
         N = (*N).next;
 
-    while (!empty_list(L))
+    while (size_list(L) > 1)
     {
         for (i = 0; i < num; i++)
             N = (*N).next;
 
-        strcpy(escapedSoldier, (*N).data);
         NodeData *NAux = (*N).next;
+        strcpy(escapedSoldier, (*NAux).data);
 
         search_by_content(L, (*N).data, &indexToRemove);
         remove_middle(L, indexToRemove);
 
         N = NAux;
     }
-    printf("\nThe solder %s has the one who escaped!\n", escapedSoldier);
+    printf("\nThe soldier %s has the one who escaped!\n", escapedSoldier);
     return 1;
 }
 
@@ -247,7 +230,7 @@ int main()
 
     do
     {
-        printf("\nNumber of the start soldier: ");
+        printf("\nName of the start soldier: ");
         fgets(soldierName, sizeof(soldierName), stdin);
         soldierName[strlen(soldierName) - 1] = '\0';
     } while (!search_by_content(list, soldierName, &soldierCounter));
