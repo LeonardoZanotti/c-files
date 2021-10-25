@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_VETOR 20
+#define NAMES_SIZE 20
 
 typedef struct Node NodeData;
 typedef NodeData *List;
 struct Node
 {
-    char data[MAX_VETOR];
+    char data[NAMES_SIZE];
     struct Node *next;
 };
 
@@ -72,7 +72,7 @@ void free_list(List *L)
 }
 
 // Insert in the end of the list
-int insert_end(List *L, char data[MAX_VETOR])
+int insert_end(List *L, char data[NAMES_SIZE])
 {
     if (L == NULL)
         return 0;
@@ -161,21 +161,26 @@ int print_list(List *L)
 
 int main()
 {
-    char option[3];
-    int optionInt = 0;
-    List *list;
+    char option[3], soldierName[NAMES_SIZE];
+    int soldierCounter = 1, optionInt = 0;
+    List *list = create_list();
 
-    while (optionInt != 12)
+    while (optionInt <= 0)
     {
-        optionInt = 0;
-        while (optionInt <= 0)
-        {
-            printf("\nNumber for the count: ");
-            scanf("%s", option);
-            optionInt = atoi(option);
-        }
+        printf("\nNumber for the count: ");
+        scanf("%s", option);
+        optionInt = atoi(option);
     }
 
+    while (soldierName[0] != ':')
+    {
+        printf("\nName for the %d° soldier: ", soldierCounter);
+        scanf("%s", soldierName);
+        insert_end(list, soldierName);
+    }
+
+    print_list(list);
+    free_list(list);
     return 0;
 }
 
