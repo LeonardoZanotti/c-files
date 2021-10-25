@@ -144,7 +144,7 @@ int remove_middle(List *L, int index)
 }
 
 // Find data by content
-int search_by_content(List *L, char data[NAMES_SIZE])
+int search_by_content(List *L, char data[NAMES_SIZE], int *index)
 {
     if (empty_list(L))
         return 0;
@@ -156,6 +156,7 @@ int search_by_content(List *L, char data[NAMES_SIZE])
     {
         if (strcmp((*N).data, data) == 0)
         {
+            *index = i;
             found = 1;
             break;
         }
@@ -185,15 +186,33 @@ int print_list(List *L)
     return 0;
 }
 
-int chooseSoldier(List *L, char startSoldierName[NAMES_SIZE], int num)
+int chooseSoldier(List *L, int startSoldierIndex, int num)
 {
-    if (!empty_list(L))
+    if (empty_list(L))
+        return 0;
+
+    int i, indexToRemove;
+    char escapedSoldier[NAMES_SIZE];
+    NodeData *N = *L;
+
+    for (i = 0; i < startSoldierIndex; i++)
+        N = (*N).next;
+
+    while (!empty_list(L))
     {
-        print_list(L);
-        printf("%s %d", startSoldierName, num);
-        return 1;
+        for (i = 0; i < num; i++)
+            N = (*N).next;
+
+        strcpy(escapedSoldier, (*N).data);
+        NodeData *NAux = (*N).next;
+
+        search_by_content(L, (*N).data, &indexToRemove);
+        remove_middle(L, indexToRemove);
+
+        N = NAux;
     }
-    return 0;
+    printf("\nThe solder %s has the one who escaped!\n", escapedSoldier);
+    return 1;
 }
 
 int main()
@@ -231,9 +250,9 @@ int main()
         printf("\nNumber of the start soldier: ");
         fgets(soldierName, sizeof(soldierName), stdin);
         soldierName[strlen(soldierName) - 1] = '\0';
-    } while (!search_by_content(list, soldierName));
+    } while (!search_by_content(list, soldierName, &soldierCounter));
 
-    chooseSoldier(list, soldierName, sortNumber);
+    chooseSoldier(list, soldierCounter, sortNumber);
     free_list(list);
 
     return 0;
