@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define NAMES_SIZE 20
 
@@ -161,24 +162,36 @@ int print_list(List *L)
 
 int main()
 {
-    char option[3], soldierName[NAMES_SIZE];
-    int soldierCounter = 1, optionInt = 0;
+    char input[3], soldierName[NAMES_SIZE];
+    int soldierCounter = 1, sortNumber = 0, shouldPrint = 1;
     List *list = create_list();
 
-    while (optionInt <= 0)
+    while (sortNumber <= 0)
     {
         printf("\nNumber for the count: ");
-        scanf("%s", option);
-        optionInt = atoi(option);
+        scanf("%s", input);
+        sortNumber = atoi(input);
     }
 
     while (soldierName[0] != ':')
     {
-        printf("\nName for the %d° soldier: ", soldierCounter);
-        scanf("%s", soldierName);
-        insert_end(list, soldierName);
+        if (shouldPrint)
+        {
+            printf("\nName for the %d° soldier: ", soldierCounter);
+            shouldPrint = 0;
+        }
+        fgets(soldierName, sizeof(soldierName), stdin);
+        soldierName[strlen(soldierName) - 1] = '\0';
+        if (strlen(soldierName) > 0 && soldierName[0] != ':')
+        {
+            insert_end(list, soldierName);
+            soldierCounter++;
+            shouldPrint = 1;
+        }
     }
 
+    print('\n');
+    printf("%d", sortNumber);
     print_list(list);
     free_list(list);
     return 0;
