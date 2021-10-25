@@ -204,7 +204,7 @@ int main()
     int soldierCounter = 1, sortNumber = 0, shouldPrint = 1;
     List *list = create_list();
 
-    while (sortNumber <= 0)
+    while (sortNumber < 0)
     {
         printf("\nNumber for the count: ");
         scanf("%s", input);
