@@ -201,7 +201,7 @@ int chooseSoldier(List *L, int startSoldierIndex, int num)
 int main()
 {
     char input[3], soldierName[NAMES_SIZE];
-    int soldierCounter = 1, sortNumber = 0, shouldPrint = 1;
+    int soldierCounter = 1, sortNumber = -1, shouldPrint = 1;
     List *list = create_list();
 
     while (sortNumber < 0)
