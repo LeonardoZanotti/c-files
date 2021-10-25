@@ -445,9 +445,10 @@ int main()
 // References
 // https://www.youtube.com/watch?v=_LWwqbHU8L0      Using OBS
 // https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf       // book
-// https://www.youtube.com/watch?v=0BDMqra4D94&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=11
-// https://www.youtube.com/watch?v=wfC61zUVaos&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=12
-// https://www.youtube.com/watch?v=WvmBhiQjPZ0&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=13
-// https://www.youtube.com/watch?v=fNP1GHLLKuY&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=14
-// https://www.youtube.com/watch?v=67KZx_Rcfgw&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=15
-// https://www.youtube.com/watch?v=rzPsfHZIlek&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=16
+// https://www.youtube.com/watch?v=p8OxiV4FYK4&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=22
+// https://www.youtube.com/watch?v=p8OxiV4FYK4&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=23
+// https://www.youtube.com/watch?v=IhCIGie5CEo&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=24
+// https://www.youtube.com/watch?v=iC9oH8ysoAU&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=25
+// https://www.youtube.com/watch?v=Kf1uPFvr_fc&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=26
+// https://www.youtube.com/watch?v=A4Vz4Dcf9ww&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=27
+// https://www.youtube.com/watch?v=bT2QSkNMecg&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=28
