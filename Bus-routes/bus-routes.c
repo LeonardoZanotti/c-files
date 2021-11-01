@@ -130,6 +130,71 @@ int insert_cities_end(CitiesList *L, char name[30], char description[30])
     return 1;
 }
 
+int remove_routes_middle(RoutesList *L, int index)
+{
+    if (empty_routes_list(L) || index >= size_routes_list(L))
+    {
+        return 0;
+    }
+
+    RouteNodeData *previous, *N = *L;
+
+    for (int i = 0; i < index; i++)
+    {
+        previous = N;
+        N = (*N).next;
+    }
+
+    if (N == (*L))
+        (*L) = (*N).next;
+    else
+        (*previous).next = (*N).next;
+
+    free(N);
+
+    return 1;
+}
+
+int remove_cities_middle(CitiesList *L, int index)
+{
+    if (empty_cities_list(L) || index >= size_cities_list(L))
+    {
+        return 0;
+    }
+
+    CityNodeData *N = (*L).start;
+
+    for (int i = 0; i < index; i++)
+    {
+        N = (*N).next;
+    }
+
+    if (N == (*L).start)
+    {
+        (*L).start = (*N).next;
+        (*L).length--;
+        if ((*L).start == NULL)
+            (*L).end = NULL;
+        else
+            (*(*L).start).previous = NULL;
+    }
+    else if (N == (*L).end)
+    {
+        (*(*N).previous).next = (*N).next;
+        (*L).end = (*N).previous;
+    }
+    else
+    {
+        (*(*N).next).previous = (*N).previous;
+        (*(*N).previous).next = (*N).next;
+    }
+
+    (*L).length--;
+    free(N);
+
+    return 1;
+}
+
 int main()
 {
     char option[3];
