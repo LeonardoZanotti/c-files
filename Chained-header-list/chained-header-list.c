@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct Node NodeData;
-typedef NodeData *List;
+typedef struct Header List;
 struct Node
 {
     int data;
@@ -10,8 +10,8 @@ struct Node
 };
 struct Header
 {
-    List start;
-    List end;
+    NodeData *start;
+    NodeData *end;
     int length;
 };
 
@@ -19,7 +19,9 @@ struct Header
 // Initialize the list
 void initialize_list(List *L)
 {
-    *L = NULL;
+    (*L).start = NULL;
+    (*L).end = NULL;
+    (*L).length = 0;
 }
 
 // Auxiliar method
@@ -37,14 +39,7 @@ int size_list(List *L)
 {
     if (L == NULL)
         return 0;
-    int count = 0;
-    NodeData *N = *L;
-    while (N != NULL)
-    {
-        count++;
-        N = (*N).next;
-    }
-    return count;
+    return (*L).count;
 }
 
 // Auxiliar method
@@ -82,10 +77,10 @@ void free_list(List *L)
 {
     if (L != NULL)
     {
-        while ((*L) != NULL)
+        while ((*L).start != NULL)
         {
-            NodeData *N = *L;
-            *L = (*L)->next;
+            NodeData *N = (*L).start;
+            (*L).start = (*(*L).start).next;
             free(N);
         }
         free(L);
