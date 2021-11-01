@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// List of routes
+// List of routes (linked list)
 typedef struct RouteNode RouteNodeData;
 typedef RouteNodeData *RoutesList;
 struct RouteNode
@@ -11,7 +11,7 @@ struct RouteNode
     CitiesList route;
 };
 
-// Routes list
+// Routes list (doubly linked list with header)
 typedef struct CityNode CityNodeData;
 typedef struct Header CitiesList;
 struct CityNode
@@ -79,6 +79,55 @@ void free_cities_list(CitiesList *L)
         free(L);
     }
     printf("\nCleared doubly linked list from memory\n");
+}
+
+int insert_routes_end(RoutesList *L, CitiesList route)
+{
+    if (L == NULL)
+        return 0;
+    RouteNodeData *N = (RouteNodeData *)malloc(sizeof(RouteNodeData));
+    if (N == NULL)
+        return 0;
+    (*N).route = route;
+    (*N).next = NULL;
+    if ((*L) == NULL)
+        *L = N;
+    else
+    {
+        RouteNodeData *NAux = *L;
+        while ((*NAux).next != NULL)
+            NAux = (*NAux).next;
+        (*NAux).next = N;
+    }
+    return 1;
+}
+
+int insert_cities_end(CitiesList *L, char name[30], char description[30])
+{
+    if (L == NULL)
+        return 0;
+    CityNodeData *N = (CityNodeData *)malloc(sizeof(CityNodeData));
+    if (N == NULL)
+        return 0;
+
+    char name[30];
+    char description[60];
+    strcpy((*N).name, name);
+    strcpy((*N).description, description);
+    (*N).next = NULL;
+    if ((*L).start == NULL)
+    {
+        (*N).previous = NULL;
+        (*L).start = N;
+    }
+    else
+    {
+        (*N).previous = (*L).end;
+        (*(*L).end).next = N;
+    }
+    (*L).end = N;
+    (*L).length++;
+    return 1;
 }
 
 int main()
