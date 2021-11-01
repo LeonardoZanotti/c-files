@@ -29,6 +29,49 @@ struct Header
     int length;
 };
 
+// Auxiliar method
+// Verify if routes list is empty
+int empty_routes_list(RoutesList *L)
+{
+    if (L == NULL || (*L) == NULL)
+        return 1;
+    return 0;
+}
+
+// Auxiliar method
+// Verify the size of the routes list
+int size_routes_list(RoutesList *L)
+{
+    if (L == NULL)
+        return 0;
+    int count = 0;
+    RouteNodeData *N = *L;
+    while (N != NULL)
+    {
+        count++;
+        N = (*N).next;
+    }
+    return count;
+}
+
+// Auxiliar method
+// Verify if list is empty
+int empty_cities_list(CitiesList *L)
+{
+    if (L == NULL || (*L).length == 0)
+        return 1;
+    return 0;
+}
+
+// Auxiliar method
+// Verify the size of the list
+int size_cities_list(CitiesList *L)
+{
+    if (L == NULL)
+        return 0;
+    return (*L).length;
+}
+
 RoutesList *create_routes_list()
 {
     RoutesList *L = (RoutesList *)malloc(sizeof(RoutesList));
