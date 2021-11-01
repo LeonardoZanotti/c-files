@@ -255,9 +255,8 @@ int remove_middle(List *L, int index)
     {
         (*previous).next = (*N).next;
         (*L).length--;
+        printf("\nThe element %d has been removed from index %d\n", (*N).data, index);
     }
-
-    printf("\nThe element %d has been removed from index %d\n", (*N).data, index);
 
     free(N);
 
