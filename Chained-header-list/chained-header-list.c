@@ -28,7 +28,7 @@ void initialize_list(List *L)
 // Verify if list is empty
 int empty_list(List *L)
 {
-    if (L == NULL || (*L) == NULL)
+    if (L == NULL || (*L).length == 0)
         return 1;
     return 0;
 }
@@ -39,7 +39,7 @@ int size_list(List *L)
 {
     if (L == NULL)
         return 0;
-    return (*L).count;
+    return (*L).length;
 }
 
 // Auxiliar method
@@ -97,8 +97,11 @@ int insert_start(List *L, int data)
     if (N == NULL)
         return 0;
     (*N).data = data;
-    (*N).next = *L;
-    *L = N;
+    (*N).next = (*L).start;
+    if ((*L).start == NULL)
+        (*L).end = N;
+    (*L).start = N;
+    (*L).length++;
     printf("Inserted %d at the start of the list\n", data);
     return 1;
 }
@@ -113,15 +116,12 @@ int insert_end(List *L, int data)
         return 0;
     (*N).data = data;
     (*N).next = NULL;
-    if ((*L) == NULL)
-        *L = N;
+    if ((*L).start == NULL)
+        (*L).start = N;
     else
-    {
-        NodeData *NAux = *L;
-        while ((*NAux).next != NULL)
-            NAux = (*NAux).next;
-        (*NAux).next = N;
-    }
+        (*(*L).end).next = N;
+    (*L).end = N;
+    (*L).length++;
     printf("Inserted %d at the end of the list\n", data);
     return 1;
 }
@@ -140,12 +140,12 @@ int insert_sorted(List *L, int data)
 
     if (empty_list(L))
     {
-        (*N).next = *L;
-        *L = N;
+        (*N).next = NULL;
+        (*L).start = N;
     }
     else
     {
-        NodeData *previous, *actual = *L;
+        NodeData *previous, *actual = (*L).start;
 
         while (actual != NULL && (*actual).data < data)
         {
@@ -153,18 +153,21 @@ int insert_sorted(List *L, int data)
             actual = (*actual).next;
         }
 
-        if (actual == *L)
+        if (actual == (*L).start)
         {
-            (*N).next = *L;
-            *L = N;
+            (*N).next = (*L).start;
+            (*L).start = N;
         }
         else
         {
+            if ((*previous).next == NULL)
+                (*L).end = N;
             (*N).next = (*previous).next;
             (*previous).next = N;
         }
     }
 
+    (*L).length++;
     printf("Inserted %d at in the list sorted\n", data);
 
     return 1;
@@ -178,8 +181,11 @@ int remove_start(List *L)
         return 0;
     }
 
-    NodeData *N = (*L);
-    *L = (*N).next;
+    NodeData *N = (*L).start;
+    (*L).start = (*N).next;
+    (*L).length--;
+    if ((*L).start == NULL)
+        (*L).end = NULL;
     free(N);
 
     printf("Removed element from start of list\n");
@@ -194,7 +200,7 @@ int remove_end(List *L)
         return 0;
     }
 
-    NodeData *previous, *N = *L;
+    NodeData *previous, *N = (*L).start;
 
     while ((*N).next != NULL)
     {
@@ -202,11 +208,18 @@ int remove_end(List *L)
         N = (*N).next;
     }
 
-    if (N == (*L))
-        (*L) = (*N).next;
+    if (N == (*L).start)
+    {
+        (*L).start = NULL;
+        (*L).end = NULL;
+    }
     else
+    {
         (*previous).next = (*N).next;
+        (*L).end = previous;
+    }
 
+    (*L).length--;
     free(N);
 
     printf("Removed element from end of list\n");
@@ -222,7 +235,7 @@ int remove_middle(List *L, int index)
         return 0;
     }
 
-    NodeData *previous, *N = *L;
+    NodeData *previous, *N = (*L).start;
 
     for (int i = 0; i < index; i++)
     {
@@ -230,10 +243,19 @@ int remove_middle(List *L, int index)
         N = (*N).next;
     }
 
-    if (N == (*L))
-        (*L) = (*N).next;
+    if (N == (*L).start)
+    {
+        remove_start(L);
+    }
+    else if (N == (*L).end)
+    {
+        remove_end(L);
+    }
     else
+    {
         (*previous).next = (*N).next;
+        (*L).length--;
+    }
 
     printf("\nThe element %d has been removed from index %d\n", (*N).data, index);
 
@@ -250,7 +272,7 @@ int search_by_content(List *L, int data, int *index)
 
     int i, found = 0;
 
-    NodeData *N = *L;
+    NodeData *N = (*L).start;
     for (i = 0; i < size_list(L); i++)
     {
         if ((*N).data == data)
@@ -276,7 +298,7 @@ int search_by_index(List *L, int *data, int index)
         return 0;
     }
 
-    NodeData *N = *L;
+    NodeData *N = (*L).start;
     for (int i = 0; i < index; i++)
         N = (*N).next;
 
@@ -291,7 +313,7 @@ int print_list(List *L)
     if (!empty_list(L))
     {
         printf("\nList:");
-        for (NodeData *N = *L; N != NULL; N = (*N).next)
+        for (NodeData *N = (*L).start; N != NULL; N = (*N).next)
             printf("\n%d", (*N).data);
         printf("\n");
     }
@@ -310,8 +332,8 @@ int main()
     {
         optionInt = 0;
 
-        printf("\n1) Create chained list\n");
-        printf("2) Free chained list\n");
+        printf("\n1) Create chained header list\n");
+        printf("2) Free chained header list\n");
         printf("3) Insert at the start\n");
         printf("4) Insert at the end\n");
         printf("5) Insert sorted\n");
@@ -388,9 +410,6 @@ int main()
 // References
 // https://www.youtube.com/watch?v=_LWwqbHU8L0      Using OBS
 // https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf       // book
-// https://www.youtube.com/watch?v=0BDMqra4D94&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=11
-// https://www.youtube.com/watch?v=wfC61zUVaos&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=12
-// https://www.youtube.com/watch?v=WvmBhiQjPZ0&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=13
-// https://www.youtube.com/watch?v=fNP1GHLLKuY&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=14
-// https://www.youtube.com/watch?v=67KZx_Rcfgw&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=15
-// https://www.youtube.com/watch?v=rzPsfHZIlek&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=16
+// https://www.youtube.com/watch?v=2RHRjBcTy0A&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=29
+// https://www.youtube.com/watch?v=N901eJajCIM&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=30
+// https://www.youtube.com/watch?v=anwUiyXDB6o&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=31
