@@ -238,6 +238,30 @@ int remove_cities_middle(CitiesList *L, int index)
     return 1;
 }
 
+int see_routes(RoutesList *L)
+{
+    if (!empty_list(L))
+    {
+        printf("\nRoutes:");
+        for (RouteNodeData *N = *L; N != NULL; N = (*N).next)
+            printf("\n%s", ((*N).route).destination);
+        printf("\n");
+    }
+    return 0;
+}
+
+int see_cities(CitiesList *L)
+{
+    if (!empty_list(L))
+    {
+        printf("\nCities of the route:");
+        for (CityNodeData *N = (*L).start; N != NULL; N = (*N).next)
+            printf("\n%s - %s", (*N).name, (*N).description);
+        printf("\n");
+    }
+    return 0;
+}
+
 int main()
 {
     char option[3];
