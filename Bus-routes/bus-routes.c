@@ -26,7 +26,7 @@ typedef RouteNodeData *RoutesList;
 struct RouteNode
 {
     struct RouteNode *next;
-    CitiesList route;
+    CitiesList *route;
 };
 
 // Auxiliar method
@@ -72,59 +72,31 @@ int size_cities_list(CitiesList *L)
     return (*L).length;
 }
 
-RoutesList *create_routes_list()
+int see_routes(RoutesList *L)
 {
-    RoutesList *L = (RoutesList *)malloc(sizeof(RoutesList));
-    if (L != NULL)
-        *L = NULL;
-    return L;
-}
-
-CitiesList *create_cities_list()
-{
-    CitiesList *L = (CitiesList *)malloc(sizeof(CitiesList));
-    if (L != NULL)
+    if (!empty_routes_list(L))
     {
-
-        (*L).start = NULL;
-        (*L).end = NULL;
-        strcpy((*L).destination, "");
-        (*L).length = 0;
+        printf("\nRoutes:");
+        for (RouteNodeData *N = *L; N != NULL; N = (*N).next)
+            printf("\n%s", ((*(*N).route)).destination);
+        printf("\n");
     }
-    return L;
+    return 0;
 }
 
-void free_routes_list(RoutesList *L)
+int see_cities(CitiesList *L)
 {
-    if (L != NULL)
+    if (!empty_cities_list(L))
     {
-        while ((*L) != NULL)
-        {
-            RouteNodeData *N = *L;
-            *L = (*L)->next;
-            free(N);
-        }
-        free(L);
+        printf("\nCities of the route:");
+        for (CityNodeData *N = (*L).start; N != NULL; N = (*N).next)
+            printf("\n%s - %s", (*N).name, (*N).description);
+        printf("\n");
     }
-    printf("\nCleared header list from memory\n");
+    return 0;
 }
 
-void free_cities_list(CitiesList *L)
-{
-    if (L != NULL)
-    {
-        while ((*L).start != NULL)
-        {
-            CityNodeData *N = (*L).start;
-            (*L).start = (*(*L).start).next;
-            free(N);
-        }
-        free(L);
-    }
-    printf("\nCleared doubly linked list from memory\n");
-}
-
-int insert_routes_end(RoutesList *L, CitiesList route)
+int insert_routes_end(RoutesList *L, CitiesList *route)
 {
     if (L == NULL)
         return 0;
@@ -169,6 +141,99 @@ int insert_cities_end(CitiesList *L, char name[30], char description[60])
     (*L).end = N;
     (*L).length++;
     return 1;
+}
+
+RoutesList *create_routes_list()
+{
+    RoutesList *L = (RoutesList *)malloc(sizeof(RoutesList));
+    if (L != NULL)
+        *L = NULL;
+    return L;
+}
+
+CitiesList *create_cities_list()
+{
+    CitiesList *L = (CitiesList *)malloc(sizeof(CitiesList));
+    if (L != NULL)
+    {
+        (*L).start = NULL;
+        (*L).end = NULL;
+        strcpy((*L).destination, "");
+        (*L).length = 0;
+    }
+    return L;
+}
+
+int add_city_to_list(CitiesList *C)
+{
+    char cityName[30];
+    char cityDescription[60];
+
+    printf("City name: ");
+    fgets(cityName, sizeof(cityName), stdin);
+
+    printf("City description: ");
+    fgets(cityName, sizeof(cityName), stdin);
+
+    insert_cities_end(C, cityName, cityDescription);
+
+    return 1;
+}
+
+int create_new_route(RoutesList *L)
+{
+    CitiesList *C = create_cities_list();
+    insert_routes_end(L, C);
+
+    char input[3];
+    int inputInt = 0;
+
+    while (inputInt != 2)
+    {
+        printf("\e[1;1H\e[2J");
+        add_city_to_list(C);
+        printf("\e[1;1H\e[2J");
+        printf("\n[1] - Add new city to route\n");
+        printf("\n[2] - Save route\n");
+        scanf("%s", input);
+        inputInt = atoi(input);
+    }
+
+    strcpy((*C).destination, (*(*C).end).name);
+
+    see_cities(C);
+
+    return 1;
+}
+
+void free_routes_list(RoutesList *L)
+{
+    if (L != NULL)
+    {
+        while ((*L) != NULL)
+        {
+            RouteNodeData *N = *L;
+            *L = (*L)->next;
+            free(N);
+        }
+        free(L);
+    }
+    printf("\nCleared header list from memory\n");
+}
+
+void free_cities_list(CitiesList *L)
+{
+    if (L != NULL)
+    {
+        while ((*L).start != NULL)
+        {
+            CityNodeData *N = (*L).start;
+            (*L).start = (*(*L).start).next;
+            free(N);
+        }
+        free(L);
+    }
+    printf("\nCleared doubly linked list from memory\n");
 }
 
 int remove_routes_middle(RoutesList *L, int index)
@@ -236,33 +301,10 @@ int remove_cities_middle(CitiesList *L, int index)
     return 1;
 }
 
-int see_routes(RoutesList *L)
-{
-    if (!empty_routes_list(L))
-    {
-        printf("\nRoutes:");
-        for (RouteNodeData *N = *L; N != NULL; N = (*N).next)
-            printf("\n%s", ((*N).route).destination);
-        printf("\n");
-    }
-    return 0;
-}
-
-int see_cities(CitiesList *L)
-{
-    if (!empty_cities_list(L))
-    {
-        printf("\nCities of the route:");
-        for (CityNodeData *N = (*L).start; N != NULL; N = (*N).next)
-            printf("\n%s - %s", (*N).name, (*N).description);
-        printf("\n");
-    }
-    return 0;
-}
-
 int main()
 {
     char option[3];
+    RoutesList *routesList = create_routes_list();
     int optionInt = 0;
 
     while (optionInt != 4)
@@ -284,10 +326,12 @@ int main()
         switch (optionInt)
         {
         case 1:
+            create_new_route(routesList);
             break;
         case 2:
             break;
         case 3:
+            see_routes(routesList);
             break;
         case 4:
             break;
