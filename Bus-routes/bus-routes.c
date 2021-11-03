@@ -2,15 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// List of routes (linked list)
-typedef struct RouteNode RouteNodeData;
-typedef RouteNodeData *RoutesList;
-struct RouteNode
-{
-    struct RouteNode *next;
-    CitiesList route;
-};
-
 // Routes list (doubly linked list with header)
 typedef struct CityNode CityNodeData;
 typedef struct Header CitiesList;
@@ -27,6 +18,15 @@ struct Header
     CityNodeData *end;
     char destination[30];
     int length;
+};
+
+// List of routes (linked list)
+typedef struct RouteNode RouteNodeData;
+typedef RouteNodeData *RoutesList;
+struct RouteNode
+{
+    struct RouteNode *next;
+    CitiesList route;
 };
 
 // Auxiliar method
@@ -88,7 +88,7 @@ CitiesList *create_cities_list()
 
         (*L).start = NULL;
         (*L).end = NULL;
-        strcpy((*L).destination, NULL);
+        strcpy((*L).destination, "");
         (*L).length = 0;
     }
     return L;
@@ -145,7 +145,7 @@ int insert_routes_end(RoutesList *L, CitiesList route)
     return 1;
 }
 
-int insert_cities_end(CitiesList *L, char name[30], char description[30])
+int insert_cities_end(CitiesList *L, char name[30], char description[60])
 {
     if (L == NULL)
         return 0;
@@ -153,8 +153,6 @@ int insert_cities_end(CitiesList *L, char name[30], char description[30])
     if (N == NULL)
         return 0;
 
-    char name[30];
-    char description[60];
     strcpy((*N).name, name);
     strcpy((*N).description, description);
     (*N).next = NULL;
@@ -240,7 +238,7 @@ int remove_cities_middle(CitiesList *L, int index)
 
 int see_routes(RoutesList *L)
 {
-    if (!empty_list(L))
+    if (!empty_routes_list(L))
     {
         printf("\nRoutes:");
         for (RouteNodeData *N = *L; N != NULL; N = (*N).next)
@@ -252,7 +250,7 @@ int see_routes(RoutesList *L)
 
 int see_cities(CitiesList *L)
 {
-    if (!empty_list(L))
+    if (!empty_cities_list(L))
     {
         printf("\nCities of the route:");
         for (CityNodeData *N = (*L).start; N != NULL; N = (*N).next)
