@@ -133,8 +133,16 @@ int insert_cities_end(CitiesList *L, char name[30], char description[60])
     (*N).next = NULL;
     if ((*L).start == NULL)
     {
-        (*N).previous = NULL;
-        (*L).start = N;
+        CityNodeData *CuritibaN = (CityNodeData *)malloc(sizeof(CityNodeData));
+        if (N == NULL)
+            return 0;
+
+        strcpy((*CuritibaN).name, "Curitiba");
+        strcpy((*CuritibaN).description, "Grande quantidade de pinheiros");
+        (*CuritibaN).previous = NULL;
+        (*CuritibaN).next = N;
+        (*N).previous = CuritibaN;
+        (*L).start = CuritibaN;
     }
     else
     {
@@ -172,11 +180,11 @@ void add_city_to_list(CitiesList *C)
     char cityName[30];
     char cityDescription[60];
     printf("City name: ");
-    fgets(cityName, 30, stdin);
+    fgets(cityName, sizeof(cityName), stdin);
     cityName[strlen(cityName) - 1] = '\0';
 
     printf("City description: ");
-    fgets(cityDescription, 60, stdin);
+    fgets(cityDescription, sizeof(cityDescription), stdin);
     cityDescription[strlen(cityDescription) - 1] = '\0';
 
     insert_cities_end(C, cityName, cityDescription);
@@ -258,49 +266,52 @@ int remove_routes_middle(RoutesList *L, int index)
     else
         (*previous).next = (*N).next;
 
+    free_cities_list((*N).route);
     free(N);
 
     return 1;
 }
 
-int remove_cities_middle(CitiesList *L, int index)
+int search_by_content(RoutesList *L, char destination[30], int *index)
 {
-    if (empty_cities_list(L) || index >= size_cities_list(L))
-    {
+    if (empty_routes_list(L))
         return 0;
-    }
 
-    CityNodeData *N = (*L).start;
+    int i, found = 0;
 
-    for (int i = 0; i < index; i++)
+    RouteNodeData *N = *L;
+    for (i = 0; i < size_routes_list(L); i++)
     {
+        if (strcmp((*(*N).route).destination, destination) == 0)
+        {
+            *index = i;
+            found = 1;
+            break;
+        }
         N = (*N).next;
     }
 
-    if (N == (*L).start)
-    {
-        (*L).start = (*N).next;
-        (*L).length--;
-        if ((*L).start == NULL)
-            (*L).end = NULL;
-        else
-            (*(*L).start).previous = NULL;
-    }
-    else if (N == (*L).end)
-    {
-        (*(*N).previous).next = (*N).next;
-        (*L).end = (*N).previous;
-    }
-    else
-    {
-        (*(*N).next).previous = (*N).previous;
-        (*(*N).previous).next = (*N).next;
-    }
+    if (found)
+        return 1;
 
-    (*L).length--;
-    free(N);
+    return 0;
+}
 
-    return 1;
+void remove_route(RoutesList *L)
+{
+    char option[30];
+    int index;
+
+    do
+    {
+        printf("\e[1;1H\e[2J");
+        printf("What route do you want to remove?");
+        see_routes(L);
+        fgets(option, sizeof(option), stdin);
+        option[strlen(option) - 1] = '\0';
+    } while (!search_by_content(L, option, &index));
+
+    remove_routes_middle(L, index);
 }
 
 int main()
@@ -332,6 +343,7 @@ int main()
             create_new_route(routesList);
             break;
         case 2:
+            remove_route(routesList);
             break;
         case 3:
             see_routes(routesList);
