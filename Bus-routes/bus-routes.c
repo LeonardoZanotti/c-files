@@ -110,10 +110,10 @@ int see_routes(RoutesList *L)
         printf("\nRoutes:");
         for (RouteNodeData *N = *L; N != NULL; N = (*N).next)
         {
-            printf("\n%s\n", ((*(*N).route)).destination);
-            see_cities((*N).route);
+            printf("\n%s", ((*(*N).route)).destination);
+            // see_cities((*N).route);
         }
-        printf("\n");
+        printf("\n\n");
     }
     return 0;
 }
@@ -222,8 +222,8 @@ int create_new_route(RoutesList *L)
         printf("\e[1;1H\e[2J");
         add_city_to_list(C);
         printf("\e[1;1H\e[2J");
-        printf("\n[1] - Add new city to route\n");
-        printf("\n[2] - Save route\n");
+        printf("[1] - Add new city to route\n");
+        printf("\n[2] - Save route\n\n");
         scanf("%s", input);
         getchar();
         inputInt = atoi(input);
@@ -291,10 +291,16 @@ int remove_routes_middle(RoutesList *L, int index)
     return 1;
 }
 
-int search_by_content(RoutesList *L, char destination[30], int *index)
+int search_routes_by_content(RoutesList *L, char destination[30], int *index)
 {
     if (empty_routes_list(L))
         return 0;
+
+    if (strcmp(destination, "exit") == 0)
+    {
+        *index = -1;
+        return 1;
+    }
 
     int i, found = 0;
 
@@ -316,39 +322,73 @@ int search_by_content(RoutesList *L, char destination[30], int *index)
     return 0;
 }
 
-void remove_route(RoutesList *L)
+int visit_routes(RoutesList *L)
 {
+    if (empty_routes_list(L))
+        return 0;
+
+    char option[30];
+    int index;
+    do
+    {
+        printf("\e[1;1H\e[2J");
+        printf("Which route do you want to visit?\n(type \"exit\" to cancel)\n");
+        see_routes(L);
+        fgets(option, sizeof(option), stdin);
+        option[strlen(option) - 1] = '\0';
+    } while (!search_routes_by_content(L, option, &index));
+
+    if (index == -1)
+        return 0;
+
+    RouteNodeData *N = *L;
+    for (int i = 0; i < index; i++)
+    {
+        N = (*N).next;
+    }
+
+    see_cities((*N).route);
+    // char c;
+    // while ((c = getch()) != EOF)
+    // {
+    //     if (c == '\n')
+    //     {
+    //         break;
+    //     }
+
+    //     printf("\n");
+    // }
+    return 1;
+}
+
+int remove_route(RoutesList *L)
+{
+    if (empty_routes_list(L))
+        return 0;
+
     char option[30];
     int index;
 
     do
     {
         printf("\e[1;1H\e[2J");
-        printf("What route do you want to remove?");
+        printf("Which route do you want to remove?\n(type \"exit\" to cancel)\n");
         see_routes(L);
         fgets(option, sizeof(option), stdin);
         option[strlen(option) - 1] = '\0';
-    } while (!search_by_content(L, option, &index));
+    } while (!search_routes_by_content(L, option, &index));
 
-    remove_routes_middle(L, index);
+    if (index != -1)
+        remove_routes_middle(L, index);
+
+    return 1;
 }
 
 int main()
 {
-    char c;
     char option[3];
     RoutesList *routesList = create_routes_list();
     int optionInt = 0;
-
-    while ((c = getch()) != EOF)
-    {
-        if (c == '\n')
-        {
-            break;
-        }
-
-        printf("\n");
-    }
 
     while (optionInt != 4)
     {
@@ -376,7 +416,7 @@ int main()
             remove_route(routesList);
             break;
         case 3:
-            see_routes(routesList);
+            visit_routes(routesList);
             break;
         case 4:
             free_routes_list(routesList);
