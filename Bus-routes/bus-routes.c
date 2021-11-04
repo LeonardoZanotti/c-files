@@ -347,17 +347,31 @@ int visit_routes(RoutesList *L)
         N = (*N).next;
     }
 
-    see_cities((*N).route);
-    // char c;
-    // while ((c = getch()) != EOF)
-    // {
-    //     if (c == '\n')
-    //     {
-    //         break;
-    //     }
+    char c = '0';
+    CityNodeData *CN = (*(*N).route).start;
 
-    //     printf("\n");
-    // }
+    do
+    {
+        if ((int)c == 68 || c == '1')
+        {
+            if ((*CN).previous != NULL)
+                CN = (*CN).previous;
+        }
+        else if ((int)c == 67 || c == '2')
+        {
+            if ((*CN).next != NULL)
+                CN = (*CN).next;
+        }
+
+        printf("\e[1;1H\e[2J");
+        printf("City name: %s\n", (*CN).name);
+        printf("City description: %s\n\n", (*CN).description);
+        printf("previous [1 - <-]\tnext [-> - 2]\n");
+        printf("0 to exit\n");
+
+        c = getch();
+    } while (c != '0');
+
     return 1;
 }
 
