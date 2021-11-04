@@ -2,6 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+// recoding getch to work in Linux
+// thanks to https://gist.github.com/jerry2yu/2591964
+#define cls system("clear")
+#include <termios.h>
+#include <unistd.h>
+int getch();
+int getch()
+{
+    struct termios oldt, newt;
+    int ch;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return ch;
+}
+
 // Routes list (doubly linked list with header)
 typedef struct CityNode CityNodeData;
 typedef struct Header CitiesList;
@@ -316,9 +335,20 @@ void remove_route(RoutesList *L)
 
 int main()
 {
+    char c;
     char option[3];
     RoutesList *routesList = create_routes_list();
     int optionInt = 0;
+
+    while ((c = getch()) != EOF)
+    {
+        if (c == '\n')
+        {
+            break;
+        }
+
+        printf("\n");
+    }
 
     while (optionInt != 4)
     {
