@@ -91,6 +91,7 @@ int size_cities_list(CitiesList *L)
     return (*L).length;
 }
 
+// List cities
 int see_cities(CitiesList *L)
 {
     if (!empty_cities_list(L))
@@ -103,6 +104,7 @@ int see_cities(CitiesList *L)
     return 0;
 }
 
+// List routes
 int see_routes(RoutesList *L)
 {
     if (!empty_routes_list(L))
@@ -118,6 +120,7 @@ int see_routes(RoutesList *L)
     return 0;
 }
 
+// Insert route in the end of the Route list
 int insert_routes_end(RoutesList *L, CitiesList *route)
 {
     if (L == NULL)
@@ -139,6 +142,7 @@ int insert_routes_end(RoutesList *L, CitiesList *route)
     return 1;
 }
 
+// Insert city in the end of some route
 int insert_cities_end(CitiesList *L, char name[30], char description[60])
 {
     if (L == NULL)
@@ -173,6 +177,7 @@ int insert_cities_end(CitiesList *L, char name[30], char description[60])
     return 1;
 }
 
+// Create a route list
 RoutesList *create_routes_list()
 {
     RoutesList *L = (RoutesList *)malloc(sizeof(RoutesList));
@@ -181,6 +186,7 @@ RoutesList *create_routes_list()
     return L;
 }
 
+// Create a city list
 CitiesList *create_cities_list()
 {
     CitiesList *L = (CitiesList *)malloc(sizeof(CitiesList));
@@ -194,6 +200,7 @@ CitiesList *create_cities_list()
     return L;
 }
 
+// Get the data to create new city and call the function that creates the city
 void add_city_to_list(CitiesList *C)
 {
     char cityName[30];
@@ -209,6 +216,7 @@ void add_city_to_list(CitiesList *C)
     insert_cities_end(C, cityName, cityDescription);
 }
 
+// Menu to insert new cities in a route
 int create_new_route(RoutesList *L)
 {
     CitiesList *C = create_cities_list();
@@ -236,6 +244,7 @@ int create_new_route(RoutesList *L)
     return 1;
 }
 
+// Clear the cities list from memory
 void free_cities_list(CitiesList *L)
 {
     if (L != NULL)
@@ -250,6 +259,7 @@ void free_cities_list(CitiesList *L)
     }
 }
 
+// Clear the routes list from memory
 void free_routes_list(RoutesList *L)
 {
     if (L != NULL)
@@ -265,6 +275,7 @@ void free_routes_list(RoutesList *L)
     }
 }
 
+// Remove routes from the middle of the list
 int remove_routes_middle(RoutesList *L, int index)
 {
     if (empty_routes_list(L) || index >= size_routes_list(L))
@@ -291,6 +302,7 @@ int remove_routes_middle(RoutesList *L, int index)
     return 1;
 }
 
+// Search routes by the destination
 int search_routes_by_content(RoutesList *L, char destination[30], int *index)
 {
     if (empty_routes_list(L))
@@ -322,6 +334,7 @@ int search_routes_by_content(RoutesList *L, char destination[30], int *index)
     return 0;
 }
 
+// Menu that shows the routes and then enter the view cities menu
 int visit_routes(RoutesList *L)
 {
     if (empty_routes_list(L))
@@ -375,6 +388,7 @@ int visit_routes(RoutesList *L)
     return 1;
 }
 
+// Menu to remove routes
 int remove_route(RoutesList *L)
 {
     if (empty_routes_list(L))
