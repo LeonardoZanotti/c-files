@@ -27,26 +27,6 @@ int empty_stack(Stack_type *v)
     return (*v).length == 0;
 }
 
-// Auxiliar method
-// Print the results of the search
-void print_search_result(int searchResult)
-{
-    if (searchResult != -1)
-    {
-        printf("Found item: %d\n", searchResult);
-    }
-}
-
-// Auxiliar method
-// Read param value to use in the functions
-void read_param(int *param)
-{
-    char input[3];
-    printf("\nValue for the operation: ");
-    scanf("%s", input);
-    *param = atoi(input);
-}
-
 // Create stack
 Stack_type *create_stack()
 {
@@ -57,7 +37,7 @@ Stack_type *create_stack()
         (*stack).length = 0;
     }
 
-    printf("\nstack created!\n");
+    printf("\nStack created!\n");
 
     return stack;
 }
@@ -74,14 +54,8 @@ int insert_start(Stack_type *v, int data)
 {
     if (!full_stack(v))
     {
-        for (int i = (*v).length - 1; i >= 0; i--)
-            (*v).data[i + 1] = (*v).data[i];
-
-        (*v).data[0] = data;
-        (*v).length++;
-
+        (*v).data[(*v).length++] = data;
         printf("Inserted %d at the start of the stack\n", data);
-
         return 1;
     }
     return 0;
@@ -91,53 +65,18 @@ int insert_start(Stack_type *v, int data)
 int remove_start(Stack_type *v)
 {
     if (empty_stack(v))
-    {
         return 0;
-    }
-
-    for (int i = 0; i < (*v).length; i++)
-    {
-        (*v).data[i] = (*v).data[i + 1];
-    }
-
     (*v).length--;
-
     printf("Removed element from start of stack\n");
-
     return 1;
 }
 
-// Find data by content
-int search_by_content(Stack_type *v, int data, int *index)
+// Get element from the top of the stack
+int get_top_of_stack(Stack_type *v, int *content)
 {
-    int i, found = 0;
-
-    for (i = 0; i < (*v).length - 1; i++)
-    {
-        if ((*v).data[i] == data)
-        {
-            *index = i;
-            found = 1;
-            break;
-        }
-    }
-
-    if (found)
-        return 1;
-
-    return 0;
-}
-
-// Find data by index
-int search_by_index(Stack_type *v, int *data, int index)
-{
-    if (v == NULL || index < 0 || index >= (*v).length)
-    {
+    if (empty_stack(v))
         return 0;
-    }
-
-    *data = (*v).data[index];
-
+    *content = (*v).data[(*v).length - 1];
     return 1;
 }
 
@@ -148,7 +87,7 @@ int print_stack(Stack_type *v)
 
     if (!empty_stack(v))
     {
-        printf("\nstack:");
+        printf("\nStack:");
 
         for (i = 0; i < (*v).length; i++)
             printf("\n%d", (*v).data[i]);
@@ -166,8 +105,6 @@ int main()
     char option[3];
     int optionInt = 0;
     Stack_type *stack;
-    int searchResult;
-    int param;
 
     while (optionInt != 12)
     {
@@ -177,8 +114,7 @@ int main()
         printf("2) Free static stack\n");
         printf("3) Insert at the start\n");
         printf("6) Remove from the start\n");
-        printf("9) Find by content\n");
-        printf("10) Find by index\n");
+        printf("9) Find the top\n");
         printf("11) Print the stack\n");
         printf("12) Exit\n");
 
@@ -198,21 +134,19 @@ int main()
             free_stack(stack);
             break;
         case 3:
-            read_param(&param);
+            char input[3];
+            printf("\nValue for the operation: ");
+            scanf("%s", input);
+            int param = atoi(input);
             insert_start(stack, param);
             break;
         case 6:
             remove_start(stack);
             break;
         case 9:
-            read_param(&param);
-            search_by_content(stack, param, &searchResult);
-            print_search_result(searchResult);
-            break;
-        case 10:
-            read_param(&param);
-            search_by_index(stack, &searchResult, param);
-            print_search_result(searchResult);
+            int content;
+            get_top_of_stack(stack, &content);
+            printf("\nValue in the top of the stack is: %d", content);
             break;
         case 11:
             print_stack(stack);
