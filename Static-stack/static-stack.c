@@ -89,7 +89,7 @@ int print_stack(Stack_type *v)
     {
         printf("\nStack:");
 
-        for (i = 0; i < (*v).length; i++)
+        for (i = (*v).length - 1; i >= 0; i--)
             printf("\n%d", (*v).data[i]);
 
         printf("\n");
@@ -147,7 +147,7 @@ int main()
             break;
         case 9:
             get_top_of_stack(stack, &content);
-            printf("\nValue in the top of the stack is: %d", content);
+            printf("Value in the top of the stack is: %d\n", content);
             break;
         case 11:
             print_stack(stack);
