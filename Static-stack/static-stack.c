@@ -6,7 +6,7 @@
 typedef struct Stack
 {
     int data[MAX_STACK];
-    int length
+    int length;
 } Stack_type;
 
 // Auxiliar method
@@ -106,6 +106,9 @@ int main()
     int optionInt = 0;
     Stack_type *stack;
 
+    char input[3];
+    int content;
+
     while (optionInt != 12)
     {
         optionInt = 0;
@@ -134,7 +137,6 @@ int main()
             free_stack(stack);
             break;
         case 3:
-            char input[3];
             printf("\nValue for the operation: ");
             scanf("%s", input);
             int param = atoi(input);
@@ -144,7 +146,6 @@ int main()
             remove_start(stack);
             break;
         case 9:
-            int content;
             get_top_of_stack(stack, &content);
             printf("\nValue in the top of the stack is: %d", content);
             break;
