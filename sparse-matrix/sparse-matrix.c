@@ -17,7 +17,7 @@ typedef struct ListNode
 } Matrix;
 typedef Matrix *MatrixList;
 
-// Uma  função  que  faz  a  alocação  de  memória  para  cada  nodo  criado  para  uma  lista encadeada;
+// Uma função que faz a alocação de memória para cada nodo criado para uma lista encadeada;
 // Uma função que insere na lista encadeada um nodo alocado;
 // Uma função que busca os dados em uma lista encadeada;
 // Uma função que libera da memória uma lista encadeada;
@@ -27,20 +27,29 @@ typedef Matrix *MatrixList;
 // Uma função que multiplica duas matrizes;
 // Uma função que gera a matriz transposta;
 // Uma função que imprime todos os dados da matriz, inclusive os zeros;
-// Uma  função  que  imprime  os  elementos  da  diagonal  principal,  inclusive  os  zeros  caso existam.
+// Uma função que imprime os elementos da diagonal principal, inclusive os zeros caso existam.
+
+// Create a matrix list
+MatrixList *create_matrix_list()
+{
+    MatrixList *L = (MatrixList *)malloc(sizeof(MatrixList));
+    if (L != NULL)
+        *L = NULL;
+    return L;
+}
 
 int main()
 {
     char option[3];
     int optionInt = 0;
-    MatrixList *list;
+    MatrixList *matrixList = create_matrix_list();
 
     while (optionInt != 12)
     {
         optionInt = 0;
 
-        printf("\n1) Create chained list\n");
-        printf("2) Free chained list\n");
+        printf("\n1) Create new matrix\n");
+        printf("2) Clear matrix\n");
         printf("12) Exit\n");
 
         while (!(optionInt >= 1 && optionInt <= 12))
@@ -53,7 +62,13 @@ int main()
         switch (optionInt)
         {
         case 1:
-            list = create_list();
+            create_new_matrix(matrixList);
+            break;
+        case 2:
+            free_matrix(matrixList);
+            break;
+        case 12:
+            free_matrix_list(matrixList);
             break;
         default:
             break;
