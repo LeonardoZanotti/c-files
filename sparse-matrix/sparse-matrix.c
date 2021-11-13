@@ -3,17 +3,18 @@
 #include <string.h>
 
 // Matrix node
-typedef struct MatrixNode
+typedef struct MatrixInfo
 {
     float data;
     int row, col;
-    struct MatrixNode *next;
-} SparseMatrix;
+    struct MatrixInfo *next;
+} MatrixNode;
+typedef MatrixNode *SparseMatrix;
 
 // List of matrixes
 typedef struct ListNode
 {
-    SparseMatrix *data;
+    SparseMatrix data;
     struct ListNode *next;
 } Matrix;
 typedef Matrix *MatrixList;
@@ -45,10 +46,7 @@ SparseMatrix *create_sparse_matrix()
     SparseMatrix *L = (SparseMatrix *)malloc(sizeof(SparseMatrix));
     if (L != NULL)
     {
-        (*L).data = 0.0;
-        (*L).row = NULL;
-        (*L).col = NULL;
-        (*L).next = NULL;
+        *L = NULL;
     }
     return L;
 }
@@ -75,16 +73,40 @@ int insert_matrix_end(MatrixList *L, SparseMatrix *matrix)
     return 1;
 }
 
+// Insert value in the end of the matrix
+int insert_matrix_value_end(SparseMatrix *L, float data, int row, int col)
+{
+    if (L == NULL)
+        return 0;
+    MatrixNode *N = (MatrixNode *)malloc(sizeof(MatrixNode));
+    if (N == NULL)
+        return 0;
+    (*N).data = data;
+    (*N).row = row;
+    (*N).col = col;
+    (*N).next = NULL;
+    if ((*L) == NULL)
+        *L = N;
+    else
+    {
+        MatrixNode *NAux = *L;
+        while ((*NAux).next != NULL)
+            NAux = (*NAux).next;
+        (*NAux).next = N;
+    }
+    return 1;
+}
+
 // Clear the matrix nodes from memory
 void free_matrix(SparseMatrix *S)
 {
     if (S != NULL)
     {
-        while ((*S).next != NULL)
+        while ((*S) != NULL)
         {
-            SparseMatrix *M = (*S).next;
-            (*S).next = (*(*S).next).next;
-            free(M);
+            MatrixNode *N = *S;
+            (*S) = (*S)->next;
+            free(N);
         }
         free(S);
     }
@@ -97,10 +119,10 @@ void free_matrix_list(MatrixList *L)
     {
         while ((*L) != NULL)
         {
-            Matrix *N = *L;
+            Matrix *M = *L;
             *L = (*L)->next;
-            free_matrix((*N).data);
-            free(N);
+            free_matrix((*M).data);
+            free(M);
         }
         free(L);
     }
