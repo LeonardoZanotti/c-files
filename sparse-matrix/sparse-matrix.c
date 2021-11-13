@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Matrix node
 typedef struct MatrixNode
@@ -12,7 +13,7 @@ typedef struct MatrixNode
 // List of matrixes
 typedef struct ListNode
 {
-    SparseMatrix data;
+    SparseMatrix *data;
     struct ListNode *next;
 } Matrix;
 typedef Matrix *MatrixList;
@@ -36,6 +37,73 @@ MatrixList *create_matrix_list()
     if (L != NULL)
         *L = NULL;
     return L;
+}
+
+// Create a sparse matrix
+SparseMatrix *create_sparse_matrix()
+{
+    SparseMatrix *L = (SparseMatrix *)malloc(sizeof(SparseMatrix));
+    if (L != NULL)
+    {
+        (*L).data = 0.0;
+        (*L).row = NULL;
+        (*L).col = NULL;
+        (*L).next = NULL;
+    }
+    return L;
+}
+
+// Insert matrix in the end of the matrix list
+int insert_matrix_end(MatrixList *L, SparseMatrix *matrix)
+{
+    if (L == NULL)
+        return 0;
+    Matrix *M = (Matrix *)malloc(sizeof(Matrix));
+    if (M == NULL)
+        return 0;
+    (*M).data = matrix;
+    (*M).next = NULL;
+    if ((*L) == NULL)
+        *L = M;
+    else
+    {
+        Matrix *MAux = *L;
+        while ((*MAux).next != NULL)
+            MAux = (*MAux).next;
+        (*MAux).next = M;
+    }
+    return 1;
+}
+
+// Clear the matrix nodes from memory
+void free_matrix(SparseMatrix *S)
+{
+    if (S != NULL)
+    {
+        while ((*S).next != NULL)
+        {
+            SparseMatrix *M = (*S).next;
+            (*S).next = (*(*S).next).next;
+            free(M);
+        }
+        free(S);
+    }
+}
+
+// Clear the matrix list from memory
+void free_matrix_list(MatrixList *L)
+{
+    if (L != NULL)
+    {
+        while ((*L) != NULL)
+        {
+            Matrix *N = *L;
+            *L = (*L)->next;
+            free_matrix((*N).data);
+            free(N);
+        }
+        free(L);
+    }
 }
 
 int main()
