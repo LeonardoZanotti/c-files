@@ -173,7 +173,6 @@ int see_matrix(SparseMatrix *S)
         MatrixNode *N = (*S);
         for (; N != NULL; N = (*N).next)
         {
-            printf("%.2f ", (*N).data);
             if ((*N).row > row)
                 row = (*N).row;
             if ((*N).col > col)
@@ -181,21 +180,21 @@ int see_matrix(SparseMatrix *S)
         }
 
         N = *S;
-        printf("\nMatrix:\n[\n");
-        for (int i = 0; i < row; i++)
+        printf("\n\nMatrix:\n[");
+        for (int i = 1; i <= row; i++)
         {
-            for (int j = 0; j < col; j++)
+            printf("\n");
+            for (int j = 1; j <= col; j++)
             {
 
                 if ((*N).row == i && (*N).col == j)
                 {
-                    printf("%.2f ", (*N).data);
+                    printf("%3.1f ", (*N).data);
                     N = (*N).next;
                 }
                 else
-                    printf("0 ");
+                    printf("0.0 ");
             }
-            printf("\n");
         }
         printf("\n]\n");
     }
@@ -303,9 +302,6 @@ int main()
         {
         case 1:
             create_new_matrix(matrixList);
-            break;
-        case 2:
-            free_matrix_list(matrixList);
             break;
         case 12:
             free_matrix_list(matrixList);
