@@ -11,20 +11,20 @@ typedef struct queue
 
 // Auxiliar method
 // Verify if queue is full
-int full_queue(Queue *v)
+int full_queue(Queue *q)
 {
-    if (v == NULL)
+    if (q == NULL)
         return -1;
-    return (*v).end == MAX_VETOR;
+    return (*q).end == MAX_VETOR;
 }
 
 // Auxiliar method
 // Verify if queue is empty
-int empty_queue(Queue *v)
+int empty_queue(Queue *q)
 {
-    if (v == NULL)
+    if (q == NULL)
         return -1;
-    return (*v).end == 0;
+    return (*q).end == 0;
 }
 
 // Auxiliar method
@@ -56,6 +56,7 @@ Queue *create_queue()
     {
         (*queue).start = 0;
         (*queue).end = 0;
+        (*queue).length = 0;
     }
 
     printf("\nQueue created!\n");
@@ -64,22 +65,22 @@ Queue *create_queue()
 }
 
 // Free the memory allocated to the queue
-void free_queue(Queue *v)
+void free_queue(Queue *q)
 {
-    free(v);
+    free(q);
     printf("\nCleared queue from memory\n");
 }
 
 // Insert in the start of the queue
-int insert_start(Queue *v, int data)
+int insert_start(Queue *q, int data)
 {
-    if (!full_queue(v))
+    if (!full_queue(q))
     {
-        for (int i = (*v).end - 1; i >= 0; i--)
-            (*v).data[i + 1] = (*v).data[i];
+        for (int i = (*q).end - 1; i >= 0; i--)
+            (*q).data[i + 1] = (*q).data[i];
 
-        (*v).data[0] = data;
-        (*v).end++;
+        (*q).data[0] = data;
+        (*q).end++;
 
         printf("Inserted %d at the start of the queue\n", data);
 
@@ -89,12 +90,12 @@ int insert_start(Queue *v, int data)
 }
 
 // Insert in the end of the queue
-int insert_end(Queue *v, int data)
+int insert_end(Queue *q, int data)
 {
-    if (!full_queue(v))
+    if (!full_queue(q))
     {
-        (*v).data[(*v).end] = data;
-        (*v).end++;
+        (*q).data[(*q).end] = data;
+        (*q).end++;
 
         printf("Inserted %d at the end of the queue\n", data);
 
@@ -104,27 +105,27 @@ int insert_end(Queue *v, int data)
 }
 
 // Insert item sorted in the queue
-int insert_sorted(Queue *v, int data)
+int insert_sorted(Queue *q, int data)
 {
-    if (!full_queue(v))
+    if (!full_queue(q))
     {
         int k = 0, i = 0;
 
-        while (k < (*v).end && (*v).data[k] < data)
+        while (k < (*q).end && (*q).data[k] < data)
         {
             k++;
         }
 
-        if ((*v).end != 0)
+        if ((*q).end != 0)
         {
-            for (i = (*v).end - 1; i >= k; i--)
+            for (i = (*q).end - 1; i >= k; i--)
             {
-                (*v).data[i + 1] = (*v).data[i];
+                (*q).data[i + 1] = (*q).data[i];
             }
         }
 
-        (*v).data[k] = data;
-        (*v).end++;
+        (*q).data[k] = data;
+        (*q).end++;
 
         printf("Inserted %d at in the queue sorted\n", data);
 
@@ -134,19 +135,19 @@ int insert_sorted(Queue *v, int data)
 }
 
 // Remove element from the start of the queue
-int remove_start(Queue *v)
+int remove_start(Queue *q)
 {
-    if (empty_queue(v))
+    if (empty_queue(q))
     {
         return 0;
     }
 
-    for (int i = 0; i < (*v).end; i++)
+    for (int i = 0; i < (*q).end; i++)
     {
-        (*v).data[i] = (*v).data[i + 1];
+        (*q).data[i] = (*q).data[i + 1];
     }
 
-    (*v).end--;
+    (*q).end--;
 
     printf("Removed element from start of queue\n");
 
@@ -154,14 +155,14 @@ int remove_start(Queue *v)
 }
 
 // Remove element from the end of the queue
-int remove_end(Queue *v)
+int remove_end(Queue *q)
 {
-    if (empty_queue(v))
+    if (empty_queue(q))
     {
         return 0;
     }
 
-    (*v).end--;
+    (*q).end--;
 
     printf("Removed element from end of queue\n");
 
@@ -169,31 +170,31 @@ int remove_end(Queue *v)
 }
 
 // Remove element from the middle of the queue by index
-int remove_middle(Queue *v, int index)
+int remove_middle(Queue *q, int index)
 {
     int i, data;
-    if (!empty_queue(v))
+    if (!empty_queue(q))
     {
-        if ((index >= 0) && (index < (*v).end))
+        if ((index >= 0) && (index < (*q).end))
         {
             if (index == 0)
             {
-                remove_start(v);
+                remove_start(q);
                 return 1;
             }
-            else if (index == (*v).end - 1)
+            else if (index == (*q).end - 1)
             {
-                remove_end(v);
+                remove_end(q);
                 return 1;
             }
             else
             {
-                data = (*v).data[index];
+                data = (*q).data[index];
 
-                for (i = index; i < (*v).end; i++)
-                    (*v).data[i] = (*v).data[i + 1];
+                for (i = index; i < (*q).end; i++)
+                    (*q).data[i] = (*q).data[i + 1];
 
-                (*v).end--;
+                (*q).end--;
 
                 printf("\nThe element %d has been removed from index %d\n", data, index);
 
@@ -206,13 +207,13 @@ int remove_middle(Queue *v, int index)
 }
 
 // Find data by content
-int search_by_content(Queue *v, int data, int *index)
+int search_by_content(Queue *q, int data, int *index)
 {
     int i, found = 0;
 
-    for (i = 0; i < (*v).end - 1; i++)
+    for (i = 0; i < (*q).end - 1; i++)
     {
-        if ((*v).data[i] == data)
+        if ((*q).data[i] == data)
         {
             *index = i;
             found = 1;
@@ -227,29 +228,29 @@ int search_by_content(Queue *v, int data, int *index)
 }
 
 // Find data by index
-int search_by_index(Queue *v, int *data, int index)
+int search_by_index(Queue *q, int *data, int index)
 {
-    if (v == NULL || index < 0 || index >= (*v).end)
+    if (q == NULL || index < 0 || index >= (*q).end)
     {
         return 0;
     }
 
-    *data = (*v).data[index];
+    *data = (*q).data[index];
 
     return 1;
 }
 
 // Print all the queue data
-int print_queue(Queue *v)
+int print_queue(Queue *q)
 {
     int i;
 
-    if (!empty_queue(v))
+    if (!empty_queue(q))
     {
         printf("\nQueue:");
 
-        for (i = 0; i < (*v).end; i++)
-            printf("\n%d", (*v).data[i]);
+        for (i = 0; i < (*q).end; i++)
+            printf("\n%d", (*q).data[i]);
 
         printf("\n");
 
@@ -347,13 +348,13 @@ int main()
 }
 
 // References
-// https://www.youtube.com/watch?v=_LWwqbHU8L0      Using OBS
+// https://www.youtube.com/watch?q=_LWwqbHU8L0      Using OBS
 // https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf        // book
-// https://www.youtube.com/watch?v=lKwEQgV6nZk&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=3
-// https://www.youtube.com/watch?v=S6rOYN-UiAA&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=4
-// https://www.youtube.com/watch?v=rxVrRdF0MTE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=5
-// https://www.youtube.com/watch?v=UCDCEjRDYrE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=6
-// https://www.youtube.com/watch?v=zO8JAxb1GmA&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=7
-// https://www.youtube.com/watch?v=IpL31ZkVZSI&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=8
-// https://www.youtube.com/watch?v=3KwG_OAB98g&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=9
-// https://www.youtube.com/watch?v=xFN6Nefpx0k&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=10
+// https://www.youtube.com/watch?q=lKwEQgV6nZk&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=3
+// https://www.youtube.com/watch?q=S6rOYN-UiAA&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=4
+// https://www.youtube.com/watch?q=rxVrRdF0MTE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=5
+// https://www.youtube.com/watch?q=UCDCEjRDYrE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=6
+// https://www.youtube.com/watch?q=zO8JAxb1GmA&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=7
+// https://www.youtube.com/watch?q=IpL31ZkVZSI&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=8
+// https://www.youtube.com/watch?q=3KwG_OAB98g&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=9
+// https://www.youtube.com/watch?q=xFN6Nefpx0k&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=10
