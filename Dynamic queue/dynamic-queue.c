@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct Node NodeData;
-typedef struct Header List;
+typedef struct Header Queue;
 struct Node
 {
     int data;
@@ -16,8 +16,8 @@ struct Header
 };
 
 // Auxiliar method
-// Initialize the list
-void initialize_list(List *L)
+// Initialize the queue
+void initialize_queue(Queue *L)
 {
     (*L).start = NULL;
     (*L).end = NULL;
@@ -25,8 +25,8 @@ void initialize_list(List *L)
 }
 
 // Auxiliar method
-// Verify if list is empty
-int empty_list(List *L)
+// Verify if queue is empty
+int empty_queue(Queue *L)
 {
     if (L == NULL || (*L).length == 0)
         return 1;
@@ -34,8 +34,8 @@ int empty_list(List *L)
 }
 
 // Auxiliar method
-// Verify the size of the list
-int size_list(List *L)
+// Verify the size of the queue
+int size_queue(Queue *L)
 {
     if (L == NULL)
         return 0;
@@ -62,18 +62,18 @@ void read_param(int *param)
     *param = atoi(input);
 }
 
-// Create list
-List *create_list()
+// Create queue
+Queue *create_queue()
 {
-    List *L = (List *)malloc(sizeof(List));
+    Queue *L = (Queue *)malloc(sizeof(Queue));
     if (L != NULL)
-        initialize_list(L);
-    printf("\nList created!\n");
+        initialize_queue(L);
+    printf("\nQueue created!\n");
     return L;
 }
 
-// Free the memory allocated to the list
-void free_list(List *L)
+// Free the memory allocated to the queue
+void free_queue(Queue *L)
 {
     if (L != NULL)
     {
@@ -85,11 +85,11 @@ void free_list(List *L)
         }
         free(L);
     }
-    printf("\nCleared list from memory\n");
+    printf("\nCleared queue from memory\n");
 }
 
-// Insert in the start of the list
-int insert_start(List *L, int data)
+// Insert in the start of the queue
+int insert_start(Queue *L, int data)
 {
     if (L == NULL)
         return 0;
@@ -102,12 +102,12 @@ int insert_start(List *L, int data)
         (*L).end = N;
     (*L).start = N;
     (*L).length++;
-    printf("Inserted %d at the start of the list\n", data);
+    printf("Inserted %d at the start of the queue\n", data);
     return 1;
 }
 
-// Insert in the end of the list
-int insert_end(List *L, int data)
+// Insert in the end of the queue
+int insert_end(Queue *L, int data)
 {
     if (L == NULL)
         return 0;
@@ -122,12 +122,12 @@ int insert_end(List *L, int data)
         (*(*L).end).next = N;
     (*L).end = N;
     (*L).length++;
-    printf("Inserted %d at the end of the list\n", data);
+    printf("Inserted %d at the end of the queue\n", data);
     return 1;
 }
 
-// Insert item sorted in the list
-int insert_sorted(List *L, int data)
+// Insert item sorted in the queue
+int insert_sorted(Queue *L, int data)
 {
     if (L == NULL)
         return 0;
@@ -138,7 +138,7 @@ int insert_sorted(List *L, int data)
 
     (*N).data = data;
 
-    if (empty_list(L))
+    if (empty_queue(L))
     {
         (*N).next = NULL;
         (*L).start = N;
@@ -168,15 +168,15 @@ int insert_sorted(List *L, int data)
     }
 
     (*L).length++;
-    printf("Inserted %d at in the list sorted\n", data);
+    printf("Inserted %d at in the queue sorted\n", data);
 
     return 1;
 }
 
-// Remove element from the start of the list
-int remove_start(List *L)
+// Remove element from the start of the queue
+int remove_start(Queue *L)
 {
-    if (empty_list(L))
+    if (empty_queue(L))
     {
         return 0;
     }
@@ -188,14 +188,14 @@ int remove_start(List *L)
         (*L).end = NULL;
     free(N);
 
-    printf("Removed element from start of list\n");
+    printf("Removed element from start of queue\n");
     return 1;
 }
 
-// Remove element from the end of the list
-int remove_end(List *L)
+// Remove element from the end of the queue
+int remove_end(Queue *L)
 {
-    if (empty_list(L))
+    if (empty_queue(L))
     {
         return 0;
     }
@@ -222,15 +222,15 @@ int remove_end(List *L)
     (*L).length--;
     free(N);
 
-    printf("Removed element from end of list\n");
+    printf("Removed element from end of queue\n");
 
     return 1;
 }
 
-// Remove element from the middle of the list by index
-int remove_middle(List *L, int index)
+// Remove element from the middle of the queue by index
+int remove_middle(Queue *L, int index)
 {
-    if (empty_list(L) || index >= size_list(L))
+    if (empty_queue(L) || index >= size_queue(L))
     {
         return 0;
     }
@@ -264,15 +264,15 @@ int remove_middle(List *L, int index)
 }
 
 // Find data by content
-int search_by_content(List *L, int data, int *index)
+int search_by_content(Queue *L, int data, int *index)
 {
-    if (empty_list(L))
+    if (empty_queue(L))
         return 0;
 
     int i, found = 0;
 
     NodeData *N = (*L).start;
-    for (i = 0; i < size_list(L); i++)
+    for (i = 0; i < size_queue(L); i++)
     {
         if ((*N).data == data)
         {
@@ -290,9 +290,9 @@ int search_by_content(List *L, int data, int *index)
 }
 
 // Find data by index
-int search_by_index(List *L, int *data, int index)
+int search_by_index(Queue *L, int *data, int index)
 {
-    if (empty_list(L) || index < 0 || index >= size_list(L))
+    if (empty_queue(L) || index < 0 || index >= size_queue(L))
     {
         return 0;
     }
@@ -306,12 +306,12 @@ int search_by_index(List *L, int *data, int index)
     return 1;
 }
 
-// Print all the list data
-int print_list(List *L)
+// Print all the queue data
+int print_queue(Queue *L)
 {
-    if (!empty_list(L))
+    if (!empty_queue(L))
     {
-        printf("\nList:");
+        printf("\nQueue:");
         for (NodeData *N = (*L).start; N != NULL; N = (*N).next)
             printf("\n%d", (*N).data);
         printf("\n");
@@ -323,7 +323,7 @@ int main()
 {
     char option[3];
     int optionInt = 0;
-    List *list;
+    Queue *queue;
     int searchResult;
     int param;
 
@@ -331,8 +331,8 @@ int main()
     {
         optionInt = 0;
 
-        printf("\n1) Create chained header list\n");
-        printf("2) Free chained header list\n");
+        printf("\n1) Create chained header queue\n");
+        printf("2) Free chained header queue\n");
         printf("3) Insert at the start\n");
         printf("4) Insert at the end\n");
         printf("5) Insert sorted\n");
@@ -341,7 +341,7 @@ int main()
         printf("8) Remove from the middle\n");
         printf("9) Find by content\n");
         printf("10) Find by index\n");
-        printf("11) Print the list\n");
+        printf("11) Print the queue\n");
         printf("12) Exit\n");
 
         while (!(optionInt >= 1 && optionInt <= 12))
@@ -354,48 +354,48 @@ int main()
         switch (optionInt)
         {
         case 1:
-            list = create_list();
+            queue = create_queue();
             break;
         case 2:
-            free_list(list);
+            free_queue(queue);
             break;
         case 3:
             read_param(&param);
-            insert_start(list, param);
+            insert_start(queue, param);
             break;
         case 4:
             read_param(&param);
-            insert_end(list, param);
+            insert_end(queue, param);
             break;
         case 5:
             read_param(&param);
-            insert_sorted(list, param);
+            insert_sorted(queue, param);
             break;
         case 6:
-            remove_start(list);
+            remove_start(queue);
             break;
         case 7:
-            remove_end(list);
+            remove_end(queue);
             break;
         case 8:
             read_param(&param);
-            remove_middle(list, param);
+            remove_middle(queue, param);
             break;
         case 9:
             read_param(&param);
-            int contentResponse = search_by_content(list, param, &searchResult);
+            int contentResponse = search_by_content(queue, param, &searchResult);
             print_search_result(searchResult, contentResponse);
             break;
         case 10:
             read_param(&param);
-            int indexResponse = search_by_index(list, &searchResult, param);
+            int indexResponse = search_by_index(queue, &searchResult, param);
             print_search_result(searchResult, indexResponse);
             break;
         case 11:
-            print_list(list);
+            print_queue(queue);
             break;
         case 12:
-            free_list(list);
+            free_queue(queue);
             printf("\nExiting...\n");
             break;
         default:
@@ -409,10 +409,10 @@ int main()
 // References
 // https://www.youtube.com/watch?q=_LWwqbHU8L0      Using OBS
 // https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf        // book
-// https://www.youtube.com/watch?v=aEfOzz_KXl8&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=32
-// https://www.youtube.com/watch?v=y93DzmBskGQ&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=33
-// https://www.youtube.com/watch?v=RLu9QLd_xpY&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=34
-// https://www.youtube.com/watch?v=0KXFoxSCEJE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=35
-// https://www.youtube.com/watch?v=4YXnrKJCWrE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=37
-// https://www.youtube.com/watch?v=aIFK1n9Sp30&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=38
-// https://www.youtube.com/watch?v=yOjgEXbKtME&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=39
+// https://www.youtube.com/watch?v=aEfOzz_KXl8&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=32
+// https://www.youtube.com/watch?v=y93DzmBskGQ&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=33
+// https://www.youtube.com/watch?v=RLu9QLd_xpY&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=34
+// https://www.youtube.com/watch?v=0KXFoxSCEJE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=35
+// https://www.youtube.com/watch?v=4YXnrKJCWrE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=37
+// https://www.youtube.com/watch?v=aIFK1n9Sp30&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=38
+// https://www.youtube.com/watch?v=yOjgEXbKtME&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=39
