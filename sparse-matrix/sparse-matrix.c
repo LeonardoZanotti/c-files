@@ -45,6 +45,27 @@ int empty_matrix(SparseMatrix *S)
     return (S == NULL || (*S) == NULL);
 }
 
+// Auxiliar method
+// Check matrix size
+int size_matrix(SparseMatrix *S)
+{
+    if (empty_matrix(S))
+        return 0;
+
+    int row = 1, col = 1;
+
+    MatrixNode *N = (*S);
+    for (; N != NULL; N = (*N).next)
+    {
+        if ((*N).row > row)
+            row = (*N).row;
+        if ((*N).col > col)
+            col = (*N).col;
+    }
+
+    return row * col;
+}
+
 // Create a matrix list
 MatrixList *create_matrix_list()
 {
@@ -171,6 +192,32 @@ int see_matrix(SparseMatrix *S)
         }
         printf("\n]\n");
     }
+    return 0;
+}
+
+// Search value in the matrixes
+int search_value_in_matrix(SparseMatrix *S, float value, int *index)
+{
+    if (empty_matrix(S))
+        return 0;
+
+    int i, found = 0;
+
+    MatrixNode *N = *S;
+    for (i = 0; i < size_matrix(S); i++)
+    {
+        if ((*N).data = value)
+        {
+            *index = i;
+            found = 1;
+            break;
+        }
+        N = (*N).next;
+    }
+
+    if (found)
+        return 1;
+
     return 0;
 }
 
