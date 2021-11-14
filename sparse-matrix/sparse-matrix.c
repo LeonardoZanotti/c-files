@@ -229,8 +229,8 @@ void add_value_to_matrix(SparseMatrix *S, int row, int col)
     scanf("%s", input);
     getchar();
     inputFloat = atof(input);
-
-    insert_matrix_value_end(S, inputFloat, row, col);
+    if (inputFloat != 0.0)
+        insert_matrix_value_end(S, inputFloat, row, col);
 }
 
 void create_new_matrix(MatrixList *M)
@@ -241,18 +241,24 @@ void create_new_matrix(MatrixList *M)
     char input[3];
     int inputInt = 1, row = 1, col = 1;
 
-    while (inputInt == 1)
+    while (inputInt == 1 || inputInt == 2)
     {
         printf("\e[1;1H\e[2J");
         add_value_to_matrix(S, row, col);
         printf("\e[1;1H\e[2J");
-        printf("[1] - Add new value to matrix\n");
-        printf("\n[2] - Save matrix\n\n");
+        printf("[1] - Add value to field [%d, %d] of the matrix\n", row, col);
+        printf("[2] - New row\n");
+        printf("\n[3] - Save matrix\n\n");
         scanf("%s", input);
         getchar();
         inputInt = atoi(input);
-        row++;
-        col++;
+        if (inputInt == 2)
+        {
+            col = 1;
+            row++;
+        }
+        else
+            col++;
     }
 
     see_matrix(S);
