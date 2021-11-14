@@ -44,6 +44,22 @@ int empty_matrix(SparseMatrix *S)
 }
 
 // Auxiliar method
+// Verify the size of the matrix list
+int size_matrix_list(MatrixList *L)
+{
+    if (L == NULL)
+        return 0;
+    int count = 0;
+    Matrix *M = *L;
+    while (M != NULL)
+    {
+        count++;
+        M = (*M).next;
+    }
+    return count;
+}
+
+// Auxiliar method
 // Check matrix size
 int size_matrix(SparseMatrix *S)
 {
@@ -198,6 +214,31 @@ void see_matrix(SparseMatrix *S)
     }
 }
 
+void show_matrix(MatrixList *L)
+{
+    char input[3];
+    int matrixIndex = 0;
+
+    while (matrixIndex < 1 || matrixIndex > size_matrix_list(L))
+    {
+        printf("\e[1;1H\e[2J");
+        printf("Index of the matrix to show: ");
+        scanf("%s", input);
+        getchar();
+        matrixIndex = atof(input);
+    }
+
+    Matrix *M = (*L);
+    SparseMatrix *S = (*M).data;
+    for (int i = 1; i < matrixIndex; i++)
+    {
+        M = (*M).next;
+        S = (*M).data;
+    }
+
+    see_matrix(S);
+}
+
 // Search value in the matrixes
 int search_value_in_matrix(SparseMatrix *S, float value, int *row, int *col)
 {
@@ -337,7 +378,7 @@ int main()
             create_new_matrix(matrixList);
             break;
         case 2:
-            // show_matrix(matrixList);
+            show_matrix(matrixList);
             break;
         case 3:
             search_matrix(matrixList);
