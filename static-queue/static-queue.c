@@ -11,11 +11,20 @@ typedef struct queue
 
 // Auxiliar method
 // Verify if queue is full
+int size_queue(Queue *q)
+{
+    if (q == NULL)
+        return -1;
+    return (*q).length;
+}
+
+// Auxiliar method
+// Verify if queue is full
 int full_queue(Queue *q)
 {
     if (q == NULL)
         return -1;
-    return (*q).end == MAX_VETOR;
+    return (*q).length == MAX_VETOR;
 }
 
 // Auxiliar method
@@ -24,7 +33,7 @@ int empty_queue(Queue *q)
 {
     if (q == NULL)
         return -1;
-    return (*q).end == 0;
+    return (*q).length == 0;
 }
 
 // Auxiliar method
