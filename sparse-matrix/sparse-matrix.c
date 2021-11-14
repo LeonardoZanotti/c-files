@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+
+#define PRECISION 0.00001
 
 // Matrix node
 typedef struct MatrixInfo
@@ -18,6 +21,13 @@ typedef struct ListNode
     struct ListNode *next;
 } Matrix;
 typedef Matrix *MatrixList;
+
+// Auxiliar method
+// Check if two float numbers are equal
+int fequal(float a, float b, float precision)
+{
+    return fabs(a - b) < precision;
+}
 
 // Auxiliar method
 // Verify if matrix list is empty
@@ -152,7 +162,7 @@ void free_matrix_list(MatrixList *L)
 }
 
 // List matrix values
-int see_matrix(SparseMatrix *S)
+void see_matrix(SparseMatrix *S)
 {
     if (!empty_matrix(S))
     {
@@ -186,23 +196,23 @@ int see_matrix(SparseMatrix *S)
         }
         printf("\n]\n");
     }
-    return 0;
 }
 
 // Search value in the matrixes
-int search_value_in_matrix(SparseMatrix *S, float value, int *index)
+int search_value_in_matrix(SparseMatrix *S, float value, int *row, int *col)
 {
     if (empty_matrix(S))
-        return 0;
+        return 1;
 
     int i, found = 0;
 
     MatrixNode *N = *S;
     for (i = 0; i < size_matrix(S); i++)
     {
-        if ((*N).data = value)
+        if (fequal((*N).data, value, PRECISION))
         {
-            *index = i;
+            *row = (*N).row;
+            *col = (*N).col;
             found = 1;
             break;
         }
@@ -218,20 +228,20 @@ int search_value_in_matrix(SparseMatrix *S, float value, int *index)
 void search_matrix(MatrixList *L)
 {
     char input[3];
-    int matrixIndex = 0, valueIndex = -1;
+    int matrixIndex = 1, row = -1, col = -1;
     float inputFloat;
 
     printf("\e[1;1H\e[2J");
     printf("Value to search: ");
     scanf("%s", input);
     getchar();
-    inputFloat = atoi(input);
+    inputFloat = atof(input);
 
     Matrix *M = (*L);
     SparseMatrix *S = (*M).data;
-    while (!search_value_in_matrix(S, inputFloat, valueIndex))
+    while (!search_value_in_matrix(S, inputFloat, &row, &col))
     {
-        if (valueIndex != -1)
+        if (M == NULL || (*M).next == NULL)
             break;
         M = (*M).next;
         S = (*M).data;
@@ -239,9 +249,9 @@ void search_matrix(MatrixList *L)
     }
 
     see_matrix(S);
-    valueIndex != -1
-        ? printf("Found value %f at index %d in the matrix %d", inputFloat, valueIndex, matrixIndex)
-        : printf("Not found");
+    (row > -1)
+        ? printf("\nFound value %4.2f at field [%d, %d] in the matrix %d\n", inputFloat, row, col, matrixIndex)
+        : printf("\nNot found\n");
 }
 
 void add_value_to_matrix(SparseMatrix *S, int row, int col)
@@ -300,7 +310,7 @@ int main()
     int optionInt = 0;
     MatrixList *matrixList = create_matrix_list();
 
-    while (optionInt != 12)
+    while (optionInt != 9)
     {
         optionInt = 0;
 
@@ -327,7 +337,7 @@ int main()
             create_new_matrix(matrixList);
             break;
         case 2:
-            show_matrix(matrixList);
+            // show_matrix(matrixList);
             break;
         case 3:
             search_matrix(matrixList);
