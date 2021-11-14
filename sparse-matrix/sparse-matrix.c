@@ -31,11 +31,15 @@ typedef Matrix *MatrixList;
 // Uma função que imprime todos os dados da matriz, inclusive os zeros;
 // Uma função que imprime os elementos da diagonal principal, inclusive os zeros caso existam.
 
+// Auxiliar method
+// Verify if matrix list is empty
 int empty_matrix_list(MatrixList *L)
 {
     return (L == NULL || (*L) == NULL);
 }
 
+// Auxiliar method
+// Verify if matrix is empty
 int empty_matrix(SparseMatrix *S)
 {
     return (S == NULL || (*S) == NULL);
