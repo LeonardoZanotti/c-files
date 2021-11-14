@@ -121,7 +121,7 @@ int get_first(Queue *Q)
     if (empty_queue(Q))
         return 0;
 
-    printf("First item of the queue: %d", (*(*Q).start).data);
+    printf("First item of the queue: %d\n", (*(*Q).start).data);
 
     return 1;
 }
@@ -153,11 +153,11 @@ int main()
 
         printf("\n1) Create queue\n");
         printf("2) Free queue\n");
-        printf("4) Insert at the end\n");
-        printf("6) Remove from the start\n");
-        printf("10) Get first item\n");
-        printf("11) Print the queue\n");
-        printf("12) Exit\n");
+        printf("3) Insert at the end\n");
+        printf("4) Remove from the start\n");
+        printf("5) Get first item\n");
+        printf("6) Print the queue\n");
+        printf("7) Exit\n");
 
         while (!(optionInt >= 1 && optionInt <= 7))
         {
