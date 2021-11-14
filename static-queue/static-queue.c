@@ -10,8 +10,8 @@ typedef struct queue
 } Queue;
 
 // Auxiliar method
-// Verify if list is full
-int full_list(Queue *v)
+// Verify if queue is full
+int full_queue(Queue *v)
 {
     if (v == NULL)
         return -1;
@@ -19,8 +19,8 @@ int full_list(Queue *v)
 }
 
 // Auxiliar method
-// Verify if list is empty
-int empty_list(Queue *v)
+// Verify if queue is empty
+int empty_queue(Queue *v)
 {
     if (v == NULL)
         return -1;
@@ -47,33 +47,33 @@ void read_param(int *param)
     *param = atoi(input);
 }
 
-// Create list
-Queue *create_list()
+// Create queue
+Queue *create_queue()
 {
-    Queue *list = (Queue *)malloc(sizeof(Queue));
+    Queue *queue = (Queue *)malloc(sizeof(Queue));
 
-    if (list != NULL)
+    if (queue != NULL)
     {
-        (*list).start = 0;
-        (*list).end = 0;
+        (*queue).start = 0;
+        (*queue).end = 0;
     }
 
-    printf("\nList created!\n");
+    printf("\nQueue created!\n");
 
-    return list;
+    return queue;
 }
 
-// Free the memory allocated to the list
-void free_list(Queue *v)
+// Free the memory allocated to the queue
+void free_queue(Queue *v)
 {
     free(v);
-    printf("\nCleared list from memory\n");
+    printf("\nCleared queue from memory\n");
 }
 
-// Insert in the start of the list
+// Insert in the start of the queue
 int insert_start(Queue *v, int data)
 {
-    if (!full_list(v))
+    if (!full_queue(v))
     {
         for (int i = (*v).end - 1; i >= 0; i--)
             (*v).data[i + 1] = (*v).data[i];
@@ -81,32 +81,32 @@ int insert_start(Queue *v, int data)
         (*v).data[0] = data;
         (*v).end++;
 
-        printf("Inserted %d at the start of the list\n", data);
+        printf("Inserted %d at the start of the queue\n", data);
 
         return 1;
     }
     return 0;
 }
 
-// Insert in the end of the list
+// Insert in the end of the queue
 int insert_end(Queue *v, int data)
 {
-    if (!full_list(v))
+    if (!full_queue(v))
     {
         (*v).data[(*v).end] = data;
         (*v).end++;
 
-        printf("Inserted %d at the end of the list\n", data);
+        printf("Inserted %d at the end of the queue\n", data);
 
         return 1;
     }
     return 0;
 }
 
-// Insert item sorted in the list
+// Insert item sorted in the queue
 int insert_sorted(Queue *v, int data)
 {
-    if (!full_list(v))
+    if (!full_queue(v))
     {
         int k = 0, i = 0;
 
@@ -126,17 +126,17 @@ int insert_sorted(Queue *v, int data)
         (*v).data[k] = data;
         (*v).end++;
 
-        printf("Inserted %d at in the list sorted\n", data);
+        printf("Inserted %d at in the queue sorted\n", data);
 
         return 1;
     }
     return 0;
 }
 
-// Remove element from the start of the list
+// Remove element from the start of the queue
 int remove_start(Queue *v)
 {
-    if (empty_list(v))
+    if (empty_queue(v))
     {
         return 0;
     }
@@ -148,31 +148,31 @@ int remove_start(Queue *v)
 
     (*v).end--;
 
-    printf("Removed element from start of list\n");
+    printf("Removed element from start of queue\n");
 
     return 1;
 }
 
-// Remove element from the end of the list
+// Remove element from the end of the queue
 int remove_end(Queue *v)
 {
-    if (empty_list(v))
+    if (empty_queue(v))
     {
         return 0;
     }
 
     (*v).end--;
 
-    printf("Removed element from end of list\n");
+    printf("Removed element from end of queue\n");
 
     return 1;
 }
 
-// Remove element from the middle of the list by index
+// Remove element from the middle of the queue by index
 int remove_middle(Queue *v, int index)
 {
     int i, data;
-    if (!empty_list(v))
+    if (!empty_queue(v))
     {
         if ((index >= 0) && (index < (*v).end))
         {
@@ -239,14 +239,14 @@ int search_by_index(Queue *v, int *data, int index)
     return 1;
 }
 
-// Print all the list data
-int print_list(Queue *v)
+// Print all the queue data
+int print_queue(Queue *v)
 {
     int i;
 
-    if (!empty_list(v))
+    if (!empty_queue(v))
     {
-        printf("\nList:");
+        printf("\nQueue:");
 
         for (i = 0; i < (*v).end; i++)
             printf("\n%d", (*v).data[i]);
@@ -263,7 +263,7 @@ int main()
 {
     char option[3];
     int optionInt = 0;
-    Queue *list;
+    Queue *queue;
     int searchResult;
     int param;
 
@@ -271,8 +271,8 @@ int main()
     {
         optionInt = 0;
 
-        printf("\n1) Create static list\n");
-        printf("2) Free static list\n");
+        printf("\n1) Create static queue\n");
+        printf("2) Free static queue\n");
         printf("3) Insert at the start\n");
         printf("4) Insert at the end\n");
         printf("5) Insert sorted\n");
@@ -281,7 +281,7 @@ int main()
         printf("8) Remove from the middle\n");
         printf("9) Find by content\n");
         printf("10) Find by index\n");
-        printf("11) Print the list\n");
+        printf("11) Print the queue\n");
         printf("12) Exit\n");
 
         while (!(optionInt >= 1 && optionInt <= 12))
@@ -294,48 +294,48 @@ int main()
         switch (optionInt)
         {
         case 1:
-            list = create_list();
+            queue = create_queue();
             break;
         case 2:
-            free_list(list);
+            free_queue(queue);
             break;
         case 3:
             read_param(&param);
-            insert_start(list, param);
+            insert_start(queue, param);
             break;
         case 4:
             read_param(&param);
-            insert_end(list, param);
+            insert_end(queue, param);
             break;
         case 5:
             read_param(&param);
-            insert_sorted(list, param);
+            insert_sorted(queue, param);
             break;
         case 6:
-            remove_start(list);
+            remove_start(queue);
             break;
         case 7:
-            remove_end(list);
+            remove_end(queue);
             break;
         case 8:
             read_param(&param);
-            remove_middle(list, param);
+            remove_middle(queue, param);
             break;
         case 9:
             read_param(&param);
-            search_by_content(list, param, &searchResult);
+            search_by_content(queue, param, &searchResult);
             print_search_result(searchResult);
             break;
         case 10:
             read_param(&param);
-            search_by_index(list, &searchResult, param);
+            search_by_index(queue, &searchResult, param);
             print_search_result(searchResult);
             break;
         case 11:
-            print_list(list);
+            print_queue(queue);
             break;
         case 12:
-            free_list(list);
+            free_queue(queue);
             printf("\nExiting...\n");
             break;
         default:
@@ -349,11 +349,11 @@ int main()
 // References
 // https://www.youtube.com/watch?v=_LWwqbHU8L0      Using OBS
 // https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf        // book
-// https://www.youtube.com/watch?v=lKwEQgV6nZk&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=3
-// https://www.youtube.com/watch?v=S6rOYN-UiAA&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=4
-// https://www.youtube.com/watch?v=rxVrRdF0MTE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=5
-// https://www.youtube.com/watch?v=UCDCEjRDYrE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=6
-// https://www.youtube.com/watch?v=zO8JAxb1GmA&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=7
-// https://www.youtube.com/watch?v=IpL31ZkVZSI&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=8
-// https://www.youtube.com/watch?v=3KwG_OAB98g&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=9
-// https://www.youtube.com/watch?v=xFN6Nefpx0k&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=10
+// https://www.youtube.com/watch?v=lKwEQgV6nZk&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=3
+// https://www.youtube.com/watch?v=S6rOYN-UiAA&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=4
+// https://www.youtube.com/watch?v=rxVrRdF0MTE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=5
+// https://www.youtube.com/watch?v=UCDCEjRDYrE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=6
+// https://www.youtube.com/watch?v=zO8JAxb1GmA&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=7
+// https://www.youtube.com/watch?v=IpL31ZkVZSI&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=8
+// https://www.youtube.com/watch?v=3KwG_OAB98g&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=9
+// https://www.youtube.com/watch?v=xFN6Nefpx0k&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=10
