@@ -221,6 +221,43 @@ int search_value_in_matrix(SparseMatrix *S, float value, int *index)
     return 0;
 }
 
+void add_value_to_matrix(SparseMatrix *S, int row, int col)
+{
+    char input[20];
+    float inputFloat;
+    printf("Value for field [%d, %d] of the matrix: ", row, col);
+    scanf("%s", input);
+    getchar();
+    inputFloat = atof(input);
+
+    insert_matrix_value_end(S, inputFloat, row, col);
+}
+
+void create_new_matrix(MatrixList *M)
+{
+    SparseMatrix *S = create_sparse_matrix();
+    insert_matrix_end(M, S);
+
+    char input[3];
+    int inputInt = 1, row = 1, col = 1;
+
+    while (inputInt == 1)
+    {
+        printf("\e[1;1H\e[2J");
+        add_value_to_matrix(S, row, col);
+        printf("\e[1;1H\e[2J");
+        printf("[1] - Add new value to matrix\n");
+        printf("\n[2] - Save matrix\n\n");
+        scanf("%s", input);
+        getchar();
+        inputInt = atoi(input);
+        row++;
+        col++;
+    }
+
+    see_matrix(S);
+}
+
 int main()
 {
     char option[3];
@@ -245,6 +282,10 @@ int main()
         switch (optionInt)
         {
         case 1:
+            create_new_matrix(matrixList);
+            break;
+        case 12:
+            free_matrix_list(matrixList);
             break;
         default:
             break;
