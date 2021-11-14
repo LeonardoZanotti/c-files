@@ -17,29 +17,29 @@ struct Header
 
 // Auxiliar method
 // Initialize the queue
-void initialize_queue(Queue *L)
+void initialize_queue(Queue *Q)
 {
-    (*L).start = NULL;
-    (*L).end = NULL;
-    (*L).length = 0;
+    (*Q).start = NULL;
+    (*Q).end = NULL;
+    (*Q).length = 0;
 }
 
 // Auxiliar method
 // Verify if queue is empty
-int empty_queue(Queue *L)
+int empty_queue(Queue *Q)
 {
-    if (L == NULL || (*L).length == 0)
+    if (Q == NULL || (*Q).length == 0)
         return 1;
     return 0;
 }
 
 // Auxiliar method
 // Verify the size of the queue
-int size_queue(Queue *L)
+int size_queue(Queue *Q)
 {
-    if (L == NULL)
+    if (Q == NULL)
         return 0;
-    return (*L).length;
+    return (*Q).length;
 }
 
 // Auxiliar method
@@ -55,62 +55,62 @@ void read_param(int *param)
 // Create queue
 Queue *create_queue()
 {
-    Queue *L = (Queue *)malloc(sizeof(Queue));
-    if (L != NULL)
-        initialize_queue(L);
+    Queue *Q = (Queue *)malloc(sizeof(Queue));
+    if (Q != NULL)
+        initialize_queue(Q);
     printf("\nQueue created!\n");
-    return L;
+    return Q;
 }
 
 // Free the memory allocated to the queue
-void free_queue(Queue *L)
+void free_queue(Queue *Q)
 {
-    if (L != NULL)
+    if (Q != NULL)
     {
-        while ((*L).start != NULL)
+        while ((*Q).start != NULL)
         {
-            NodeData *N = (*L).start;
-            (*L).start = (*(*L).start).next;
+            NodeData *N = (*Q).start;
+            (*Q).start = (*(*Q).start).next;
             free(N);
         }
-        free(L);
+        free(Q);
     }
     printf("\nCleared queue from memory\n");
 }
 
 // Insert in the end of the queue
-int insert_end(Queue *L, int data)
+int insert_end(Queue *Q, int data)
 {
-    if (L == NULL)
+    if (Q == NULL)
         return 0;
     NodeData *N = (NodeData *)malloc(sizeof(NodeData));
     if (N == NULL)
         return 0;
     (*N).data = data;
     (*N).next = NULL;
-    if ((*L).start == NULL)
-        (*L).start = N;
+    if ((*Q).start == NULL)
+        (*Q).start = N;
     else
-        (*(*L).end).next = N;
-    (*L).end = N;
-    (*L).length++;
+        (*(*Q).end).next = N;
+    (*Q).end = N;
+    (*Q).length++;
     printf("Inserted %d at the end of the queue\n", data);
     return 1;
 }
 
 // Remove element from the start of the queue
-int remove_start(Queue *L)
+int remove_start(Queue *Q)
 {
-    if (empty_queue(L))
+    if (empty_queue(Q))
     {
         return 0;
     }
 
-    NodeData *N = (*L).start;
-    (*L).start = (*N).next;
-    (*L).length--;
-    if ((*L).start == NULL)
-        (*L).end = NULL;
+    NodeData *N = (*Q).start;
+    (*Q).start = (*N).next;
+    (*Q).length--;
+    if ((*Q).start == NULL)
+        (*Q).end = NULL;
     free(N);
 
     printf("Removed element from start of queue\n");
@@ -118,15 +118,15 @@ int remove_start(Queue *L)
 }
 
 // Get first element of the queue
-int get_first(Queue *L)
+int get_first(Queue *Q)
 {
-    if (empty_queue(L))
+    if (empty_queue(Q))
         return 0;
 
     int i, found = 0;
 
-    NodeData *N = (*L).start;
-    for (i = 0; i < size_queue(L); i++)
+    NodeData *N = (*Q).start;
+    for (i = 0; i < size_queue(Q); i++)
     {
         if ((*N).data == data)
         {
@@ -144,12 +144,12 @@ int get_first(Queue *L)
 }
 
 // Print all the queue data
-int print_queue(Queue *L)
+int print_queue(Queue *Q)
 {
-    if (!empty_queue(L))
+    if (!empty_queue(Q))
     {
         printf("\nQueue:");
-        for (NodeData *N = (*L).start; N != NULL; N = (*N).next)
+        for (NodeData *N = (*Q).start; N != NULL; N = (*N).next)
             printf("\n%d", (*N).data);
         printf("\n");
     }
