@@ -14,7 +14,7 @@ typedef MatrixNode *SparseMatrix;
 // List of matrixes
 typedef struct ListNode
 {
-    SparseMatrix data;
+    SparseMatrix *data;
     struct ListNode *next;
 } Matrix;
 typedef Matrix *MatrixList;
@@ -152,13 +152,13 @@ int main()
         switch (optionInt)
         {
         case 1:
-            create_new_matrix(matrixList);
+            // create_new_matrix(matrixList);
             break;
         case 2:
-            free_matrix(matrixList);
+            // free_matrix(matrixList);
             break;
         case 12:
-            free_matrix_list(matrixList);
+            // free_matrix_list(matrixList);
             break;
         default:
             break;
