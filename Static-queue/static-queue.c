@@ -142,7 +142,7 @@ int main()
     int searchResult;
     int param;
 
-    while (optionInt != 11)
+    while (optionInt != 7)
     {
         optionInt = 0;
 
