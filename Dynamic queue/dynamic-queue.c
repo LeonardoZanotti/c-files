@@ -102,9 +102,7 @@ int insert_end(Queue *Q, int data)
 int remove_start(Queue *Q)
 {
     if (empty_queue(Q))
-    {
         return 0;
-    }
 
     NodeData *N = (*Q).start;
     (*Q).start = (*N).next;
@@ -123,24 +121,9 @@ int get_first(Queue *Q)
     if (empty_queue(Q))
         return 0;
 
-    int i, found = 0;
+    printf("First item of the queue: %d", (*(*Q).start).data);
 
-    NodeData *N = (*Q).start;
-    for (i = 0; i < size_queue(Q); i++)
-    {
-        if ((*N).data == data)
-        {
-            *index = i;
-            found = 1;
-            break;
-        }
-        N = (*N).next;
-    }
-
-    if (found)
-        return 1;
-
-    return 0;
+    return 1;
 }
 
 // Print all the queue data
