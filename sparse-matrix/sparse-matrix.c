@@ -180,18 +180,20 @@ int see_matrix(SparseMatrix *S)
         }
 
         N = *S;
+        printf("%d %d", (*N).row, (*N).col);
         printf("\n[\n");
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < col; j++)
             {
+
                 if ((*N).row == row && (*N).col == col)
                 {
-                    printf("%.2f ", (*N).data);
+                    // printf("%.2f ", (*N).data);
                     N = (*N).next;
                 }
                 else
-                    printf("0.0 ");
+                    printf("0 ");
             }
             printf("\n");
         }
@@ -249,8 +251,13 @@ void create_new_matrix(MatrixList *M)
     while (inputInt == 1 || inputInt == 2)
     {
         printf("\e[1;1H\e[2J");
-        add_value_to_matrix(S, row, col);
-        printf("\e[1;1H\e[2J");
+
+        if (inputInt == 1)
+        {
+            add_value_to_matrix(S, row, col);
+            printf("\e[1;1H\e[2J");
+        }
+
         if (inputInt == 2)
         {
             col = 1;
@@ -258,9 +265,11 @@ void create_new_matrix(MatrixList *M)
         }
         else
             col++;
+
         printf("[1] - Add value to field [%d, %d] of the matrix\n", row, col);
         printf("\n[2] - New row\n");
         printf("\n[3] - Save matrix\n\n");
+
         scanf("%s", input);
         getchar();
         inputInt = atoi(input);
