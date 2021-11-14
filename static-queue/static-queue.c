@@ -148,17 +148,13 @@ int main()
 
         printf("\n1) Create static queue\n");
         printf("2) Free static queue\n");
-        printf("3) Insert at the start\n");
-        printf("4) Insert at the end\n");
-        printf("5) Insert sorted\n");
-        printf("6) Remove from the start\n");
-        printf("7) Remove from the end\n");
-        printf("8) Remove from the middle\n");
-        printf("9) Get first item\n");
-        printf("10) Print the queue\n");
-        printf("11) Exit\n");
+        printf("3) Insert at the end\n");
+        printf("4) Remove from the start\n");
+        printf("5) Get first item\n");
+        printf("6) Print the queue\n");
+        printf("7) Exit\n");
 
-        while (!(optionInt >= 1 && optionInt <= 12))
+        while (!(optionInt >= 1 && optionInt <= 7))
         {
             printf("\nChoose an option: ");
             scanf("%s", option);
@@ -175,33 +171,18 @@ int main()
             break;
         case 3:
             read_param(&param);
-            insert_start(queue, param);
-            break;
-        case 4:
-            read_param(&param);
             insert_end(queue, param);
             break;
-        case 5:
-            read_param(&param);
-            insert_sorted(queue, param);
-            break;
-        case 6:
+        case 4:
             remove_start(queue);
             break;
-        case 7:
-            remove_end(queue);
-            break;
-        case 8:
-            read_param(&param);
-            remove_middle(queue, param);
-            break;
-        case 9:
+        case 5:
             get_first(queue);
             break;
-        case 10:
+        case 6:
             print_queue(queue);
             break;
-        case 11:
+        case 7:
             free_queue(queue);
             printf("\nExiting...\n");
             break;
@@ -216,11 +197,10 @@ int main()
 // References
 // https://www.youtube.com/watch?q=_LWwqbHU8L0      Using OBS
 // https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf        // book
-// https://www.youtube.com/watch?q=lKwEQgV6nZk&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=3
-// https://www.youtube.com/watch?q=S6rOYN-UiAA&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=4
-// https://www.youtube.com/watch?q=rxVrRdF0MTE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=5
-// https://www.youtube.com/watch?q=UCDCEjRDYrE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=6
-// https://www.youtube.com/watch?q=zO8JAxb1GmA&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=7
-// https://www.youtube.com/watch?q=IpL31ZkVZSI&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=8
-// https://www.youtube.com/watch?q=3KwG_OAB98g&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=9
-// https://www.youtube.com/watch?q=xFN6Nefpx0k&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=10
+// https://www.youtube.com/watch?v=aEfOzz_KXl8&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=32
+// https://www.youtube.com/watch?v=y93DzmBskGQ&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=33
+// https://www.youtube.com/watch?v=RLu9QLd_xpY&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=34
+// https://www.youtube.com/watch?v=0KXFoxSCEJE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=35
+// https://www.youtube.com/watch?v=4YXnrKJCWrE&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=37
+// https://www.youtube.com/watch?v=aIFK1n9Sp30&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=38
+// https://www.youtube.com/watch?v=yOjgEXbKtME&list=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=39
