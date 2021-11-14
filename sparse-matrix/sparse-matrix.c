@@ -19,18 +19,6 @@ typedef struct ListNode
 } Matrix;
 typedef Matrix *MatrixList;
 
-// Uma função que faz a alocação de memória para cada nodo criado para uma lista encadeada;
-// Uma função que insere na lista encadeada um nodo alocado;
-// Uma função que busca os dados em uma lista encadeada;
-// Uma função que libera da memória uma lista encadeada;
-// Uma função que lê os dados da matriz, via teclado, e inseri na lista encadeada somente os dados diferentes de zero;
-// Uma função que soma duas matrizes;
-// Uma função que subtrai duas matrizes;
-// Uma função que multiplica duas matrizes;
-// Uma função que gera a matriz transposta;
-// Uma função que imprime todos os dados da matriz, inclusive os zeros;
-// Uma função que imprime os elementos da diagonal principal, inclusive os zeros caso existam.
-
 // Auxiliar method
 // Verify if matrix list is empty
 int empty_matrix_list(MatrixList *L)
@@ -227,6 +215,35 @@ int search_value_in_matrix(SparseMatrix *S, float value, int *index)
     return 0;
 }
 
+void search_matrix(MatrixList *L)
+{
+    char input[3];
+    int matrixIndex = 0, valueIndex = -1;
+    float inputFloat;
+
+    printf("\e[1;1H\e[2J");
+    printf("Value to search: ");
+    scanf("%s", input);
+    getchar();
+    inputFloat = atoi(input);
+
+    Matrix *M = (*L);
+    SparseMatrix *S = (*M).data;
+    while (!search_value_in_matrix(S, inputFloat, valueIndex))
+    {
+        if (valueIndex != -1)
+            break;
+        M = (*M).next;
+        S = (*M).data;
+        matrixIndex++;
+    }
+
+    see_matrix(S);
+    valueIndex != -1
+        ? printf("Found value %f at index %d in the matrix %d", inputFloat, valueIndex, matrixIndex)
+        : printf("Not found");
+}
+
 void add_value_to_matrix(SparseMatrix *S, int row, int col)
 {
     char input[20];
@@ -288,8 +305,14 @@ int main()
         optionInt = 0;
 
         printf("\n1) Create new matrix\n");
-        printf("2) Clear matrix\n");
-        printf("12) Exit\n");
+        printf("2) See matrix\n");
+        printf("3) Search in matrix\n");
+        printf("4) Sum matrix\n");
+        printf("5) Subtract matrix\n");
+        printf("6) Multiply matrix\n");
+        printf("7) Transposed matrix\n");
+        printf("8) See diagonal of matrix\n");
+        printf("9) Exit\n");
 
         while (!(optionInt >= 1 && optionInt <= 12))
         {
@@ -303,7 +326,13 @@ int main()
         case 1:
             create_new_matrix(matrixList);
             break;
-        case 12:
+        case 2:
+            show_matrix(matrixList);
+            break;
+        case 3:
+            search_matrix(matrixList);
+            break;
+        case 9:
             free_matrix_list(matrixList);
             break;
         default:
