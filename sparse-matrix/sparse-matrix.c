@@ -31,6 +31,16 @@ typedef Matrix *MatrixList;
 // Uma função que imprime todos os dados da matriz, inclusive os zeros;
 // Uma função que imprime os elementos da diagonal principal, inclusive os zeros caso existam.
 
+int empty_matrix_list(MatrixList *L)
+{
+    return (L == NULL || (*L) == NULL);
+}
+
+int empty_matrix(SparseMatrix *S)
+{
+    return (S == NULL || (*S) == NULL);
+}
+
 // Create a matrix list
 MatrixList *create_matrix_list()
 {
@@ -128,6 +138,38 @@ void free_matrix_list(MatrixList *L)
     }
 }
 
+// List matrix values
+int see_matrix(SparseMatrix *S)
+{
+    if (!empty_matrix(S))
+    {
+        int row = 0, col = 0;
+
+        MatrixNode *N = (*S);
+        for (; N != NULL; N = (*N).next)
+        {
+            if ((*N).row > row)
+                row = (*N).row;
+            if ((*N).col > col)
+                col = (*N).col;
+        }
+
+        N = *S;
+        printf("\n[\n");
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < col; j++)
+            {
+                (*N).row == row && (*N).col == col
+                    ? printf("%.2f ", (*N).data)
+                    : printf("0 ");
+            }
+        }
+        printf("\n]\n");
+    }
+    return 0;
+}
+
 int main()
 {
     char option[3];
@@ -152,13 +194,6 @@ int main()
         switch (optionInt)
         {
         case 1:
-            // create_new_matrix(matrixList);
-            break;
-        case 2:
-            // free_matrix(matrixList);
-            break;
-        case 12:
-            // free_matrix_list(matrixList);
             break;
         default:
             break;
