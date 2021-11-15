@@ -370,10 +370,11 @@ void add_value_to_matrix(SparseMatrix *S, int row, int col, int last)
         insert_matrix_value_end(S, inputFloat, row, col);
 }
 
-void create_new_matrix(MatrixList *M)
+void create_new_matrix(MatrixList *L)
 {
     SparseMatrix *S = create_sparse_matrix();
-    insert_matrix_end(M, S);
+    insert_matrix_end(L, S);
+    printf("Created new matrix at index %d\n", size_matrix_list(L) - 1);
 
     char input[3];
     int row, col;
@@ -401,6 +402,7 @@ void create_new_matrix(MatrixList *M)
         }
     }
 
+    printf("\nCreated new matrix at index %d\n", size_matrix_list(L));
     see_matrix(S, 0, 0);
 }
 
@@ -473,6 +475,42 @@ void read_params(MatrixList *L, int *matrix1, int *matrix2, int twoParams)
     }
 }
 
+void add_matrix(MatrixList *L, int index1, int index2)
+{
+    Matrix *M1 = get_matrix_by_index(L, index1);
+    Matrix *M2 = get_matrix_by_index(L, index2);
+
+    MatrixSize info1 = size_matrix((*M1).data);
+    MatrixSize info2 = size_matrix((*M2).data);
+
+    if (info1.rows != info2.rows || info1.cols == info2.cols)
+    {
+        printf("The matrixes should have the same size!");
+    }
+    else
+    {
+        printf("sum");
+    }
+}
+
+void subtract_matrix(MatrixList *L, int index1, int index2)
+{
+    Matrix *M1 = get_matrix_by_index(L, index1);
+    Matrix *M2 = get_matrix_by_index(L, index2);
+
+    MatrixSize info1 = size_matrix((*M1).data);
+    MatrixSize info2 = size_matrix((*M2).data);
+
+    if (info1.rows != info2.rows || info1.cols == info2.cols)
+    {
+        printf("The matrixes should have the same size!");
+    }
+    else
+    {
+        printf("sub");
+    }
+}
+
 void transposed_matrix(MatrixList *L, int index)
 {
     Matrix *M = get_matrix_by_index(L, index);
@@ -526,11 +564,11 @@ int main()
             break;
         case 4:
             read_params(matrixList, &matrix1, &matrix2, 1);
-            // sum_matrix(matrixList, matrix1, matrix2);
+            add_matrix(matrixList, matrix1, matrix2);
             break;
         case 5:
             read_params(matrixList, &matrix1, &matrix2, 1);
-            // subtract_matrix(matrixList, matrix1, matrix2);
+            subtract_matrix(matrixList, matrix1, matrix2);
             break;
         case 6:
             read_params(matrixList, &matrix1, &matrix2, 1);
