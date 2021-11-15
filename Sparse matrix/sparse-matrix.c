@@ -574,6 +574,69 @@ void subtract_matrix(MatrixList *L, int index1, int index2)
     }
 }
 
+void multiply_matrix(MatrixList *L, int index1, int index2)
+{
+    Matrix *M1 = get_matrix_by_index(L, index1);
+    Matrix *M2 = get_matrix_by_index(L, index2);
+
+    MatrixSize info1 = size_matrix((*M1).data);
+    MatrixSize info2 = size_matrix((*M2).data);
+
+    if (info1.cols != info2.rows)
+    {
+        printf("The number of columns of the first matrix should be equal to the number of rows of the second matrix!");
+    }
+    else
+    {
+        SparseMatrix *R = create_sparse_matrix(), *S1 = (*M1).data, *S2 = (*M2).data;
+        insert_matrix_end(L, R);
+
+        int rows, cols;
+        float data = 0;
+        MatrixNode *N1 = (*S1);
+        MatrixNode *N2 = (*S2);
+
+        for (int i = 1; i <= info1.rows; i++)
+        {
+            for (int j = 1; j <= info2.cols; j++)
+            {
+                rows = i;
+                cols = j;
+                data = 0;
+
+                // Get first value
+                do
+                {
+                    if ((*N1).info.rows == i && (*N1).info.cols == j)
+                    {
+                        data = (*N1).data;
+                        break;
+                    }
+                    N1 = (*N1).next;
+                } while (N1);
+
+                // Subtract the second value
+                do
+                {
+                    if ((*N2).info.rows == i && (*N2).info.cols == j)
+                    {
+                        data -= (*N2).data;
+                        break;
+                    }
+                    N2 = (*N2).next;
+                } while (N2);
+
+                if (data != 0)
+                    insert_matrix_value_end(R, data, rows, cols);
+
+                N1 = (*S1);
+                N2 = (*S2);
+            }
+        }
+        see_matrix(R, 0);
+    }
+}
+
 void transposed_matrix(MatrixList *L, int index)
 {
     printf("\n");
@@ -661,7 +724,7 @@ int main()
             break;
         case 6:
             read_params(matrixList, &matrix1, &matrix2, 1);
-            // multiply_matrix(matrixList, matrix1, matrix2);
+            multiply_matrix(matrixList, matrix1, matrix2);
             break;
         case 7:
             read_params(matrixList, &matrix1, &matrix2, 0);
