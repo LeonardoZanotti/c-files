@@ -197,7 +197,7 @@ void free_matrix_list(MatrixList *L)
 }
 
 // List matrix values
-void see_matrix(SparseMatrix *S, int diagonal)
+void see_matrix(SparseMatrix *S, int diagonal, int transposed)
 {
     if (!empty_matrix(S))
     {
@@ -226,6 +226,32 @@ void see_matrix(SparseMatrix *S, int diagonal)
                     }
                     else
                         printf("%4s ", "");
+                }
+            }
+            printf("\n]\n");
+        }
+        else if (transposed)
+        {
+            int found = 0;
+            printf("\nTransposed matrix:\n[");
+            for (i = 1; i <= info.cols; i++)
+            {
+                printf("\n");
+                for (j = 1; j <= info.rows; j++)
+                {
+                    do
+                    {
+                        if ((*N).info.rows == j && (*N).info.cols == i)
+                        {
+                            found = 1;
+                            printf("%4.1f ", (*N).data);
+                        }
+                        N = (*N).next;
+                    } while (N);
+                    if (!found)
+                        printf("%4.1f ", 0.0);
+                    N = (*S);
+                    found = 0;
                 }
             }
             printf("\n]\n");
@@ -265,7 +291,7 @@ void show_matrix(MatrixList *L, int matrixIndex)
         S = (*M).data;
     }
 
-    see_matrix(S, 0);
+    see_matrix(S, 0, 0);
 }
 
 // Search value in the matrixes
@@ -325,7 +351,7 @@ void search_matrix(MatrixList *L)
 
     if (row > -1)
     {
-        see_matrix(S, 0);
+        see_matrix(S, 0, 0);
         printf("\nFound value %4.1f at field [%d, %d] in the matrix %d\n", inputFloat, row, col, matrixIndex);
     }
     else
@@ -379,7 +405,7 @@ void create_new_matrix(MatrixList *M)
         inputInt = atoi(input);
     }
 
-    see_matrix(S, 0);
+    see_matrix(S, 0, 0);
 }
 
 void read_params(MatrixList *L, int *matrix1, int *matrix2, int twoParams)
@@ -413,23 +439,16 @@ void read_params(MatrixList *L, int *matrix1, int *matrix2, int twoParams)
     }
 }
 
-Matrix *generate_transposed_matrix(Matrix *M)
-{
-    Matrix *T;
-    return T;
-}
-
 void transposed_matrix(MatrixList *L, int index)
 {
     Matrix *M = get_matrix_by_index(L, index);
-    Matrix *T = generate_transposed_matrix(M);
-    see_matrix((*T).data, 0);
+    see_matrix((*M).data, 0, 1);
 }
 
 void see_diagonal_of_matrix(MatrixList *L, int index)
 {
     Matrix *M = get_matrix_by_index(L, index);
-    see_matrix((*M).data, 1);
+    see_matrix((*M).data, 1, 0);
 }
 
 int main()
