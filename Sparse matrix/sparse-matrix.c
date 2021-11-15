@@ -326,10 +326,10 @@ void search_matrix(MatrixList *L)
     if (row > -1)
     {
         see_matrix(S, 0);
-        printf("\nFound value %4.1f at field [%d, %d] in the matrix %d\n", inputFloat, row, col, matrixIndex);
+        printf("Found value %4.1f at field [%d, %d] in the matrix %d\n\n", inputFloat, row, col, matrixIndex);
     }
     else
-        printf("\nNot found\n");
+        printf("\nNot found\n\n");
 }
 
 void add_value_to_matrix(SparseMatrix *S, int row, int col, int last)
@@ -376,7 +376,6 @@ void create_new_matrix(MatrixList *L)
         }
     }
 
-    printf("\n");
     see_matrix(S, 0);
 }
 
@@ -445,9 +444,8 @@ void read_params(MatrixList *L, int *matrix1, int *matrix2, int twoParams)
             getchar();
             (*matrix2) = atoi(input);
         }
+        printf("\n");
     }
-
-    printf("\n");
 }
 
 void add_matrix(MatrixList *L, int index1, int index2)
@@ -572,13 +570,14 @@ void subtract_matrix(MatrixList *L, int index1, int index2)
                 N2 = (*S2);
             }
         }
-        printf("\n");
         see_matrix(R, 0);
     }
 }
 
 void transposed_matrix(MatrixList *L, int index)
 {
+    printf("\n");
+
     Matrix *M = get_matrix_by_index(L, index);
     SparseMatrix *T = create_sparse_matrix(), *S = (*M).data;
     insert_matrix_end(L, T);
@@ -602,7 +601,6 @@ void transposed_matrix(MatrixList *L, int index)
             N = (*S);
         }
     }
-    printf("\n");
     see_matrix(T, 0);
 }
 
