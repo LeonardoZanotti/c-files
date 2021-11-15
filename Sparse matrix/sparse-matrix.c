@@ -5,6 +5,12 @@
 
 #define PRECISION 0.00001
 
+// Matrix size - rows and cols
+typedef struct RowCol
+{
+    int rows, cols;
+} MatrixSize;
+
 // Matrix node
 typedef struct MatrixInfo
 {
@@ -27,6 +33,16 @@ typedef Matrix *MatrixList;
 int fequal(float a, float b, float precision)
 {
     return fabs(a - b) < precision;
+}
+
+// Auxiliar method
+// Get matrix by index
+Matrix *get_matrix_by_index(MatrixList *L, int index)
+{
+    Matrix *M = (*L);
+    for (int i = 1; i < index; i++)
+        M = (*M).next;
+    return M;
 }
 
 // Auxiliar method
@@ -61,23 +77,26 @@ int size_matrix_list(MatrixList *L)
 
 // Auxiliar method
 // Check matrix size
-int size_matrix(SparseMatrix *S)
+MatrixSize size_matrix(SparseMatrix *S)
 {
-    if (empty_matrix(S))
-        return 0;
+    MatrixSize info;
+    info.rows = 0;
+    info.cols = 0;
 
-    int row = 1, col = 1;
-
-    MatrixNode *N = (*S);
-    for (; N != NULL; N = (*N).next)
+    if (!empty_matrix(S))
     {
-        if ((*N).row > row)
-            row = (*N).row;
-        if ((*N).col > col)
-            col = (*N).col;
+
+        MatrixNode *N = (*S);
+        for (; N != NULL; N = (*N).next)
+        {
+            if ((*N).row > info.rows)
+                info.rows = (*N).row;
+            if ((*N).col > info.cols)
+                info.cols = (*N).col;
+        }
     }
 
-    return row * col;
+    return info;
 }
 
 // Create a matrix list
@@ -182,15 +201,17 @@ void see_matrix(SparseMatrix *S, int diagonal)
 {
     if (!empty_matrix(S))
     {
-        int row = 0, col = 0, i, j;
+        int i, j;
 
         MatrixNode *N = (*S);
+        MatrixSize info = size_matrix(S);
+
         for (; N != NULL; N = (*N).next)
         {
-            if ((*N).row > row)
-                row = (*N).row;
-            if ((*N).col > col)
-                col = (*N).col;
+            if ((*N).row > info.rows)
+                info.rows = (*N).row;
+            if ((*N).col > info.cols)
+                info.cols = (*N).col;
         }
 
         N = *S;
@@ -198,10 +219,10 @@ void see_matrix(SparseMatrix *S, int diagonal)
         if (diagonal)
         {
             printf("\nDiagonal of matrix:\n[");
-            for (i = 1; i <= row; i++)
+            for (i = 1; i <= info.rows; i++)
             {
                 printf("\n");
-                for (j = 1; j <= col; j++)
+                for (j = 1; j <= info.cols; j++)
                 {
                     if (i == j)
                     {
@@ -222,10 +243,10 @@ void see_matrix(SparseMatrix *S, int diagonal)
         else
         {
             printf("\nMatrix:\n[");
-            for (i = 1; i <= row; i++)
+            for (i = 1; i <= info.rows; i++)
             {
                 printf("\n");
-                for (j = 1; j <= col; j++)
+                for (j = 1; j <= info.cols; j++)
                 {
                     if ((*N).row == i && (*N).col == j)
                     {
@@ -276,7 +297,8 @@ int search_value_in_matrix(SparseMatrix *S, float value, int *row, int *col)
     int i, found = 0;
 
     MatrixNode *N = *S;
-    for (i = 0; i < size_matrix(S); i++)
+    MatrixSize info = size_matrix(S);
+    for (i = 0; i < info.rows * info.cols; i++)
     {
         if (fequal((*N).data, value, PRECISION))
         {
@@ -394,12 +416,22 @@ void read_params(int *matrix1, int *matrix2, int twoParams)
     }
 }
 
+Matrix *generate_transposed_matrix(Matrix *M)
+{
+    Matrix *T;
+    return T;
+}
+
+void transposed_matrix(MatrixList *L, int index)
+{
+    Matrix *M = get_matrix_by_index(L, index);
+    Matrix *T = generate_transposed_matrix(M);
+    see_matrix((*T).data, 0);
+}
+
 void see_diagonal_of_matrix(MatrixList *L, int index)
 {
-    Matrix *M = (*L);
-    for (int i = 1; i < index; i++)
-        M = (*M).next;
-
+    Matrix *M = get_matrix_by_index(L, index);
     see_matrix((*M).data, 1);
 }
 
@@ -455,7 +487,7 @@ int main()
             break;
         case 7:
             read_params(&matrix1, &matrix2, 0);
-            // transposed_matrix(matrixList, matrix1);
+            transposed_matrix(matrixList, matrix1);
             break;
         case 8:
             read_params(&matrix1, &matrix2, 0);
