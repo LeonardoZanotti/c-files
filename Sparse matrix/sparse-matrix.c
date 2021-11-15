@@ -287,6 +287,8 @@ int search_value_in_matrix(SparseMatrix *S, float value, int *row, int *col)
             found = 1;
             break;
         }
+        if (!(*N).next)
+            break;
         N = (*N).next;
     }
 
@@ -321,10 +323,13 @@ void search_matrix(MatrixList *L)
         }
     }
 
-    see_matrix(S, 0);
-    (row > -1)
-        ? printf("\nFound value %4.2f at field [%d, %d] in the matrix %d\n", inputFloat, row, col, matrixIndex)
-        : printf("\nNot found\n");
+    if (row > -1)
+    {
+        see_matrix(S, 0);
+        printf("\nFound value %4.1f at field [%d, %d] in the matrix %d\n", inputFloat, row, col, matrixIndex);
+    }
+    else
+        printf("\nNot found\n");
 }
 
 void add_value_to_matrix(SparseMatrix *S, int row, int col)
