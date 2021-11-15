@@ -146,7 +146,7 @@ int main()
         while (!(optionInt >= 1 && optionInt <= 12))
         {
             printf("\nChoose an option: ");
-            scanf("%s", option);
+            scanf("%3s", option);
             optionInt = atoi(option);
         }
 
@@ -160,7 +160,7 @@ int main()
             break;
         case 3:
             printf("\nValue for the operation: ");
-            scanf("%s", input);
+            scanf("%3s", input);
             int param = atoi(input);
             insert_start(stack, param);
             break;

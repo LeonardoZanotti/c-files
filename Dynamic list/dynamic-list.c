@@ -41,7 +41,7 @@ void read_param(int *param)
 {
     char input[3];
     printf("\nValue for the operation: ");
-    scanf("%s", input);
+    scanf("%3s", input);
     *param = atoi(input);
 }
 
@@ -288,7 +288,7 @@ int main()
         while (!(optionInt >= 1 && optionInt <= 12))
         {
             printf("\nChoose an option: ");
-            scanf("%s", option);
+            scanf("%3s", option);
             optionInt = atoi(option);
         }
 

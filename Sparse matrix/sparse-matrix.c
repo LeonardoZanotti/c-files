@@ -223,7 +223,7 @@ void show_matrix(MatrixList *L)
     {
         printf("\e[1;1H\e[2J");
         printf("Index of the matrix to show: ");
-        scanf("%s", input);
+        scanf("%3s", input);
         getchar();
         matrixIndex = atof(input);
     }
@@ -274,7 +274,7 @@ void search_matrix(MatrixList *L)
 
     printf("\e[1;1H\e[2J");
     printf("Value to search: ");
-    scanf("%s", input);
+    scanf("%3s", input);
     getchar();
     inputFloat = atof(input);
 
@@ -300,7 +300,7 @@ void add_value_to_matrix(SparseMatrix *S, int row, int col)
     char input[20];
     float inputFloat;
     printf("Value for field [%d, %d] of the matrix: ", row, col);
-    scanf("%s", input);
+    scanf("%20s", input);
     getchar();
     inputFloat = atof(input);
     if (inputFloat != 0.0)
@@ -337,7 +337,7 @@ void create_new_matrix(MatrixList *M)
         printf("\n[2] - New row\n");
         printf("\n[3] - Save matrix\n\n");
 
-        scanf("%s", input);
+        scanf("%3s", input);
         getchar();
         inputInt = atoi(input);
     }
@@ -368,7 +368,7 @@ int main()
         while (!(optionInt >= 1 && optionInt <= 12))
         {
             printf("\nChoose an option: ");
-            scanf("%s", option);
+            scanf("%3s", option);
             optionInt = atoi(option);
         }
 

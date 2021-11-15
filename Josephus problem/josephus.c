@@ -207,7 +207,7 @@ int main()
     while (sortNumber < 0)
     {
         printf("\nNumber for the count: ");
-        scanf("%s", input);
+        scanf("%3s", input);
         sortNumber = atoi(input);
     }
 

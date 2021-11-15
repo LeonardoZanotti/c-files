@@ -232,7 +232,7 @@ int create_new_route(RoutesList *L)
         printf("\e[1;1H\e[2J");
         printf("[1] - Add new city to route\n");
         printf("\n[2] - Save route\n\n");
-        scanf("%s", input);
+        scanf("%3s", input);
         getchar();
         inputInt = atoi(input);
     }
@@ -430,7 +430,7 @@ int main()
         while (!(optionInt >= 1 && optionInt <= 4))
         {
             printf("\nChoose an option: ");
-            scanf("%s", option);
+            scanf("%3s", option);
             getchar();
             optionInt = atoi(option);
         }
