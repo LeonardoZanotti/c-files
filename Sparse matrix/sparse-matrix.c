@@ -138,6 +138,7 @@ int insert_matrix_end(MatrixList *L, SparseMatrix *matrix)
             MAux = (*MAux).next;
         (*MAux).next = M;
     }
+    printf("Created new matrix at index %d\n", size_matrix_list(L));
     return 1;
 }
 
@@ -197,7 +198,7 @@ void free_matrix_list(MatrixList *L)
 }
 
 // List matrix values
-void see_matrix(SparseMatrix *S, int diagonal, int transposed)
+void see_matrix(SparseMatrix *S, int diagonal)
 {
     if (!empty_matrix(S))
     {
@@ -226,32 +227,6 @@ void see_matrix(SparseMatrix *S, int diagonal, int transposed)
                     }
                     else
                         printf("%4s ", "");
-                }
-            }
-            printf("\n]\n");
-        }
-        else if (transposed)
-        {
-            int found = 0;
-            printf("\nTransposed matrix:\n[");
-            for (i = 1; i <= info.cols; i++)
-            {
-                printf("\n");
-                for (j = 1; j <= info.rows; j++)
-                {
-                    do
-                    {
-                        if ((*N).info.rows == j && (*N).info.cols == i)
-                        {
-                            found = 1;
-                            printf("%4.1f ", (*N).data);
-                        }
-                        N = (*N).next;
-                    } while (N);
-                    if (!found)
-                        printf("%4.1f ", 0.0);
-                    N = (*S);
-                    found = 0;
                 }
             }
             printf("\n]\n");
@@ -291,7 +266,7 @@ void show_matrix(MatrixList *L, int matrixIndex)
         S = (*M).data;
     }
 
-    see_matrix(S, 0, 0);
+    see_matrix(S, 0);
 }
 
 // Search value in the matrixes
@@ -351,7 +326,7 @@ void search_matrix(MatrixList *L)
 
     if (row > -1)
     {
-        see_matrix(S, 0, 0);
+        see_matrix(S, 0);
         printf("\nFound value %4.1f at field [%d, %d] in the matrix %d\n", inputFloat, row, col, matrixIndex);
     }
     else
@@ -372,15 +347,15 @@ void add_value_to_matrix(SparseMatrix *S, int row, int col, int last)
 
 void create_new_matrix(MatrixList *L)
 {
+    printf("\e[1;1H\e[2J");
+
     SparseMatrix *S = create_sparse_matrix();
     insert_matrix_end(L, S);
-    printf("Created new matrix at index %d\n", size_matrix_list(L) - 1);
 
     char input[3];
     int row, col;
 
-    printf("\e[1;1H\e[2J");
-    printf("Number of rows of the matrix: ");
+    printf("\nNumber of rows of the matrix: ");
 
     scanf("%10s", input);
     getchar();
@@ -402,8 +377,7 @@ void create_new_matrix(MatrixList *L)
         }
     }
 
-    printf("\nCreated new matrix at index %d\n", size_matrix_list(L));
-    see_matrix(S, 0, 0);
+    see_matrix(S, 0);
 }
 
 // void create_new_matrix(MatrixList *M)
@@ -441,7 +415,7 @@ void create_new_matrix(MatrixList *L)
 //         inputInt = atoi(input);
 //     }
 
-//     see_matrix(S, 0, 0);
+//     see_matrix(S, 0);
 // }
 
 void read_params(MatrixList *L, int *matrix1, int *matrix2, int twoParams)
@@ -513,14 +487,37 @@ void subtract_matrix(MatrixList *L, int index1, int index2)
 
 void transposed_matrix(MatrixList *L, int index)
 {
+    printf("\n");
     Matrix *M = get_matrix_by_index(L, index);
-    see_matrix((*M).data, 0, 1);
+    SparseMatrix *T = create_sparse_matrix(), *S = (*M).data;
+    insert_matrix_end(L, T);
+
+    MatrixNode *N = (*S);
+    MatrixSize info = size_matrix(S);
+
+    for (int i = 1; i <= info.cols; i++)
+    {
+        for (int j = 1; j <= info.rows; j++)
+        {
+            do
+            {
+                if ((*N).info.rows == j && (*N).info.cols == i)
+                {
+                    insert_matrix_value_end(T, (*N).data, (*N).info.cols, (*N).info.rows);
+                    break;
+                }
+                N = (*N).next;
+            } while (N);
+            N = (*S);
+        }
+    }
+    see_matrix(T, 0);
 }
 
 void see_diagonal_of_matrix(MatrixList *L, int index)
 {
     Matrix *M = get_matrix_by_index(L, index);
-    see_matrix((*M).data, 1, 0);
+    see_matrix((*M).data, 1);
 }
 
 int main()
@@ -528,6 +525,8 @@ int main()
     char option[3];
     int optionInt = 0, matrix1 = -1, matrix2 = -1;
     MatrixList *matrixList = create_matrix_list();
+
+    printf("\e[1;1H\e[2J");
 
     while (optionInt != 9)
     {
