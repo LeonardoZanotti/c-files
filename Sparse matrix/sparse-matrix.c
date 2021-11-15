@@ -358,7 +358,7 @@ void search_matrix(MatrixList *L)
         printf("\nNot found\n");
 }
 
-void add_value_to_matrix(SparseMatrix *S, int row, int col)
+void add_value_to_matrix(SparseMatrix *S, int row, int col, int last)
 {
     char input[20];
     float inputFloat;
@@ -366,7 +366,7 @@ void add_value_to_matrix(SparseMatrix *S, int row, int col)
     scanf("%20s", input);
     getchar();
     inputFloat = atof(input);
-    if (inputFloat != 0.0)
+    if (last || inputFloat != 0.0)
         insert_matrix_value_end(S, inputFloat, row, col);
 }
 
@@ -376,37 +376,71 @@ void create_new_matrix(MatrixList *M)
     insert_matrix_end(M, S);
 
     char input[3];
-    int inputInt = 1, row = 1, col = 1;
+    int row, col;
 
-    while (inputInt == 1 || inputInt == 2)
+    printf("\e[1;1H\e[2J");
+    printf("Number of rows of the matrix: ");
+
+    scanf("%10s", input);
+    getchar();
+    row = atoi(input);
+
+    printf("Number of cols of the matrix: ");
+
+    scanf("%10s", input);
+    getchar();
+    col = atoi(input);
+
+    printf("\n");
+
+    for (int i = 1; i <= row; i++)
     {
-        printf("\e[1;1H\e[2J");
-
-        if (inputInt == 1)
+        for (int j = 1; j <= col; j++)
         {
-            add_value_to_matrix(S, row, col);
-            printf("\e[1;1H\e[2J");
+            add_value_to_matrix(S, i, j, (i == row && j == col));
         }
-
-        if (inputInt == 2)
-        {
-            col = 1;
-            row++;
-        }
-        else
-            col++;
-
-        printf("[1] - Add value to field [%d, %d] of the matrix\n", row, col);
-        printf("\n[2] - New row\n");
-        printf("\n[3] - Save matrix\n\n");
-
-        scanf("%3s", input);
-        getchar();
-        inputInt = atoi(input);
     }
 
     see_matrix(S, 0, 0);
 }
+
+// void create_new_matrix(MatrixList *M)
+// {
+//     SparseMatrix *S = create_sparse_matrix();
+//     insert_matrix_end(M, S);
+
+//     char input[3];
+//     int inputInt = 1, row = 1, col = 1;
+
+//     while (inputInt == 1 || inputInt == 2)
+//     {
+//         printf("\e[1;1H\e[2J");
+
+//         if (inputInt == 1)
+//         {
+//             add_value_to_matrix(S, row, col);
+//             printf("\e[1;1H\e[2J");
+//         }
+
+//         if (inputInt == 2)
+//         {
+//             col = 1;
+//             row++;
+//         }
+//         else
+//             col++;
+
+//         printf("[1] - Add value to field [%d, %d] of the matrix\n", row, col);
+//         printf("\n[2] - New row\n");
+//         printf("\n[3] - Save matrix\n\n");
+
+//         scanf("%3s", input);
+//         getchar();
+//         inputInt = atoi(input);
+//     }
+
+//     see_matrix(S, 0, 0);
+// }
 
 void read_params(MatrixList *L, int *matrix1, int *matrix2, int twoParams)
 {
