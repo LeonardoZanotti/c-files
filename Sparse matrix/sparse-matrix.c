@@ -206,16 +206,6 @@ void see_matrix(SparseMatrix *S, int diagonal)
         MatrixNode *N = (*S);
         MatrixSize info = size_matrix(S);
 
-        for (; N != NULL; N = (*N).next)
-        {
-            if ((*N).info.rows > info.rows)
-                info.rows = (*N).info.rows;
-            if ((*N).info.cols > info.cols)
-                info.cols = (*N).info.cols;
-        }
-
-        N = *S;
-
         if (diagonal)
         {
             printf("\nDiagonal of matrix:\n[");
@@ -263,19 +253,9 @@ void see_matrix(SparseMatrix *S, int diagonal)
     }
 }
 
-void show_matrix(MatrixList *L)
+void show_matrix(MatrixList *L, int matrixIndex)
 {
     char input[3];
-    int matrixIndex = 0;
-
-    while (matrixIndex < 1 || matrixIndex > size_matrix_list(L))
-    {
-        printf("\e[1;1H\e[2J");
-        printf("Index of the matrix to show: ");
-        scanf("%3s", input);
-        getchar();
-        matrixIndex = atof(input);
-    }
 
     Matrix *M = (*L);
     SparseMatrix *S = (*M).data;
@@ -319,7 +299,7 @@ int search_value_in_matrix(SparseMatrix *S, float value, int *row, int *col)
 void search_matrix(MatrixList *L)
 {
     char input[3];
-    int matrixIndex = 1, row = -1, col = -1;
+    int matrixIndex, row = -1, col = -1;
     float inputFloat;
 
     printf("\e[1;1H\e[2J");
@@ -330,13 +310,15 @@ void search_matrix(MatrixList *L)
 
     Matrix *M = (*L);
     SparseMatrix *S = (*M).data;
-    while (!search_value_in_matrix(S, inputFloat, &row, &col))
+    for (matrixIndex = 1; matrixIndex <= size_matrix_list(L); matrixIndex++)
     {
-        if (M == NULL || (*M).next == NULL)
+        if (search_value_in_matrix(S, inputFloat, &row, &col))
             break;
-        M = (*M).next;
-        S = (*M).data;
-        matrixIndex++;
+        if ((*M).next)
+        {
+            M = (*M).next;
+            S = (*M).data;
+        }
     }
 
     see_matrix(S, 0);
@@ -395,24 +377,34 @@ void create_new_matrix(MatrixList *M)
     see_matrix(S, 0);
 }
 
-void read_params(int *matrix1, int *matrix2, int twoParams)
+void read_params(MatrixList *L, int *matrix1, int *matrix2, int twoParams)
 {
     char input[3], text[7] = "";
+    (*matrix1) = -1;
+    (*matrix2) = -1;
 
     if (twoParams)
         strcpy(text, "first ");
 
-    printf("Index of the %smatrix: ", text);
-    scanf("%3s", input);
-    getchar();
-    (*matrix1) = atoi(input);
+    while ((*matrix1) < 1 || (*matrix1) > size_matrix_list(L))
+    {
+        printf("\e[1;1H\e[2J");
+        printf("Index of the %smatrix: ", text);
+        scanf("%3s", input);
+        getchar();
+        (*matrix1) = atoi(input);
+    }
 
     if (twoParams)
     {
-        printf("Index of the second matrix: ");
-        scanf("%3s", input);
-        getchar();
-        (*matrix2) = atoi(input);
+        while ((*matrix2) < 1 || (*matrix2) > size_matrix_list(L))
+        {
+            printf("\e[1;1H\e[2J");
+            printf("Index of the second matrix: ");
+            scanf("%3s", input);
+            getchar();
+            (*matrix2) = atoi(input);
+        }
     }
 }
 
@@ -468,29 +460,30 @@ int main()
             create_new_matrix(matrixList);
             break;
         case 2:
-            show_matrix(matrixList);
+            read_params(matrixList, &matrix1, &matrix2, 0);
+            show_matrix(matrixList, matrix1);
             break;
         case 3:
             search_matrix(matrixList);
             break;
         case 4:
-            read_params(&matrix1, &matrix2, 1);
+            read_params(matrixList, &matrix1, &matrix2, 1);
             // sum_matrix(matrixList, matrix1, matrix2);
             break;
         case 5:
-            read_params(&matrix1, &matrix2, 1);
+            read_params(matrixList, &matrix1, &matrix2, 1);
             // subtract_matrix(matrixList, matrix1, matrix2);
             break;
         case 6:
-            read_params(&matrix1, &matrix2, 1);
+            read_params(matrixList, &matrix1, &matrix2, 1);
             // multiply_matrix(matrixList, matrix1, matrix2);
             break;
         case 7:
-            read_params(&matrix1, &matrix2, 0);
+            read_params(matrixList, &matrix1, &matrix2, 0);
             transposed_matrix(matrixList, matrix1);
             break;
         case 8:
-            read_params(&matrix1, &matrix2, 0);
+            read_params(matrixList, &matrix1, &matrix2, 0);
             see_diagonal_of_matrix(matrixList, matrix1);
             break;
         case 9:
