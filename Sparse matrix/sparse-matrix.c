@@ -345,10 +345,31 @@ void create_new_matrix(MatrixList *M)
     see_matrix(S);
 }
 
+void read_params(int *matrix1, int *matrix2, int twoParams)
+{
+    char input[3], text[7] = "";
+
+    if (twoParams)
+        strcpy(text, "first ");
+
+    printf("Index of the %smatrix: ", text);
+    scanf("%3s", input);
+    getchar();
+    (*matrix1) = atoi(input);
+
+    if (twoParams)
+    {
+        printf("Index of the second matrix: ");
+        scanf("%3s", input);
+        getchar();
+        (*matrix2) = atoi(input);
+    }
+}
+
 int main()
 {
     char option[3];
-    int optionInt = 0;
+    int optionInt = 0, matrix1 = -1, matrix2 = -1;
     MatrixList *matrixList = create_matrix_list();
 
     while (optionInt != 9)
@@ -382,6 +403,26 @@ int main()
             break;
         case 3:
             search_matrix(matrixList);
+            break;
+        case 4:
+            read_params(&matrix1, &matrix2, 1);
+            // sum_matrix(matrixList, matrix1, matrix2);
+            break;
+        case 5:
+            read_params(&matrix1, &matrix2, 1);
+            // subtract_matrix(matrixList, matrix1, matrix2);
+            break;
+        case 6:
+            read_params(&matrix1, &matrix2, 1);
+            // multiply_matrix(matrixList, matrix1, matrix2);
+            break;
+        case 7:
+            read_params(&matrix1, &matrix2, 0);
+            // transposed_matrix(matrixList, matrix1);
+            break;
+        case 8:
+            read_params(&matrix1, &matrix2, 0);
+            // see_diagonal_of_matrix(matrixList, matrix1);
             break;
         case 9:
             free_matrix_list(matrixList);
