@@ -203,14 +203,15 @@ void see_matrix(SparseMatrix *S, int diagonal)
                 printf("\n");
                 for (j = 1; j <= col; j++)
                 {
-                    if ((*N).row == i && (*N).col == j)
+                    if (i == j)
                     {
-                        if (i == j)
+                        while ((*N).next && ((*N).row < i || (*N).col < j))
+                            N = (*N).next;
+
+                        if ((*N).row == i && (*N).col == j)
                             printf("%4.1f ", (*N).data);
                         else
-                            printf("%4s ", "");
-                        if ((*N).next)
-                            N = (*N).next;
+                            printf("%4.1f ", 0.0);
                     }
                     else
                         printf("%4s ", "");
