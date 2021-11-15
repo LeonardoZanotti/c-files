@@ -178,7 +178,7 @@ void free_matrix_list(MatrixList *L)
 }
 
 // List matrix values
-void see_matrix(SparseMatrix *S)
+void see_matrix(SparseMatrix *S, int diagonal)
 {
     if (!empty_matrix(S))
     {
@@ -194,23 +194,50 @@ void see_matrix(SparseMatrix *S)
         }
 
         N = *S;
-        printf("\nMatrix:\n[");
-        for (i = 1; i <= row; i++)
+
+        if (diagonal)
         {
-            printf("\n");
-            for (j = 1; j <= col; j++)
+            printf("\nDiagonal of matrix:\n[");
+            for (i = 1; i <= row; i++)
             {
-                if ((*N).row == i && (*N).col == j)
+                printf("\n");
+                for (j = 1; j <= col; j++)
                 {
-                    printf("%4.1f ", (*N).data);
-                    if ((*N).next)
-                        N = (*N).next;
+                    if ((*N).row == i && (*N).col == j)
+                    {
+                        if (i == j)
+                            printf("%4.1f ", (*N).data);
+                        else
+                            printf("%4s ", "");
+                        if ((*N).next)
+                            N = (*N).next;
+                    }
+                    else
+                        printf("%4s ", "");
                 }
-                else
-                    printf("%4.1f ", 0.0);
             }
+            printf("\n]\n");
         }
-        printf("\n]\n");
+        else
+        {
+            printf("\nMatrix:\n[");
+            for (i = 1; i <= row; i++)
+            {
+                printf("\n");
+                for (j = 1; j <= col; j++)
+                {
+                    if ((*N).row == i && (*N).col == j)
+                    {
+                        printf("%4.1f ", (*N).data);
+                        if ((*N).next)
+                            N = (*N).next;
+                    }
+                    else
+                        printf("%4.1f ", 0.0);
+                }
+            }
+            printf("\n]\n");
+        }
     }
 }
 
@@ -236,7 +263,7 @@ void show_matrix(MatrixList *L)
         S = (*M).data;
     }
 
-    see_matrix(S);
+    see_matrix(S, 0);
 }
 
 // Search value in the matrixes
@@ -289,7 +316,7 @@ void search_matrix(MatrixList *L)
         matrixIndex++;
     }
 
-    see_matrix(S);
+    see_matrix(S, 0);
     (row > -1)
         ? printf("\nFound value %4.2f at field [%d, %d] in the matrix %d\n", inputFloat, row, col, matrixIndex)
         : printf("\nNot found\n");
@@ -342,7 +369,7 @@ void create_new_matrix(MatrixList *M)
         inputInt = atoi(input);
     }
 
-    see_matrix(S);
+    see_matrix(S, 0);
 }
 
 void read_params(int *matrix1, int *matrix2, int twoParams)
@@ -364,6 +391,15 @@ void read_params(int *matrix1, int *matrix2, int twoParams)
         getchar();
         (*matrix2) = atoi(input);
     }
+}
+
+void see_diagonal_of_matrix(MatrixList *L, int index)
+{
+    Matrix *M = (*L);
+    for (int i = 1; i < index; i++)
+        M = (*M).next;
+
+    see_matrix((*M).data, 1);
 }
 
 int main()
@@ -422,7 +458,7 @@ int main()
             break;
         case 8:
             read_params(&matrix1, &matrix2, 0);
-            // see_diagonal_of_matrix(matrixList, matrix1);
+            see_diagonal_of_matrix(matrixList, matrix1);
             break;
         case 9:
             free_matrix_list(matrixList);
