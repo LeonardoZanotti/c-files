@@ -15,7 +15,7 @@ typedef struct RowCol
 typedef struct MatrixInfo
 {
     float data;
-    int row, col;
+    MatrixSize info;
     struct MatrixInfo *next;
 } MatrixNode;
 typedef MatrixNode *SparseMatrix;
@@ -89,10 +89,10 @@ MatrixSize size_matrix(SparseMatrix *S)
         MatrixNode *N = (*S);
         for (; N != NULL; N = (*N).next)
         {
-            if ((*N).row > info.rows)
-                info.rows = (*N).row;
-            if ((*N).col > info.cols)
-                info.cols = (*N).col;
+            if ((*N).info.rows > info.rows)
+                info.rows = (*N).info.rows;
+            if ((*N).info.cols > info.cols)
+                info.cols = (*N).info.cols;
         }
     }
 
@@ -150,8 +150,8 @@ int insert_matrix_value_end(SparseMatrix *L, float data, int row, int col)
     if (N == NULL)
         return 0;
     (*N).data = data;
-    (*N).row = row;
-    (*N).col = col;
+    (*N).info.rows = row;
+    (*N).info.cols = col;
     (*N).next = NULL;
     if ((*L) == NULL)
         *L = N;
@@ -208,10 +208,10 @@ void see_matrix(SparseMatrix *S, int diagonal)
 
         for (; N != NULL; N = (*N).next)
         {
-            if ((*N).row > info.rows)
-                info.rows = (*N).row;
-            if ((*N).col > info.cols)
-                info.cols = (*N).col;
+            if ((*N).info.rows > info.rows)
+                info.rows = (*N).info.rows;
+            if ((*N).info.cols > info.cols)
+                info.cols = (*N).info.cols;
         }
 
         N = *S;
@@ -226,10 +226,10 @@ void see_matrix(SparseMatrix *S, int diagonal)
                 {
                     if (i == j)
                     {
-                        while ((*N).next && ((*N).row < i || (*N).col < j))
+                        while ((*N).next && ((*N).info.rows < i || (*N).info.cols < j))
                             N = (*N).next;
 
-                        if ((*N).row == i && (*N).col == j)
+                        if ((*N).info.rows == i && (*N).info.cols == j)
                             printf("%4.1f ", (*N).data);
                         else
                             printf("%4.1f ", 0.0);
@@ -248,7 +248,7 @@ void see_matrix(SparseMatrix *S, int diagonal)
                 printf("\n");
                 for (j = 1; j <= info.cols; j++)
                 {
-                    if ((*N).row == i && (*N).col == j)
+                    if ((*N).info.rows == i && (*N).info.cols == j)
                     {
                         printf("%4.1f ", (*N).data);
                         if ((*N).next)
@@ -302,8 +302,8 @@ int search_value_in_matrix(SparseMatrix *S, float value, int *row, int *col)
     {
         if (fequal((*N).data, value, PRECISION))
         {
-            *row = (*N).row;
-            *col = (*N).col;
+            *row = (*N).info.rows;
+            *col = (*N).info.cols;
             found = 1;
             break;
         }
