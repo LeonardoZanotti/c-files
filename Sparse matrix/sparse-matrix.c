@@ -85,7 +85,6 @@ MatrixSize size_matrix(SparseMatrix *S)
 
     if (!empty_matrix(S))
     {
-
         MatrixNode *N = (*S);
         for (; N != NULL; N = (*N).next)
         {
@@ -440,8 +439,7 @@ void read_params(MatrixList *L, int *matrix1, int *matrix2, int twoParams)
     {
         while ((*matrix2) < 1 || (*matrix2) > size_matrix_list(L))
         {
-            printf("\e[1;1H\e[2J");
-            printf("Index of the second matrix: ");
+            printf("\nIndex of the second matrix: ");
             scanf("%3s", input);
             getchar();
             (*matrix2) = atoi(input);
@@ -469,19 +467,66 @@ void add_matrix(MatrixList *L, int index1, int index2)
 
 void subtract_matrix(MatrixList *L, int index1, int index2)
 {
+    printf("\n");
+
     Matrix *M1 = get_matrix_by_index(L, index1);
     Matrix *M2 = get_matrix_by_index(L, index2);
 
     MatrixSize info1 = size_matrix((*M1).data);
     MatrixSize info2 = size_matrix((*M2).data);
 
-    if (info1.rows != info2.rows || info1.cols == info2.cols)
+    if (info1.rows != info2.rows || info1.cols != info2.cols)
     {
         printf("The matrixes should have the same size!");
     }
     else
     {
-        printf("sub");
+        SparseMatrix *R = create_sparse_matrix(), *S1 = (*M1).data, *S2 = (*M2).data;
+        insert_matrix_end(L, R);
+
+        int rows, cols;
+        float data = 0;
+        MatrixNode *N1 = (*S1);
+        MatrixNode *N2 = (*S2);
+
+        for (int i = 1; i <= info1.rows; i++)
+        {
+            for (int j = 1; j <= info1.cols; j++)
+            {
+                rows = i;
+                cols = j;
+                data = 0;
+
+                // Get first value
+                do
+                {
+                    if ((*N1).info.rows == i && (*N1).info.cols == j)
+                    {
+                        data = (*N1).data;
+                        break;
+                    }
+                    N1 = (*N1).next;
+                } while (N1);
+
+                // Subtract the second value
+                do
+                {
+                    if ((*N2).info.rows == i && (*N2).info.cols == j)
+                    {
+                        data -= (*N2).data;
+                        break;
+                    }
+                    N2 = (*N2).next;
+                } while (N2);
+
+                if (data != 0)
+                    insert_matrix_value_end(R, data, rows, cols);
+
+                N1 = (*S1);
+                N2 = (*S2);
+            }
+        }
+        see_matrix(R, 0);
     }
 }
 
@@ -535,7 +580,7 @@ int main()
         printf("\n1) Create new matrix\n");
         printf("2) See matrix\n");
         printf("3) Search in matrix\n");
-        printf("4) Sum matrix\n");
+        printf("4) Add matrix\n");
         printf("5) Subtract matrix\n");
         printf("6) Multiply matrix\n");
         printf("7) Transposed matrix\n");
