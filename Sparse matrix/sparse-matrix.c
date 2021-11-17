@@ -458,7 +458,7 @@ void add_matrix(MatrixList *L, int index1, int index2)
 
     if (info1.rows != info2.rows || info1.cols != info2.cols)
     {
-        printf("The matrixes should have the same size!");
+        printf("The matrixes should have the same size!\n");
     }
     else
     {
@@ -521,7 +521,7 @@ void subtract_matrix(MatrixList *L, int index1, int index2)
 
     if (info1.rows != info2.rows || info1.cols != info2.cols)
     {
-        printf("The matrixes should have the same size!");
+        printf("The matrixes should have the same size!\n");
     }
     else
     {
@@ -584,53 +584,64 @@ void multiply_matrix(MatrixList *L, int index1, int index2)
 
     if (info1.cols != info2.rows)
     {
-        printf("The number of columns of the first matrix should be equal to the number of rows of the second matrix!");
+        printf("The number of columns of the first matrix should be equal to the number of rows of the second matrix!\n");
     }
     else
     {
         SparseMatrix *R = create_sparse_matrix(), *S1 = (*M1).data, *S2 = (*M2).data;
         insert_matrix_end(L, R);
 
-        int rows, cols;
         float data = 0;
+        float finalData = 0;
+        int row1Number = 0, col1Number = 1, col2Number;
         MatrixNode *N1 = (*S1);
         MatrixNode *N2 = (*S2);
 
         for (int i = 1; i <= info1.rows; i++)
         {
+            row1Number++;
+            col2Number = 0;
             for (int j = 1; j <= info2.cols; j++)
             {
-                rows = i;
-                cols = j;
                 data = 0;
+                finalData = 0;
+                col1Number = 1;
+                col2Number++;
 
-                // Get first value
-                do
+                for (int n = 1; n <= info2.rows; n++)
                 {
-                    if ((*N1).info.rows == i && (*N1).info.cols == j)
+                    // Get first value
+                    do
                     {
-                        data = (*N1).data;
-                        break;
-                    }
-                    N1 = (*N1).next;
-                } while (N1);
+                        if ((*N1).info.rows == row1Number && (*N1).info.cols == col1Number)
+                        {
+                            data = (*N1).data;
+                            break;
+                        }
+                        N1 = (*N1).next;
+                    } while (N1);
 
-                // Subtract the second value
-                do
-                {
-                    if ((*N2).info.rows == i && (*N2).info.cols == j)
+                    // Multiply by the second value
+                    do
                     {
-                        data -= (*N2).data;
-                        break;
-                    }
-                    N2 = (*N2).next;
-                } while (N2);
+                        if ((*N2).info.rows == n && (*N2).info.cols == col2Number)
+                        {
+                            data *= (*N2).data;
+                            break;
+                        }
+                        N2 = (*N2).next;
+                    } while (N2);
 
-                if (data != 0)
-                    insert_matrix_value_end(R, data, rows, cols);
+                    N1 = (*S1);
+                    N2 = (*S2);
+                    col1Number++;
 
-                N1 = (*S1);
-                N2 = (*S2);
+                    // sum the result in the field
+                    finalData += data;
+                }
+
+                if (finalData != 0)
+                    insert_matrix_value_end(R, finalData, i, j);
             }
         }
         see_matrix(R, 0);
