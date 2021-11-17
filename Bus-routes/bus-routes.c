@@ -418,11 +418,13 @@ int main()
     RoutesList *routesList = create_routes_list();
     int optionInt = 0;
 
+    printf("\e[1;1H\e[2J");
+
     while (optionInt != 4)
     {
         optionInt = 0;
 
-        printf("\n1) Create route\n");
+        printf("1) Create route\n");
         printf("2) Remove route\n");
         printf("3) Visit route\n");
         printf("4) Exit\n");
@@ -452,6 +454,8 @@ int main()
         default:
             break;
         }
+
+        printf("\n");
     }
 
     return 0;
