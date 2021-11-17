@@ -458,7 +458,7 @@ void add_matrix(MatrixList *L, int index1, int index2)
 
     if (info1.rows != info2.rows || info1.cols != info2.cols)
     {
-        printf("The matrixes should have the same size!\n");
+        printf("The matrixes should have the same size!\n\n");
     }
     else
     {
@@ -521,7 +521,7 @@ void subtract_matrix(MatrixList *L, int index1, int index2)
 
     if (info1.rows != info2.rows || info1.cols != info2.cols)
     {
-        printf("The matrixes should have the same size!\n");
+        printf("The matrixes should have the same size!\n\n");
     }
     else
     {
@@ -584,7 +584,7 @@ void multiply_matrix(MatrixList *L, int index1, int index2)
 
     if (info1.cols != info2.rows)
     {
-        printf("The number of columns of the first matrix should be equal to the number of rows of the second matrix!\n");
+        printf("The number of columns of the first matrix should be equal to the number of rows of the second matrix!\n\n");
     }
     else
     {
