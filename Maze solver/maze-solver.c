@@ -197,6 +197,7 @@ int main(int argc, char **argv)
         }
     }
 
+    // solve the maze
     do
     {
         printf("\e[1;1H\e[2J");
