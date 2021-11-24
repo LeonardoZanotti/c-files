@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 typedef struct StackBase StackNode;
 typedef StackNode *Stack;
@@ -129,10 +130,10 @@ void read_file(char path[])
 int main()
 {
     char ch;
-    FILE *file = fopen("./maze.txt", "r");
+    FILE *file = fopen("maze.txt", "r");
     if (file == NULL)
     {
-        printf("Error opening file!");
+        printf("Error opening file: %d \n", errno);
         exit(1);
     }
     while ((ch = fgetc(file)) != EOF)
