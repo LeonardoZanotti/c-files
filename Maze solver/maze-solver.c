@@ -224,7 +224,9 @@ int main(int argc, char **argv)
     int found = 0, end;
     do
     {
+        printf("\e[1;1H\e[2J");
         usleep(50000);
+
         row = get_item_row(*stack);
         col = get_item_col(*stack);
         end = 1;
@@ -259,7 +261,11 @@ int main(int argc, char **argv)
         found = maze[row][col] == '2';
         maze[row][col] = '3';
 
-        printf("\e[1;1H\e[2J");
+        if ((col > 0 && maze[row][col - 1] == '2') ||
+            (col < mazeSize - 1 && maze[row][col + 1] == '2') ||
+            (row > 0 && maze[row - 1][col] == '2') ||
+            (row < mazeSize - 1 && maze[row + 1][col] == '2'))
+            end = 0;
 
         for (row = 0; row < mazeSize; row++)
         {
