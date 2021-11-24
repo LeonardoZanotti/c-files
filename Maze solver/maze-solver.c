@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#define WALL "\u2589"
+#define VISITED "\u2591"
+#define FREE " "
+#define PLAYER "\u263A"
+#define EXIT "\u2573"
+
 typedef struct StackBase StackNode;
 typedef StackNode *Stack;
 struct StackBase
@@ -136,9 +142,27 @@ int main()
         printf("Error opening file: %d \n", errno);
         exit(1);
     }
+
     while ((ch = fgetc(file)) != EOF)
     {
-        printf("%c", ch);
+        switch (ch)
+        {
+        case '0':
+            printf("%s", WALL);
+            break;
+        case '1':
+            printf("%s", FREE);
+            break;
+        case '2':
+            printf("%s", EXIT);
+            break;
+        case '3':
+            printf("%s", PLAYER);
+            break;
+        default:
+            printf("\n");
+            break;
+        }
     }
     fclose(file);
     return 0;
