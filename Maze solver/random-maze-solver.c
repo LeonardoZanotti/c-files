@@ -147,35 +147,33 @@ int main(int argc, char **argv)
     char maze[30][30];
     int row = 0, col = 0, playerRow = 0, playerCol = 0, exitRow = 0, exitCol = 0;
 
+    srand(time(0));
+
     while (playerRow == exitRow && playerCol == exitCol)
     {
-        playerRow = rand() % 29 + 1;
-        playerCol = rand() % 29 + 1;
-        exitRow = rand() % 29 + 1;
-        exitCol = rand() % 29 + 1;
+        playerRow = rand() % 28 + 1;
+        playerCol = rand() % 28 + 1;
+        exitRow = rand() % 28 + 1;
+        exitCol = rand() % 28 + 1;
     }
 
     for (row = 0; row < 30; row++)
     {
         for (col = 0; col < 30; col++)
         {
-            maze[row][col] = '1';
+            maze[row][col] = '0';
         }
     }
 
-    srand(time(0));
-
-    for (row = 0; row < 30; row += 2)
+    for (row = 2; row < 30; row += 2)
     {
-        for (col = 0; col < 30; col += 2)
+        for (col = 2; col < 30; col += 2)
         {
             int x1, y1;
             int x2, y2;
             int dx, dy;
-            int dir, count;
+            int dir = rand() % 4, count = 0;
 
-            dir = rand() % 4;
-            count = 0;
             while (count < 4)
             {
                 dx = 0;
@@ -199,10 +197,10 @@ int main(int argc, char **argv)
                 y1 = col + dy;
                 x2 = x1 + dx;
                 y2 = y1 + dy;
-                if (x2 > 0 && x2 < 30 && y2 > 0 && y2 < 30 && maze[x1][y1] == '1' && maze[x2][y2] == '1')
+                if (x2 > 0 && x2 < 30 && y2 > 0 && y2 < 30 && maze[x1][y1] == '0' && maze[x2][y2] == '0')
                 {
-                    maze[x1][y1] = '0';
-                    maze[x2][y2] = '0';
+                    maze[x1][y1] = '1';
+                    maze[x2][y2] = '1';
                     row = x2;
                     col = y2;
                     dir = rand() % 4;
