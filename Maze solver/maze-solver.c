@@ -133,13 +133,13 @@ void read_file(char path[])
 {
 }
 
-int main()
+int main(int argc, char **argv)
 {
     char ch;
-    FILE *file = fopen("maze.txt", "r");
+    FILE *file = fopen(argv[1], "r");
     if (file == NULL)
     {
-        printf("Error opening file: %d \n", errno);
+        perror("Error opening file");
         exit(1);
     }
 
