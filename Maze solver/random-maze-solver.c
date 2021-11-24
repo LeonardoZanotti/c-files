@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <math.h>
 #include <unistd.h>
+#include <time.h>
 
 #define WALL "\u2589"
 #define VISITED "\u2591"
@@ -143,908 +144,7 @@ int main(int argc, char **argv)
     Stack *stack = create_stack();
 
     // fill the matrix with file data
-    char maze[30][30] = {
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-    };
+    char maze[30][30];
     int row = 0, col = 0, playerRow = 0, playerCol = 0, exitRow = 0, exitCol = 0;
 
     while (playerRow == exitRow && playerCol == exitCol)
@@ -1055,111 +155,155 @@ int main(int argc, char **argv)
         exitCol = rand() % 29 + 1;
     }
 
-    maze[playerRow][playerCol] = '3';
-    maze[exitRow][exitCol] = '2';
+    for (row = 0; row < 30; row++)
+    {
+        for (col = 0; col < 30; col++)
+        {
+            maze[row][col] = '1';
+        }
+    }
+
+    srand(time(0));
+
+    for (row = 0; row < 30; row += 2)
+    {
+        for (col = 0; col < 30; col += 2)
+        {
+            int x1, y1;
+            int x2, y2;
+            int dx, dy;
+            int dir, count;
+
+            dir = rand() % 4;
+            count = 0;
+            while (count < 4)
+            {
+                dx = 0;
+                dy = 0;
+                switch (dir)
+                {
+                case 0:
+                    dx = 1;
+                    break;
+                case 1:
+                    dy = 1;
+                    break;
+                case 2:
+                    dx = -1;
+                    break;
+                default:
+                    dy = -1;
+                    break;
+                }
+                x1 = row + dx;
+                y1 = col + dy;
+                x2 = x1 + dx;
+                y2 = y1 + dy;
+                if (x2 > 0 && x2 < 30 && y2 > 0 && y2 < 30 && maze[x1][y1] == '1' && maze[x2][y2] == '1')
+                {
+                    maze[x1][y1] = '0';
+                    maze[x2][y2] = '0';
+                    row = x2;
+                    col = y2;
+                    dir = rand() % 4;
+                    count = 0;
+                }
+                else
+                {
+                    dir = (dir + 1) % 4;
+                    count += 1;
+                }
+            }
+        }
+    }
 
     for (row = 0; row < 30; row++)
     {
         for (col = 0; col < 30; col++)
         {
-            switch (maze[row][col])
-            {
-            case '0':
-                printf("%s", WALL);
-                break;
-            case '1':
-                printf("%s", FREE);
-                break;
-            case '2':
-                printf("%s", EXIT);
-                break;
-            case '3':
-                printf("%s", PLAYER);
-                break;
-            case '4':
-                printf("%s", VISITED);
-                break;
-            default:
-                break;
-            }
+            if (row == 0 || col == 0 || row == 29 || col == 29)
+                maze[row][col] = '0';
         }
-        printf("\n");
     }
+
+    maze[playerRow][playerCol] = '3';
+    maze[exitRow][exitCol] = '2';
+    insert_start(stack, stackable_item(playerRow, playerCol));
+
     // solve the maze
-    // do
-    // {
-    //     printf("\e[1;1H\e[2J");
-    //     usleep(50000);
+    do
+    {
+        printf("\e[1;1H\e[2J");
+        usleep(50000);
+        row = get_item_row(*stack);
+        col = get_item_col(*stack);
+        end = 1;
 
-    //     row = get_item_row(*stack);
-    //     col = get_item_col(*stack);
-    //     end = 1;
+        maze[row][col] = '4';
 
-    //     maze[row][col] = '4';
+        // check left
+        if (col > 0 && (maze[row][col - 1] == '1' || maze[row][col - 1] == '2'))
+            insert_start(stack, stackable_item(row, col - 1));
 
-    //     // check left
-    //     if (col > 0 && (maze[row][col - 1] == '1' || maze[row][col - 1] == '2'))
-    //         insert_start(stack, stackable_item(row, col - 1));
+        // check right
+        else if (col < 29 && (maze[row][col + 1] == '1' || maze[row][col + 1] == '2'))
+            insert_start(stack, stackable_item(row, col + 1));
 
-    //     // check right
-    //     else if (col < 29 && (maze[row][col + 1] == '1' || maze[row][col + 1] == '2'))
-    //         insert_start(stack, stackable_item(row, col + 1));
+        // check up
+        else if (row > 0 && (maze[row - 1][col] == '1' || maze[row - 1][col] == '2'))
+            insert_start(stack, stackable_item(row - 1, col));
 
-    //     // check up
-    //     else if (row > 0 && (maze[row - 1][col] == '1' || maze[row - 1][col] == '2'))
-    //         insert_start(stack, stackable_item(row - 1, col));
+        // check down
+        else if (row < 29 && (maze[row + 1][col] == '1' || maze[row + 1][col] == '2'))
+            insert_start(stack, stackable_item(row + 1, col));
 
-    //     // check down
-    //     else if (row < 29 && (maze[row + 1][col] == '1' || maze[row + 1][col] == '2'))
-    //         insert_start(stack, stackable_item(row + 1, col));
+        // return because path is blocked
+        else
+            remove_start(stack);
 
-    //     // return because path is blocked
-    //     else
-    //         remove_start(stack);
+        if (empty_stack(stack))
+            break;
 
-    //     if (empty_stack(stack))
-    //         break;
+        row = get_item_row(*stack);
+        col = get_item_col(*stack);
+        found = maze[row][col] == '2';
+        maze[row][col] = '3';
 
-    //     row = get_item_row(*stack);
-    //     col = get_item_col(*stack);
-    //     found = maze[row][col] == '2';
-    //     maze[row][col] = '3';
+        if ((col > 0 && maze[row][col - 1] == '2') ||
+            (col < 29 && maze[row][col + 1] == '2') ||
+            (row > 0 && maze[row - 1][col] == '2') ||
+            (row < 29 && maze[row + 1][col] == '2'))
+            end = 0;
 
-    //     if ((col > 0 && maze[row][col - 1] == '2') ||
-    //         (col < 29 && maze[row][col + 1] == '2') ||
-    //         (row > 0 && maze[row - 1][col] == '2') ||
-    //         (row < 29 && maze[row + 1][col] == '2'))
-    //         end = 0;
-
-    //     for (row = 0; row < 30; row++)
-    //     {
-    //         for (col = 0; col < 30; col++)
-    //         {
-    //             switch (maze[row][col])
-    //             {
-    //             case '0':
-    //                 printf("%s", WALL);
-    //                 break;
-    //             case '1':
-    //                 printf("%s", FREE);
-    //                 end = 0;
-    //                 break;
-    //             case '2':
-    //                 printf("%s", EXIT);
-    //                 break;
-    //             case '3':
-    //                 printf("%s", PLAYER);
-    //                 break;
-    //             case '4':
-    //                 printf("%s", VISITED);
-    //                 break;
-    //             default:
-    //                 break;
-    //             }
-    //         }
-    //         printf("\n");
-    //     }
-    // } while (!end && !found);
+        for (row = 0; row < 30; row++)
+        {
+            for (col = 0; col < 30; col++)
+            {
+                switch (maze[row][col])
+                {
+                case '0':
+                    printf("%s", WALL);
+                    break;
+                case '1':
+                    printf("%s", FREE);
+                    end = 0;
+                    break;
+                case '2':
+                    printf("%s", EXIT);
+                    break;
+                case '3':
+                    printf("%s", PLAYER);
+                    break;
+                case '4':
+                    printf("%s", VISITED);
+                    break;
+                default:
+                    break;
+                }
+            }
+            printf("\n");
+        }
+    } while (!end && !found);
 
     if (found)
         printf("Found a solution (maybe not the best)!\n");
