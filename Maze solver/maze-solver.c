@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <math.h>
+#include <unistd.h>
 
 #define WALL "\u2589"
 #define VISITED "\u2591"
@@ -116,15 +117,6 @@ int print_stack(Stack *v)
     return 0;
 }
 
-// Get element from the top of the stack
-int get_top_of_stack(Stack *v, int *content)
-{
-    if (empty_stack(v))
-        return 0;
-    *content = (*v)->data;
-    return 1;
-}
-
 // turn matrix item into a value that can be stored in the stack
 int stackable_item(int row, int col)
 {
@@ -229,8 +221,81 @@ int main(int argc, char **argv)
         printf("\n");
     }
 
-    print_stack(stack);
-    printf("%d %d", get_item_row(*stack), get_item_col(*stack));
+    int found = 0, end;
+    do
+    {
+        usleep(50000);
+        row = get_item_row(*stack);
+        col = get_item_col(*stack);
+        end = 1;
+
+        maze[row][col] = '4';
+
+        // check left
+        if (col > 0 && (maze[row][col - 1] == '1' || maze[row][col - 1] == '2'))
+            insert_start(stack, stackable_item(row, col - 1));
+
+        // check right
+        else if (col < mazeSize - 1 && (maze[row][col + 1] == '1' || maze[row][col + 1] == '2'))
+            insert_start(stack, stackable_item(row, col + 1));
+
+        // check up
+        else if (row > 0 && (maze[row - 1][col] == '1' || maze[row - 1][col] == '2'))
+            insert_start(stack, stackable_item(row - 1, col));
+
+        // check down
+        else if (row < mazeSize - 1 && (maze[row + 1][col] == '1' || maze[row + 1][col] == '2'))
+            insert_start(stack, stackable_item(row + 1, col));
+
+        // return because path is blocked
+        else
+            remove_start(stack);
+
+        if (empty_stack(stack))
+            break;
+
+        row = get_item_row(*stack);
+        col = get_item_col(*stack);
+        found = maze[row][col] == '2';
+        maze[row][col] = '3';
+
+        printf("\e[1;1H\e[2J");
+
+        for (row = 0; row < mazeSize; row++)
+        {
+            for (col = 0; col < mazeSize; col++)
+            {
+                switch (maze[row][col])
+                {
+                case '0':
+                    printf("%s", WALL);
+                    break;
+                case '1':
+                    printf("%s", FREE);
+                    end = 0;
+                    break;
+                case '2':
+                    printf("%s", EXIT);
+                    break;
+                case '3':
+                    printf("%s", PLAYER);
+                    break;
+                case '4':
+                    printf("%s", VISITED);
+                    break;
+                default:
+                    break;
+                }
+            }
+            printf("\n");
+        }
+    } while (!end && !found);
+
+    if (found)
+        printf("Found a solution (maybe not the best)!\n");
+    else
+        printf("Maze unsolveable!\n");
+
     fclose(file);
     free_stack(stack);
 
