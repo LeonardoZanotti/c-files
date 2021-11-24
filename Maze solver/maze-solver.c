@@ -50,8 +50,6 @@ Stack *create_stack()
         *stack = NULL;
     }
 
-    printf("\nStack created!\n");
-
     return stack;
 }
 
@@ -69,7 +67,6 @@ void free_stack(Stack *v)
         }
         free(v);
     }
-    printf("\nCleared stack from memory\n");
 }
 
 // Insert in the start of the stack
@@ -83,7 +80,6 @@ int insert_start(Stack *v, int data)
     (*N).data = data;
     (*N).next = (*v);
     (*v) = N;
-    printf("Inserted %d at the start of the stack\n", data);
     return 1;
 }
 
@@ -95,16 +91,6 @@ int remove_start(Stack *v)
     StackNode *N = (*v);
     (*v) = (*N).next;
     free(N);
-    printf("Removed element from start of stack\n");
-    return 1;
-}
-
-// Get element from the top of the stack
-int get_top_of_stack(Stack *v, int *content)
-{
-    if (empty_stack(v))
-        return 0;
-    *content = (*v)->data;
     return 1;
 }
 
@@ -128,6 +114,33 @@ int print_stack(Stack *v)
     }
 
     return 0;
+}
+
+// Get element from the top of the stack
+int get_top_of_stack(Stack *v, int *content)
+{
+    if (empty_stack(v))
+        return 0;
+    *content = (*v)->data;
+    return 1;
+}
+
+// turn matrix item into a value that can be stored in the stack
+int stackable_item(int row, int col)
+{
+    return row * 100 + col;
+}
+
+// get the row from a stack item
+int get_item_row(StackNode *item)
+{
+    return (*item).data / 100;
+}
+
+// get the col from a stack item
+int get_item_col(StackNode *item)
+{
+    return (*item).data % 100;
 }
 
 int main(int argc, char **argv)
@@ -188,6 +201,8 @@ int main(int argc, char **argv)
         }
     }
 
+    Stack *stack = create_stack();
+
     for (row = 0; row < mazeSize; row++)
     {
         for (col = 0; col < mazeSize; col++)
@@ -204,6 +219,7 @@ int main(int argc, char **argv)
                 printf("%s", EXIT);
                 break;
             case '3':
+                insert_start(stack, stackable_item(row, col));
                 printf("%s", PLAYER);
                 break;
             default:
@@ -213,7 +229,10 @@ int main(int argc, char **argv)
         printf("\n");
     }
 
+    print_stack(stack);
+    printf("%d %d", get_item_row(*stack), get_item_col(*stack));
     fclose(file);
+    free_stack(stack);
 
     return 0;
 }
