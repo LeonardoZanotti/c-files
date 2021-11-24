@@ -134,12 +134,16 @@ int main(int argc, char **argv)
 {
     char ch;
     int mazeSize = 0, mazeSize1 = 0, mazeSize2 = 0;
+
+    // open the file with the maze
     FILE *file = fopen(argv[1], "r");
     if (file == NULL)
     {
         perror("Error opening file");
         exit(1);
     }
+
+    // file validation (see if is a square)
     while ((ch = fgetc(file)) != EOF)
     {
         if (ch != '\n')
@@ -165,27 +169,51 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    // while ((ch = fgetc(file)) != EOF)
-    // {
-    //     switch (ch)
-    //     {
-    //     case '0':
-    //         printf("%s", WALL);
-    //         break;
-    //     case '1':
-    //         printf("%s", FREE);
-    //         break;
-    //     case '2':
-    //         printf("%s", EXIT);
-    //         break;
-    //     case '3':
-    //         printf("%s", PLAYER);
-    //         break;
-    //     default:
-    //         printf("\n");
-    //         break;
-    //     }
-    // }
+    rewind(file);
+
+    // fill the matrix with file data
+    char maze[mazeSize][mazeSize];
+    int row = 0, col = 0;
+    while ((ch = fgetc(file)) != EOF)
+    {
+        if (ch != '\n')
+        {
+            maze[row][col] = ch;
+            col++;
+        }
+        else
+        {
+            row++;
+            col = 0;
+        }
+    }
+
+    for (row = 0; row < mazeSize; row++)
+    {
+        for (col = 0; col < mazeSize; col++)
+        {
+            switch (maze[row][col])
+            {
+            case '0':
+                printf("%s", WALL);
+                break;
+            case '1':
+                printf("%s", FREE);
+                break;
+            case '2':
+                printf("%s", EXIT);
+                break;
+            case '3':
+                printf("%s", PLAYER);
+                break;
+            default:
+                break;
+            }
+        }
+        printf("\n");
+    }
+
     fclose(file);
+
     return 0;
 }
