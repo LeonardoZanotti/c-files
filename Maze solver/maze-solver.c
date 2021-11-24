@@ -138,7 +138,9 @@ int get_item_col(StackNode *item)
 int main(int argc, char **argv)
 {
     char ch;
-    int mazeSize = 0, mazeSize1 = 0, mazeSize2 = 0;
+    int mazeSize = 0, mazeSize1 = 0, mazeSize2 = 0, found = 0, end;
+
+    Stack *stack = create_stack();
 
     // open the file with the maze
     FILE *file = fopen(argv[1], "r");
@@ -183,6 +185,8 @@ int main(int argc, char **argv)
     {
         if (ch != '\n')
         {
+            if (ch == '3')
+                insert_start(stack, stackable_item(row, col));
             maze[row][col] = ch;
             col++;
         }
@@ -193,35 +197,6 @@ int main(int argc, char **argv)
         }
     }
 
-    Stack *stack = create_stack();
-
-    for (row = 0; row < mazeSize; row++)
-    {
-        for (col = 0; col < mazeSize; col++)
-        {
-            switch (maze[row][col])
-            {
-            case '0':
-                printf("%s", WALL);
-                break;
-            case '1':
-                printf("%s", FREE);
-                break;
-            case '2':
-                printf("%s", EXIT);
-                break;
-            case '3':
-                insert_start(stack, stackable_item(row, col));
-                printf("%s", PLAYER);
-                break;
-            default:
-                break;
-            }
-        }
-        printf("\n");
-    }
-
-    int found = 0, end;
     do
     {
         printf("\e[1;1H\e[2J");
