@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <math.h>
 
 #define WALL "\u2589"
 #define VISITED "\u2591"
@@ -129,41 +130,62 @@ int print_stack(Stack *v)
     return 0;
 }
 
-void read_file(char path[])
-{
-}
-
 int main(int argc, char **argv)
 {
     char ch;
+    int mazeSize = 0, mazeSize1 = 0, mazeSize2 = 0;
     FILE *file = fopen(argv[1], "r");
     if (file == NULL)
     {
         perror("Error opening file");
         exit(1);
     }
-
     while ((ch = fgetc(file)) != EOF)
     {
-        switch (ch)
+        if (ch != '\n')
         {
-        case '0':
-            printf("%s", WALL);
-            break;
-        case '1':
-            printf("%s", FREE);
-            break;
-        case '2':
-            printf("%s", EXIT);
-            break;
-        case '3':
-            printf("%s", PLAYER);
-            break;
-        default:
-            printf("\n");
-            break;
+            mazeSize++;
+            mazeSize2++;
+        }
+        else
+        {
+            if (mazeSize1 != 0 && mazeSize != mazeSize1)
+            {
+                printf("The maze must be a square!\n");
+                exit(1);
+            }
+            mazeSize1 = mazeSize;
+            mazeSize = 0;
         }
     }
+
+    if (mazeSize != sqrt(mazeSize2))
+    {
+        printf("The maze must be a square!\n");
+        exit(1);
+    }
+
+    // while ((ch = fgetc(file)) != EOF)
+    // {
+    //     switch (ch)
+    //     {
+    //     case '0':
+    //         printf("%s", WALL);
+    //         break;
+    //     case '1':
+    //         printf("%s", FREE);
+    //         break;
+    //     case '2':
+    //         printf("%s", EXIT);
+    //         break;
+    //     case '3':
+    //         printf("%s", PLAYER);
+    //         break;
+    //     default:
+    //         printf("\n");
+    //         break;
+    //     }
+    // }
     fclose(file);
     return 0;
 }
