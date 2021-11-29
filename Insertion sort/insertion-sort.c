@@ -11,21 +11,25 @@ void printArray(int array[], int size)
 
 void insertionSort(int array[], int size)
 {
-    for (int step = 1; step < size; step++)
+    // size *
+    for (int step = 1; step < size; step++) // 2
     {
-        int key = array[step];
-        int j = step - 1;
+        int key = array[step]; // 2
+        int j = step - 1;      // 2
 
-        while (key < array[j] && j >= 0)
+        // size / 2
+        while (key < array[j] && j >= 0) // 4
         {
-            array[j + 1] = array[j];
-            --j;
+            array[j + 1] = array[j]; // 3
+            --j;                     // 1
         }
-        array[j + 1] = key;
+
+        array[j + 1] = key; // 2
     }
 }
 
-// Driver code
+// 2 + size * (6 + size/2 * 8) = 2 + 6 * size + 4 * size² => O(N²)
+
 int main()
 {
     int data[] = {9, 5, 1, 4, 3};
