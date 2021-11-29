@@ -28,7 +28,7 @@ void insertionSort(int array[], int size)
     }
 }
 
-// 2 + size * (6 + size/2 * 8) = 2 + 6 * size + 4 * size² => O(N²)
+// 2 + size * (6 + (size/2 * 8)) = 2 + 6 * size + 4 * size² => O(N²)
 
 int main()
 {
