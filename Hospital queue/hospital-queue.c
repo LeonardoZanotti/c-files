@@ -60,12 +60,11 @@ int size_queue(Queue *Q)
 
 // Auxiliar method
 // Read param value to use in the functions
-void read_param(int *param)
+void read_param(char query[50])
 {
-    char input[3];
-    printf("\nPosition of the patient: ");
-    scanf("%3s", input);
-    *param = atoi(input);
+    printf("\nName of the patient: ");
+    fgets(query, 50, stdin);
+    query[strlen(query) - 1] = '\0';
 }
 
 // Create queue
@@ -195,8 +194,6 @@ void register_patient(Queue *Q)
     int urgency;
     char urgencyStr[3];
 
-    getchar();
-
     printf("\nPatient name: ");
     fgets(name, sizeof(name), stdin);
     name[strlen(name) - 1] = '\0';
@@ -208,21 +205,37 @@ void register_patient(Queue *Q)
     printf("Patient urgency: ");
     scanf("%3s", urgencyStr);
     urgency = atoi(urgencyStr);
+    getchar();
 
     insert_sorted(Q, name, phone, urgency);
 }
 
-void search_patient(Queue *Q, int index)
+void search_patient(Queue *Q, char name[50])
 {
-    if (empty_queue(Q) || index < 1 || index > size_queue(Q))
+    if (empty_queue(Q))
         printf("\nNot found!\n");
     else
     {
+        int i, found = 0;
+
         NodeData *N = (*Q).start;
-        for (int i = 0; i < index - 1; i++)
+        for (i = 0; i < size_queue(Q); i++)
+        {
+            if (strcmp((*N).data.name, name) == 0)
+            {
+                found = 1;
+                break;
+            }
             N = (*N).next;
-        print_patient((*N).data, index);
-        printf("\n");
+        }
+
+        if (found)
+        {
+            print_patient((*N).data, i + 1);
+            printf("\n");
+        }
+        else
+            printf("\nNot found!\n");
     }
 }
 
@@ -246,10 +259,10 @@ void get_queue_size(Queue *Q)
 
 int main(int argc, char **argv)
 {
-    char option[3];
+    char option[3], query[50];
     int optionInt = 0;
     Queue *queue = create_queue();
-    int param, index;
+    int param;
 
     FILE *file = fopen(argv[1], "w");
     if (file == NULL)
@@ -257,7 +270,7 @@ int main(int argc, char **argv)
         perror("Error opening file");
         exit(1);
     }
-    fprintf(file, "%-50s - %-20s - %d\n", "Patient name", "Patient phone", "Patient urgency");
+    fprintf(file, "%-50s - %-20s - %s\n", "Patient name", "Patient phone", "Patient urgency");
 
     while (optionInt != 5)
     {
@@ -274,6 +287,7 @@ int main(int argc, char **argv)
             printf("\nChoose an option: ");
             scanf("%3s", option);
             optionInt = atoi(option);
+            getchar();
         }
 
         printf("\e[1;1H\e[2J");
@@ -284,8 +298,8 @@ int main(int argc, char **argv)
             register_patient(queue);
             break;
         case 2:
-            read_param(&index);
-            search_patient(queue, index);
+            read_param(query);
+            search_patient(queue, query);
             break;
         case 3:
             get_next_patient(queue, file);

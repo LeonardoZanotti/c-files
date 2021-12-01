@@ -1,4 +1,4 @@
-Dale do flinston johnson                           - 12341238467          - 5
-Leonardo Jose Zanotti                              - 1239487612304        - 3
-Ana Vamo Silva Palmeiras                           - 2                    - 2
-último da fila vamo que vamo file                 - 182746312934         - 1
+Patient name                                       - Patient phone        - Patient urgency
+Ana Carolina Zanotti                               - 1209471230947        - 4
+Leonardo José Zanotti                             - 2189476123           - 3
+Reinaldinho                                        - 2134762139084        - 1
