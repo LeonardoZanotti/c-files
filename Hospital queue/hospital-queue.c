@@ -109,7 +109,7 @@ int insert_sorted(Queue *Q, char name[50], char phone[20], int urgency)
     {
         NodeData *previous, *actual = (*Q).start;
 
-        while (actual != NULL && (*actual).data.urgency > urgency)
+        while (actual != NULL && (*actual).data.urgency >= urgency)
         {
             previous = actual;
             actual = (*actual).next;
@@ -171,6 +171,9 @@ int print_queue(Queue *Q)
     if (!empty_queue(Q))
     {
         printf("\nQueue:");
+        printf("Start: %s\n", (*Q).start->data.name);
+        printf("End: %s\n", (*Q).end->data.name);
+        printf("Length: %d\n", (*Q).length);
         for (NodeData *N = (*Q).start; N != NULL; N = (*N).next)
             printf("\n%-50s - %-20s - %d", (*N).data.name, (*N).data.phone, (*N).data.urgency);
         printf("\n");
