@@ -24,6 +24,13 @@ struct Header
 };
 
 // Auxiliar method
+// Print data from patient
+void print_patient(PatientNodeData patient, int index)
+{
+    printf("\n%3d° - %-50s - %-20s - %d", index, patient.name, patient.phone, patient.urgency);
+}
+
+// Auxiliar method
 // Initialize the queue
 void initialize_queue(Queue *Q)
 {
@@ -55,7 +62,7 @@ int size_queue(Queue *Q)
 void read_param(int *param)
 {
     char input[3];
-    printf("\nValue for the operation: ");
+    printf("\nPosition of the patient: ");
     scanf("%3s", input);
     *param = atoi(input);
 }
@@ -169,8 +176,12 @@ int print_queue(Queue *Q)
         printf("Start: %s\n", (*Q).start->data.name);
         printf("End: %s\n", (*Q).end->data.name);
         printf("Length: %d\n", (*Q).length);
+        int index = 1;
         for (NodeData *N = (*Q).start; N != NULL; N = (*N).next)
-            printf("\n%-50s - %-20s - %d", (*N).data.name, (*N).data.phone, (*N).data.urgency);
+        {
+            print_patient((*N).data, index);
+            index++;
+        }
         printf("\n");
     }
     return 0;
@@ -200,13 +211,29 @@ void register_patient(Queue *Q)
     insert_sorted(Q, name, phone, urgency);
 }
 
+void search_patient(Queue *Q, int index)
+{
+    if (empty_queue(Q) || index < 1 || index > size_queue(Q))
+        printf("\nNot found!\n");
+    else
+    {
+        NodeData *N = (*Q).start;
+        for (int i = 0; i < index - 1; i++)
+            N = (*N).next;
+        print_patient((*N).data, index);
+        printf("\n");
+    }
+}
+
 void get_next_patient(Queue *Q)
 {
     if (!empty_queue(Q))
     {
         PatientNodeData firstPatient = get_first(Q);
-        printf("\nNext patient:\n%-50s - %-20s - %d\n", firstPatient.name, firstPatient.phone, firstPatient.urgency);
+        printf("\nNext patient:");
+        print_patient(firstPatient, 1);
         remove_start(Q);
+        printf("\n");
     }
 }
 
@@ -217,10 +244,11 @@ void get_queue_size(Queue *Q)
 
 int main()
 {
+    printf("\e[1;1H\e[2J");
     char option[3];
     int optionInt = 0;
     Queue *queue = create_queue();
-    int param;
+    int param, index;
 
     while (optionInt != 5)
     {
@@ -239,12 +267,16 @@ int main()
             optionInt = atoi(option);
         }
 
+        printf("\e[1;1H\e[2J");
+
         switch (optionInt)
         {
         case 1:
             register_patient(queue);
             break;
         case 2:
+            read_param(&index);
+            search_patient(queue, index);
             break;
         case 3:
             get_next_patient(queue);
