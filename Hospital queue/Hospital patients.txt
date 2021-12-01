@@ -1,4 +1,3 @@
 Patient name                                       - Patient phone        - Patient urgency
-Ana Carolina Zanotti                               - 1209471230947        - 4
-Leonardo José Zanotti                             - 2189476123           - 3
-Reinaldinho                                        - 2134762139084        - 1
+Leonardo Zanotti                                   - 28436213984          - 5
+Aninha da silva                                    - 19234712304          - 5
