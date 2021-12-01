@@ -109,7 +109,7 @@ int insert_sorted(Queue *Q, char name[50], char phone[20], int urgency)
     {
         NodeData *previous, *actual = (*Q).start;
 
-        while (actual != NULL && (*actual).data.urgency < urgency)
+        while (actual != NULL && (*actual).data.urgency > urgency)
         {
             previous = actual;
             actual = (*actual).next;
@@ -121,15 +121,12 @@ int insert_sorted(Queue *Q, char name[50], char phone[20], int urgency)
             (*N).next = (*Q).start;
             (*Q).start = N;
         }
-        else if (actual == (*Q).end)
-        {
-            (*(*Q).end).next = N;
-            (*Q).end = N;
-        }
         else
         {
             (*N).next = (*previous).next;
             (*previous).next = N;
+            if (position >= (*Q).length)
+                (*Q).end = N;
         }
     }
 
@@ -188,15 +185,17 @@ void register_patient(Queue *Q)
     int urgency;
     char urgencyStr[3];
 
-    printf("Patient name: ");
+    getchar();
+
+    printf("\nPatient name: ");
     fgets(name, sizeof(name), stdin);
     name[strlen(name) - 1] = '\0';
 
-    printf("\nPatient phone: ");
+    printf("Patient phone: ");
     fgets(phone, sizeof(phone), stdin);
     phone[strlen(phone) - 1] = '\0';
 
-    printf("\nPatient urgency: ");
+    printf("Patient urgency: ");
     scanf("%3s", urgencyStr);
     urgency = atoi(urgencyStr);
 
