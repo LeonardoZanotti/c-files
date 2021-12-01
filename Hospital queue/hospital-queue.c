@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 typedef struct PatientNode PatientNodeData;
 typedef struct Node NodeData;
@@ -225,13 +226,14 @@ void search_patient(Queue *Q, int index)
     }
 }
 
-void get_next_patient(Queue *Q)
+void get_next_patient(Queue *Q, FILE *file)
 {
     if (!empty_queue(Q))
     {
         PatientNodeData firstPatient = get_first(Q);
         printf("\nNext patient:");
         print_patient(firstPatient, 1);
+        fprintf(file, "%-50s - %-20s - %d\n", firstPatient.name, firstPatient.phone, firstPatient.urgency);
         remove_start(Q);
         printf("\n");
     }
@@ -242,13 +244,20 @@ void get_queue_size(Queue *Q)
     printf("\nQueue size: %d patients\n", size_queue(Q));
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    printf("\e[1;1H\e[2J");
     char option[3];
     int optionInt = 0;
     Queue *queue = create_queue();
     int param, index;
+
+    FILE *file = fopen(argv[1], "w");
+    if (file == NULL)
+    {
+        perror("Error opening file");
+        exit(1);
+    }
+    fprintf(file, "%-50s - %-20s - %d\n", "Patient name", "Patient phone", "Patient urgency");
 
     while (optionInt != 5)
     {
@@ -279,7 +288,7 @@ int main()
             search_patient(queue, index);
             break;
         case 3:
-            get_next_patient(queue);
+            get_next_patient(queue, file);
             break;
         case 4:
             get_queue_size(queue);
@@ -287,6 +296,7 @@ int main()
             break;
         case 5:
             free_queue(queue);
+            fclose(file);
             printf("\nExiting...\n");
             break;
         default:
