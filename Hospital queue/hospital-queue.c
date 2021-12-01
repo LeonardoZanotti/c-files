@@ -137,7 +137,7 @@ int insert_sorted(Queue *Q, char name[50], char phone[20], int urgency)
 
     (*Q).length++;
 
-    printf("Inserted %s in the %d° position\n", name, position);
+    printf("\nInserted %s in the %d° position\n", name, position);
 
     return 1;
 }
@@ -177,10 +177,32 @@ int print_queue(Queue *Q)
     {
         printf("\nQueue:");
         for (NodeData *N = (*Q).start; N != NULL; N = (*N).next)
-            printf("\n%d", (*N).data);
+            printf("\n%s - %s - %d", (*N).data.name, (*N).data.phone, (*N).data.urgency);
         printf("\n");
     }
     return 0;
+}
+
+void register_patient(Queue *Q)
+{
+    char name[50];
+    char phone[20];
+    int urgency;
+    char urgencyStr[3];
+
+    printf("Patient name: ");
+    fgets(name, sizeof(name), stdin);
+    name[strlen(name) - 1] = '\0';
+
+    printf("\nPatient phone: ");
+    fgets(phone, sizeof(phone), stdin);
+    phone[strlen(phone) - 1] = '\0';
+
+    printf("\nPatient urgency: ");
+    scanf("%3s", urgencyStr);
+    urgency = atoi(urgencyStr);
+
+    insert_sorted(Q, name, phone, urgency);
 }
 
 int main()
@@ -210,8 +232,7 @@ int main()
         switch (optionInt)
         {
         case 1:
-            read_param(&param);
-            insert_end(queue, param);
+            register_patient(queue);
             break;
         case 2:
             break;
@@ -220,6 +241,7 @@ int main()
             remove_start(queue);
             break;
         case 4:
+            print_queue(queue);
             break;
         case 5:
             free_queue(queue);
