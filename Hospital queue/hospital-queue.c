@@ -1,11 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+typedef struct PatientNode PatientNodeData;
 typedef struct Node NodeData;
 typedef struct Header Queue;
+struct PatientNode
+{
+    char name[50];
+    char phone[20];
+    int urgency;
+};
 struct Node
 {
-    int data;
+    PatientNodeData data;
     struct Node *next;
 };
 struct Header
@@ -79,22 +87,58 @@ void free_queue(Queue *Q)
 }
 
 // Insert in the end of the queue
-int insert_end(Queue *Q, int data)
+int insert_sorted(Queue *Q, char name[50], char phone[20], int urgency)
 {
     if (Q == NULL)
         return 0;
     NodeData *N = (NodeData *)malloc(sizeof(NodeData));
     if (N == NULL)
         return 0;
-    (*N).data = data;
+
+    strcpy((*N).data.name, name);
+    strcpy((*N).data.phone, phone);
+    (*N).data.urgency = urgency;
+
     (*N).next = NULL;
-    if ((*Q).start == NULL)
+
+    int position = 1;
+
+    if (empty_queue(Q))
+    {
         (*Q).start = N;
+    }
     else
-        (*(*Q).end).next = N;
-    (*Q).end = N;
+    {
+        NodeData *previous, *actual = (*Q).start;
+
+        while (actual != NULL && (*actual).data.urgency < urgency)
+        {
+            previous = actual;
+            actual = (*actual).next;
+            position++;
+        }
+
+        if (actual == (*Q).start)
+        {
+            (*N).next = (*Q).start;
+            (*Q).start = N;
+        }
+        else if (actual == (*Q).end)
+        {
+            (*(*Q).end).next = N;
+            (*Q).end = N;
+        }
+        else
+        {
+            (*N).next = (*previous).next;
+            (*previous).next = N;
+        }
+    }
+
     (*Q).length++;
-    printf("Inserted %d at the end of the queue\n", data);
+
+    printf("Inserted %s in the %d° position\n", name, position);
+
     return 1;
 }
 
@@ -143,23 +187,20 @@ int main()
 {
     char option[3];
     int optionInt = 0;
-    Queue *queue;
-    int searchResult;
+    Queue *queue = create_queue();
     int param;
 
-    while (optionInt != 7)
+    while (optionInt != 5)
     {
         optionInt = 0;
 
-        printf("\n1) Create queue\n");
-        printf("2) Free queue\n");
-        printf("3) Insert at the end\n");
-        printf("4) Remove from the start\n");
-        printf("5) Get first item\n");
-        printf("6) Print the queue\n");
-        printf("7) Exit\n");
+        printf("\n1) Register patient\n");
+        printf("2) Search patient\n");
+        printf("3) Next patient\n");
+        printf("4) Queue size\n");
+        printf("5) Exit\n");
 
-        while (!(optionInt >= 1 && optionInt <= 7))
+        while (!(optionInt >= 1 && optionInt <= 5))
         {
             printf("\nChoose an option: ");
             scanf("%3s", option);
@@ -169,25 +210,18 @@ int main()
         switch (optionInt)
         {
         case 1:
-            queue = create_queue();
-            break;
-        case 2:
-            free_queue(queue);
-            break;
-        case 3:
             read_param(&param);
             insert_end(queue, param);
             break;
-        case 4:
+        case 2:
+            break;
+        case 3:
+            get_first(queue);
             remove_start(queue);
             break;
+        case 4:
+            break;
         case 5:
-            get_first(queue);
-            break;
-        case 6:
-            print_queue(queue);
-            break;
-        case 7:
             free_queue(queue);
             printf("\nExiting...\n");
             break;
@@ -198,14 +232,3 @@ int main()
 
     return 0;
 }
-
-// References
-// https://www.youtube.com/watch?q=_LWwqbHU8L0      Using OBS
-// https://www.tads.ufpr.br/pluginfile.php/15801/mod_resource/content/1/operacoes_ed_codigofonte.pdf        // book
-// https://www.youtube.com/watch?v=aEfOzz_KXl8&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=32
-// https://www.youtube.com/watch?v=y93DzmBskGQ&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=33
-// https://www.youtube.com/watch?v=RLu9QLd_xpY&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=34
-// https://www.youtube.com/watch?v=0KXFoxSCEJE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=35
-// https://www.youtube.com/watch?v=4YXnrKJCWrE&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=37
-// https://www.youtube.com/watch?v=aIFK1n9Sp30&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=38
-// https://www.youtube.com/watch?v=yOjgEXbKtME&queue=PL8iN9FQ7_jt6H5m4Gm0H89sybzR9yaaka&index=39
