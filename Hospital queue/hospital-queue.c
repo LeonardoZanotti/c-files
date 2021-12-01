@@ -125,10 +125,11 @@ int insert_sorted(Queue *Q, char name[50], char phone[20], int urgency)
         {
             (*N).next = (*previous).next;
             (*previous).next = N;
-            if (position >= (*Q).length)
-                (*Q).end = N;
         }
     }
+
+    if (position > (*Q).length)
+        (*Q).end = N;
 
     (*Q).length++;
 
@@ -150,19 +151,13 @@ int remove_start(Queue *Q)
         (*Q).end = NULL;
     free(N);
 
-    printf("Removed element from start of queue\n");
     return 1;
 }
 
-// Get first element of the queue
-int get_first(Queue *Q)
+// Get first patient data from the element of the queue
+PatientNodeData get_first(Queue *Q)
 {
-    if (empty_queue(Q))
-        return 0;
-
-    // printf("First item of the queue: %d\n", (*(*Q).start).data);
-
-    return 1;
+    return (*(*Q).start).data;
 }
 
 // Print all the queue data
@@ -170,7 +165,7 @@ int print_queue(Queue *Q)
 {
     if (!empty_queue(Q))
     {
-        printf("\nQueue:");
+        printf("\nQueue:\n\n");
         printf("Start: %s\n", (*Q).start->data.name);
         printf("End: %s\n", (*Q).end->data.name);
         printf("Length: %d\n", (*Q).length);
@@ -205,6 +200,16 @@ void register_patient(Queue *Q)
     insert_sorted(Q, name, phone, urgency);
 }
 
+void get_next_patient(Queue *Q)
+{
+    if (!empty_queue(Q))
+    {
+        PatientNodeData firstPatient = get_first(Q);
+        printf("\nNext patient:\n%-50s - %-20s - %d\n", firstPatient.name, firstPatient.phone, firstPatient.urgency);
+        remove_start(Q);
+    }
+}
+
 int main()
 {
     char option[3];
@@ -237,8 +242,7 @@ int main()
         case 2:
             break;
         case 3:
-            get_first(queue);
-            remove_start(queue);
+            get_next_patient(queue);
             break;
         case 4:
             print_queue(queue);
