@@ -66,7 +66,6 @@ Queue *create_queue()
     Queue *Q = (Queue *)malloc(sizeof(Queue));
     if (Q != NULL)
         initialize_queue(Q);
-    printf("\nQueue created!\n");
     return Q;
 }
 
@@ -83,7 +82,6 @@ void free_queue(Queue *Q)
         }
         free(Q);
     }
-    printf("\nCleared queue from memory\n");
 }
 
 // Insert in the end of the queue
@@ -165,7 +163,7 @@ int get_first(Queue *Q)
     if (empty_queue(Q))
         return 0;
 
-    printf("First item of the queue: %d\n", (*(*Q).start).data);
+    // printf("First item of the queue: %d\n", (*(*Q).start).data);
 
     return 1;
 }
