@@ -172,7 +172,7 @@ int print_queue(Queue *Q)
     {
         printf("\nQueue:");
         for (NodeData *N = (*Q).start; N != NULL; N = (*N).next)
-            printf("\n%s - %s - %d", (*N).data.name, (*N).data.phone, (*N).data.urgency);
+            printf("\n%-50s - %-20s - %d", (*N).data.name, (*N).data.phone, (*N).data.urgency);
         printf("\n");
     }
     return 0;
