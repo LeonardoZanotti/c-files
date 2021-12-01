@@ -210,6 +210,11 @@ void get_next_patient(Queue *Q)
     }
 }
 
+void get_queue_size(Queue *Q)
+{
+    printf("\nQueue size: %d patients\n", size_queue(Q));
+}
+
 int main()
 {
     char option[3];
@@ -245,6 +250,7 @@ int main()
             get_next_patient(queue);
             break;
         case 4:
+            get_queue_size(queue);
             print_queue(queue);
             break;
         case 5:
