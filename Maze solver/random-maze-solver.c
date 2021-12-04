@@ -10,6 +10,7 @@
 #define FREE " "
 #define PLAYER "\u263A"
 #define EXIT "\u2573"
+#define MAZE_SIZE 31
 
 typedef struct StackBase StackNode;
 typedef StackNode *Stack;
@@ -121,19 +122,19 @@ int print_stack(Stack *v)
 // turn matrix item into a value that can be stored in the stack
 int stackable_item(int row, int col)
 {
-    return row * 100 + col;
+    return row * MAZE_SIZE + col;
 }
 
 // get the row from a stack item
 int get_item_row(StackNode *item)
 {
-    return (*item).data / 100;
+    return (*item).data / MAZE_SIZE;
 }
 
 // get the col from a stack item
 int get_item_col(StackNode *item)
 {
-    return (*item).data % 100;
+    return (*item).data % MAZE_SIZE;
 }
 
 int main(int argc, char **argv)
@@ -144,30 +145,33 @@ int main(int argc, char **argv)
     Stack *stack = create_stack();
 
     // fill the matrix with file data
-    char maze[30][30];
+    char maze[MAZE_SIZE][MAZE_SIZE];
     int row = 0, col = 0, playerRow = 0, playerCol = 0, exitRow = 0, exitCol = 0;
 
     srand(time(0));
 
+    // random exit and player start cell
     while (playerRow == exitRow && playerCol == exitCol)
     {
-        playerRow = rand() % 28 + 1;
-        playerCol = rand() % 28 + 1;
-        exitRow = rand() % 28 + 1;
-        exitCol = rand() % 28 + 1;
+        playerRow = rand() % (MAZE_SIZE - 2) + 1;
+        playerCol = rand() % (MAZE_SIZE - 2) + 1;
+        exitRow = rand() % (MAZE_SIZE - 2) + 1;
+        exitCol = rand() % (MAZE_SIZE - 2) + 1;
     }
 
-    for (row = 0; row < 30; row++)
+    // start the maze with all cells as walls
+    for (row = 0; row < MAZE_SIZE; row++)
     {
-        for (col = 0; col < 30; col++)
+        for (col = 0; col < MAZE_SIZE; col++)
         {
             maze[row][col] = '0';
         }
     }
 
-    for (row = 2; row < 30; row += 2)
+    // create the ways
+    for (row = 1; row < MAZE_SIZE - 1; row += 2)
     {
-        for (col = 2; col < 30; col += 2)
+        for (col = 1; col < MAZE_SIZE - 1; col += 2)
         {
             int x1, y1;
             int x2, y2;
@@ -197,7 +201,7 @@ int main(int argc, char **argv)
                 y1 = col + dy;
                 x2 = x1 + dx;
                 y2 = y1 + dy;
-                if (x2 > 0 && x2 < 30 && y2 > 0 && y2 < 30 && maze[x1][y1] == '0' && maze[x2][y2] == '0')
+                if (x2 > 0 && x2 < MAZE_SIZE - 1 && y2 > 0 && y2 < MAZE_SIZE - 1 && maze[x1][y1] == '0' && maze[x2][y2] == '0')
                 {
                     maze[x1][y1] = '1';
                     maze[x2][y2] = '1';
@@ -215,15 +219,7 @@ int main(int argc, char **argv)
         }
     }
 
-    for (row = 0; row < 30; row++)
-    {
-        for (col = 0; col < 30; col++)
-        {
-            if (row == 0 || col == 0 || row == 29 || col == 29)
-                maze[row][col] = '0';
-        }
-    }
-
+    // set player and exit, also, stack the player cell
     maze[playerRow][playerCol] = '3';
     maze[exitRow][exitCol] = '2';
     insert_start(stack, stackable_item(playerRow, playerCol));
@@ -232,7 +228,8 @@ int main(int argc, char **argv)
     do
     {
         printf("\e[1;1H\e[2J");
-        usleep(50000);
+
+        // usleep(50000);
         row = get_item_row(*stack);
         col = get_item_col(*stack);
         end = 1;
@@ -244,7 +241,7 @@ int main(int argc, char **argv)
             insert_start(stack, stackable_item(row, col - 1));
 
         // check right
-        else if (col < 29 && (maze[row][col + 1] == '1' || maze[row][col + 1] == '2'))
+        else if (col < MAZE_SIZE - 1 && (maze[row][col + 1] == '1' || maze[row][col + 1] == '2'))
             insert_start(stack, stackable_item(row, col + 1));
 
         // check up
@@ -252,7 +249,7 @@ int main(int argc, char **argv)
             insert_start(stack, stackable_item(row - 1, col));
 
         // check down
-        else if (row < 29 && (maze[row + 1][col] == '1' || maze[row + 1][col] == '2'))
+        else if (row < MAZE_SIZE - 1 && (maze[row + 1][col] == '1' || maze[row + 1][col] == '2'))
             insert_start(stack, stackable_item(row + 1, col));
 
         // return because path is blocked
@@ -268,14 +265,14 @@ int main(int argc, char **argv)
         maze[row][col] = '3';
 
         if ((col > 0 && maze[row][col - 1] == '2') ||
-            (col < 29 && maze[row][col + 1] == '2') ||
+            (col < MAZE_SIZE - 1 && maze[row][col + 1] == '2') ||
             (row > 0 && maze[row - 1][col] == '2') ||
-            (row < 29 && maze[row + 1][col] == '2'))
+            (row < MAZE_SIZE - 1 && maze[row + 1][col] == '2'))
             end = 0;
 
-        for (row = 0; row < 30; row++)
+        for (row = 0; row < MAZE_SIZE; row++)
         {
-            for (col = 0; col < 30; col++)
+            for (col = 0; col < MAZE_SIZE; col++)
             {
                 switch (maze[row][col])
                 {
