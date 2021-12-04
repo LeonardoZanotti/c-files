@@ -150,15 +150,6 @@ int main(int argc, char **argv)
 
     srand(time(0));
 
-    // random exit and player start cell
-    while (playerRow == exitRow && playerCol == exitCol)
-    {
-        playerRow = rand() % (MAZE_SIZE - 2) + 1;
-        playerCol = rand() % (MAZE_SIZE - 2) + 1;
-        exitRow = rand() % (MAZE_SIZE - 2) + 1;
-        exitCol = rand() % (MAZE_SIZE - 2) + 1;
-    }
-
     // start the maze with all cells as walls
     for (row = 0; row < MAZE_SIZE; row++)
     {
@@ -219,6 +210,15 @@ int main(int argc, char **argv)
         }
     }
 
+    // random exit and player start cell
+    while ((playerRow == exitRow && playerCol == exitCol) || maze[playerRow][playerCol] == '0')
+    {
+        playerRow = rand() % (MAZE_SIZE - 2) + 1;
+        playerCol = rand() % (MAZE_SIZE - 2) + 1;
+        exitRow = rand() % (MAZE_SIZE - 2) + 1;
+        exitCol = rand() % (MAZE_SIZE - 2) + 1;
+    }
+
     // set player and exit, also, stack the player cell
     maze[playerRow][playerCol] = '3';
     maze[exitRow][exitCol] = '2';
@@ -227,8 +227,6 @@ int main(int argc, char **argv)
     // solve the maze
     do
     {
-        printf("\e[1;1H\e[2J");
-
         // usleep(50000);
         row = get_item_row(*stack);
         col = get_item_col(*stack);
@@ -258,6 +256,8 @@ int main(int argc, char **argv)
 
         if (empty_stack(stack))
             break;
+
+        printf("\e[1;1H\e[2J");
 
         row = get_item_row(*stack);
         col = get_item_col(*stack);
