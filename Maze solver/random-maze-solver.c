@@ -227,7 +227,7 @@ int main(int argc, char **argv)
     // solve the maze
     do
     {
-        // usleep(50000);
+        usleep(50000);
         row = get_item_row(*stack);
         col = get_item_col(*stack);
         end = 1;
