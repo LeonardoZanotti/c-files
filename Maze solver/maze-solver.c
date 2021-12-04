@@ -116,21 +116,21 @@ int print_stack(Stack *v)
 }
 
 // turn matrix item into a value that can be stored in the stack
-int stackable_item(int row, int col)
+int stackable_item(int row, int col, int mazeSize)
 {
-    return row * 100 + col;
+    return row * mazeSize + col;
 }
 
 // get the row from a stack item
-int get_item_row(StackNode *item)
+int get_item_row(StackNode *item, int mazeSize)
 {
-    return (*item).data / 100;
+    return (*item).data / mazeSize;
 }
 
 // get the col from a stack item
-int get_item_col(StackNode *item)
+int get_item_col(StackNode *item, int mazeSize)
 {
-    return (*item).data % 100;
+    return (*item).data % mazeSize;
 }
 
 int main(int argc, char **argv)
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
         if (ch != '\n')
         {
             if (ch == '3')
-                insert_start(stack, stackable_item(row, col));
+                insert_start(stack, stackable_item(row, col, mazeSize));
             maze[row][col] = ch;
             col++;
         }
@@ -201,27 +201,27 @@ int main(int argc, char **argv)
         printf("\e[1;1H\e[2J");
         usleep(50000); // sleep 0.5 seconds
 
-        row = get_item_row(*stack);
-        col = get_item_col(*stack);
+        row = get_item_row(*stack, mazeSize);
+        col = get_item_col(*stack, mazeSize);
         end = 1;
 
         maze[row][col] = '4';
 
         // check left
         if (col > 0 && (maze[row][col - 1] == '1' || maze[row][col - 1] == '2'))
-            insert_start(stack, stackable_item(row, col - 1));
+            insert_start(stack, stackable_item(row, col - 1, mazeSize));
 
         // check right
         else if (col < mazeSize - 1 && (maze[row][col + 1] == '1' || maze[row][col + 1] == '2'))
-            insert_start(stack, stackable_item(row, col + 1));
+            insert_start(stack, stackable_item(row, col + 1, mazeSize));
 
         // check up
         else if (row > 0 && (maze[row - 1][col] == '1' || maze[row - 1][col] == '2'))
-            insert_start(stack, stackable_item(row - 1, col));
+            insert_start(stack, stackable_item(row - 1, col, mazeSize));
 
         // check down
         else if (row < mazeSize - 1 && (maze[row + 1][col] == '1' || maze[row + 1][col] == '2'))
-            insert_start(stack, stackable_item(row + 1, col));
+            insert_start(stack, stackable_item(row + 1, col, mazeSize));
 
         // return because path is blocked
         else
@@ -230,8 +230,8 @@ int main(int argc, char **argv)
         if (empty_stack(stack))
             break;
 
-        row = get_item_row(*stack);
-        col = get_item_col(*stack);
+        row = get_item_row(*stack, mazeSize);
+        col = get_item_col(*stack, mazeSize);
         found = maze[row][col] == '2';
         maze[row][col] = '3';
 
