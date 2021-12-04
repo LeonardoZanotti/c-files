@@ -47,9 +47,7 @@ Stack *create_stack()
     Stack *stack = (Stack *)malloc(sizeof(Stack));
 
     if (stack != NULL)
-    {
         *stack = NULL;
-    }
 
     return stack;
 }
@@ -201,7 +199,7 @@ int main(int argc, char **argv)
     do
     {
         printf("\e[1;1H\e[2J");
-        usleep(50000);
+        usleep(50000); // sleep 0.5 seconds
 
         row = get_item_row(*stack);
         col = get_item_col(*stack);
