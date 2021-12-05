@@ -3,7 +3,16 @@
 
 #define SIZE 1000
 
-void insertionSort(int array[], int size, char text[50])
+void printArray(int array[], int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        printf("%d - %d\n", i, array[i]);
+    }
+    printf("\n");
+}
+
+void insertionSort(int array[SIZE], int size, char text[50])
 {
     int comparations = 0, swaps = 0;
     for (int step = 0; step < size; step++)
@@ -25,11 +34,12 @@ void insertionSort(int array[], int size, char text[50])
     printf("Insertion sort (%s)\nComparations: %d\nSwaps: %d\n\n", text, comparations, swaps);
 }
 
-void bubbleSort(int array[], int size, char text[50])
+void bubbleSort(int array[SIZE], int size, char text[50])
 {
     int i, j, temp, comparations = 0, swaps = 0;
     for (i = 0; i < size; i++)
     {
+        ++comparations;
         for (j = 0; j < size - i; j++)
         {
             if (array[j] > array[j + 1])
@@ -41,7 +51,6 @@ void bubbleSort(int array[], int size, char text[50])
             }
             comparations += 2;
         }
-        comparations++;
     }
     printf("Bubble sort (%s)\nComparations: %d\nSwaps: %d\n\n", text, comparations, swaps);
 }
