@@ -8,6 +8,7 @@
         "string_view": "c",
         "initializer_list": "c",
         "algorithm": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "utility": "c"
     }
 }

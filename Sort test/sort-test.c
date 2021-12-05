@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#define SIZE 1000
+
 void insertionSort(int array[], int size, char text[50])
 {
     int comparations = 0, swaps = 0;
-    for (int step = 1; step < size; step++)
+    for (int step = 0; step < size; step++)
     {
         int key = array[step];
         int j = step - 1;
@@ -26,9 +28,9 @@ void insertionSort(int array[], int size, char text[50])
 void bubbleSort(int array[], int size, char text[50])
 {
     int i, j, temp, comparations = 0, swaps = 0;
-    for (i = 0; i < size - 1; i++)
+    for (i = 0; i < size; i++)
     {
-        for (j = 0; j < size - i - 1; j++)
+        for (j = 0; j < size - i; j++)
         {
             if (array[j] > array[j + 1])
             {
@@ -44,39 +46,38 @@ void bubbleSort(int array[], int size, char text[50])
     printf("Bubble sort (%s)\nComparations: %d\nSwaps: %d\n\n", text, comparations, swaps);
 }
 
-void generate_data(int data[1000], char order[4])
+void generate_data(int data[SIZE], char order[4])
 {
     int i;
     if (strcmp(order, "asc") == 0)
     {
-        for (i = 0; i < 1000; i++)
+        for (i = 0; i < SIZE; i++)
             data[i] = i;
     }
     else if (strcmp(order, "desc") == 0)
     {
-        for (i = 0; i < 1000; i++)
-            data[999 - i] = i;
+        for (i = 0; i < SIZE; i++)
+            data[SIZE - 1 - i] = i;
     }
 }
 
 int main()
 {
-    int data[1000];
-    int size = sizeof(data) / sizeof(1000);
+    int data[SIZE];
 
     generate_data(data, "desc");
 
-    insertionSort(data, size, "Worst case");
+    insertionSort(data, SIZE, "Worst case");
 
     generate_data(data, "desc");
 
-    bubbleSort(data, size, "Worst case");
+    bubbleSort(data, SIZE, "Worst case");
 
     generate_data(data, "asc");
 
-    insertionSort(data, size, "Best case");
+    insertionSort(data, SIZE, "Best case");
 
     generate_data(data, "asc");
 
-    bubbleSort(data, size, "Best case");
+    bubbleSort(data, SIZE, "Best case");
 }
