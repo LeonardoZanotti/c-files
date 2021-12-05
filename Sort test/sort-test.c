@@ -36,21 +36,21 @@ void insertionSort(int array[SIZE], int size, char text[50])
 
 void bubbleSort(int array[SIZE], int size, char text[50])
 {
-    int i, j, temp, comparations = 0, swaps = 0;
-    for (i = 0; i < size; i++)
+    int swaps = 0, comparations = 0;
+    for (int step = 0; step < size - 1; ++step)
     {
-        ++comparations;
-        for (j = 0; j < size - i; j++)
+        for (int i = 0; i < size - step - 1; ++i)
         {
-            if (array[j] > array[j + 1])
+            if (array[i] > array[i + 1])
             {
-                temp = array[j];
-                array[j] = array[j + 1];
-                array[j + 1] = temp;
+                int temp = array[i];
+                array[i] = array[i + 1];
+                array[i + 1] = temp;
                 swaps++;
             }
             comparations += 2;
         }
+        ++comparations;
     }
     printf("Bubble sort (%s)\nComparations: %d\nSwaps: %d\n\n", text, comparations, swaps);
 }
