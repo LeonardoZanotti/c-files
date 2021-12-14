@@ -272,6 +272,8 @@ int main(int argc, char **argv)
     }
     fprintf(file, "%-50s - %-20s - %s\n", "Patient name", "Patient phone", "Patient urgency");
 
+    printf("\e[1;1H\e[2J");
+
     while (optionInt != 5)
     {
         optionInt = 0;
