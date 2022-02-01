@@ -55,13 +55,13 @@ void union_UF(UF *uf, int p, int q)
   {
     if (base1 >= 0)
       uf->id[p] = -base1;
-    uf->id[q] = base1;
+    uf->id[q] = uf->id[p];
   }
   else
   {
     if (base2 >= 0)
       uf->id[q] = -base2;
-    uf->id[p] = base2;
+    uf->id[p] = uf->id[q];
   }
 
   if (base1 < 0 && base2 < 0)
