@@ -51,6 +51,7 @@ void union_UF(UF *uf, int p, int q)
 {
   uf->count--;
   int h, base1 = uf->id[p], base2 = uf->id[q];
+
   if (base1 < base2)
   {
     if (base1 >= 0)
