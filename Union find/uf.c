@@ -44,11 +44,35 @@ int connected_UF(UF *uf, int p, int q)
 
 int find_UF(UF *uf, int p)
 {
-  return (0);
+  return (uf->id[p]);
 }
 
 void union_UF(UF *uf, int p, int q)
 {
+  uf->count--;
+  int h, base1 = uf->id[p], base2 = uf->id[q];
+  if (base1 < base2)
+  {
+    if (base1 >= 0)
+      uf->id[p] = -base1;
+    uf->id[q] = base1;
+  }
+  else
+  {
+    if (base2 >= 0)
+      uf->id[q] = -base2;
+    uf->id[p] = base2;
+  }
+
+  if (base1 < 0 && base2 < 0)
+  {
+    for (h = 0; h < uf->n; ++h)
+    {
+      if (uf->id[h] == base2)
+        uf->id[h] = base1;
+    }
+  }
+
   return;
 }
 
@@ -71,6 +95,14 @@ int main()
       union_UF(uf, p, q);
     }
 
+    // printf("\n\n");
+    // for (int j = 0; j < uf->n; ++j)
+    // {
+    //   printf("%d -> %d\n", j, uf->id[j]);
+    // }
+
     scanf("%d %d", &p, &q);
   }
+
+  printf("%d components\n", uf->count);
 }
