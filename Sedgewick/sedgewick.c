@@ -181,7 +181,22 @@ t_time *t_timetable_ceil(t_timetable *ttable, t_time *key)
     return ttime;
 }
 
-t_time t_timetable_rank(t_timetable *ttable, t_time *key);
+int t_timetable_rank(t_timetable *ttable, t_time *key)
+{
+    int i;
+    for (i = 0; i < (*ttable).n; i++)
+    {
+        if (t_time_cmp((*ttable).table[i].key, key) == 1)
+            break;
+    }
+    return i;
+}
+
+t_time *t_timetable_select(t_timetable *ttable, int k)
+{
+    return (*ttable).table[k].key;
+}
+
 int t_timetable_size_range(t_timetable *ttable, t_time *low, t_time *high);
 
 void t_timetable_print(t_timetable *ttable)
