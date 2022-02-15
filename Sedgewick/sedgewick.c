@@ -86,15 +86,6 @@ void t_timetable_put(t_timetable *ttable, t_time *key, char *value)
     (*ttable).n++;
 }
 
-void t_timetable_print(t_timetable *ttable)
-{
-    for (int i = 0; i < (*ttable).n; i++)
-    {
-        t_timetable_item table_item = (*ttable).table[i];
-        printf("%02d:%02d:%02d => %s\n", t_time_get_h(table_item.key), t_time_get_m(table_item.key), t_time_get_s(table_item.key), table_item.value);
-    }
-}
-
 char *t_timetable_get(t_timetable *ttable, t_time *key)
 {
     for (int i = 0; i < (*ttable).n; i++)
@@ -103,6 +94,28 @@ char *t_timetable_get(t_timetable *ttable, t_time *key)
             return (*ttable).table[i].value;
     }
     return NULL;
+}
+
+void t_timetable_delete(t_timetable *ttable, t_time *key);
+void t_timetable_contains(t_timetable *ttable, t_time *key);
+int t_timetable_is_empty(t_timetable *ttable);
+t_time t_timetable_size(t_timetable *ttable);
+t_time t_timetable_min(t_timetable *ttable);
+t_time t_timetable_delete_min(t_timetable *ttable);
+t_time t_timetable_delete_max(t_timetable *ttable);
+t_time t_timetable_max(t_timetable *ttable);
+t_time t_timetable_floor(t_timetable *ttable, t_time *key);
+t_time t_timetable_ceil(t_timetable *ttable, t_time *key);
+t_time t_timetable_rank(t_timetable *ttable, t_time *key);
+int t_timetable_size_range(t_timetable *ttable, t_time *low, t_time *high);
+
+void t_timetable_print(t_timetable *ttable)
+{
+    for (int i = 0; i < (*ttable).n; i++)
+    {
+        t_timetable_item table_item = (*ttable).table[i];
+        printf("%02d:%02d:%02d => %s\n", t_time_get_h(table_item.key), t_time_get_m(table_item.key), t_time_get_s(table_item.key), table_item.value);
+    }
 }
 
 void t_timetable_free(t_timetable *ttable)
