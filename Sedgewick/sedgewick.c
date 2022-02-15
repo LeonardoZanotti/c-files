@@ -197,7 +197,32 @@ t_time *t_timetable_select(t_timetable *ttable, int k)
     return (*ttable).table[k].key;
 }
 
-int t_timetable_size_range(t_timetable *ttable, t_time *low, t_time *high);
+int t_timetable_size_range(t_timetable *ttable, t_time *low, t_time *high)
+{
+    int count = 0;
+    for (int i = 1; i < (*ttable).n; i++)
+    {
+        if (t_time_cmp((*ttable).table[i].key, low) == 1 && t_time_cmp((*ttable).table[i].key, high) == -1)
+            count++;
+        if (t_time_cmp((*ttable).table[i].key, high) == 1)
+            break;
+    }
+    return count;
+}
+
+t_time *t_timetable_keys(t_timetable *ttable, t_time *low, t_time *high)
+{
+    t_time *ttime;
+    for (int i = 1; i < (*ttable).n; i++)
+    {
+        if (t_time_cmp((*ttable).table[i].key, low) == 1 && t_time_cmp((*ttable).table[i].key, high) == -1)
+        {
+            ttime = (*ttable).table[i].key;
+            break;
+        }
+    }
+    return ttime;
+}
 
 void t_timetable_print(t_timetable *ttable)
 {
