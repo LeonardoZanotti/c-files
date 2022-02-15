@@ -1,25 +1,35 @@
+#include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
-#include "t_time.h"
+
+typedef struct
+{
+    short int h, m, s;
+} t_time;
+
+typedef struct
+{
+    t_time *key;
+    char *value;
+} t_timetable_item;
+
+typedef struct
+{
+    t_timetable_item *table;
+    int size, n;
+} t_timetable;
 
 t_time *t_time_init(short int h, short int m, short int s)
 {
-    t_time *nt;
-
-    if (h < 0 || h > 23)
-        return (NULL);
-    if (m < 0 || m > 59)
-        return (NULL);
-    if (s < 0 || s > 59)
+    if (h < 0 || h > 23 || m < 0 || m > 59 || s < 0 || s > 59)
         return (NULL);
 
-    nt = (t_time *)malloc(sizeof(t_time));
+    t_time *t = (t_time *)malloc(sizeof(t_time));
 
-    nt->h = h;
-    nt->m = m;
-    nt->s = s;
+    t->h = h;
+    t->m = m;
+    t->s = s;
 
-    return (nt);
+    return (t);
 }
 
 int t_time_cmp(t_time *ta, t_time *tb)
@@ -45,3 +55,92 @@ void t_time_free(t_time *t)
 int t_time_get_h(t_time *t) { return t->h; }
 int t_time_get_m(t_time *t) { return t->m; }
 int t_time_get_s(t_time *t) { return t->s; }
+
+t_timetable *t_timetable_init(int size)
+{
+    t_timetable *newTt = (t_timetable *)malloc(sizeof(t_timetable));
+    (*newTt).table = (t_timetable_item *)malloc(sizeof(t_timetable_item) * size); // array of timetable items
+    (*newTt).size = size;
+    (*newTt).n = 0;
+    return newTt;
+}
+
+void t_timetable_put(t_timetable *ttable, t_time *key, char *value)
+{
+    if (ttable->n == ttable->size)
+        exit(-1);
+
+    int i = 0, j;
+
+    while (i < (*ttable).n && t_time_cmp(key, (*ttable).table[i].key))
+        i++;
+
+    for (j = (*ttable).n; j >= i; j--)
+    {
+        (*ttable).table[j + 1].key = (*ttable).table[j].key;
+        (*ttable).table[j + 1].value = (*ttable).table[j].value;
+    }
+
+    (*ttable).table[i].key = key;
+    (*ttable).table[i].value = value;
+    (*ttable).n++;
+}
+
+void t_timetable_print(t_timetable *ttable)
+{
+}
+
+void t_timetable_free(t_timetable *ttable)
+{
+    free(ttable->table);
+    free(ttable);
+}
+
+int main()
+{
+    t_time *ttime;
+    t_timetable *ttable;
+    char *str;
+    size_t len;
+
+    int h, m, s, size;
+
+    scanf("%d", &size);
+    ttable = t_timetable_init(size);
+
+    scanf("%d:%d:%d", &h, &m, &s);
+    while (h >= 0)
+    {
+        getchar();
+
+        ttime = t_time_init(h, m, s);
+
+        // read string
+        str = NULL;
+        len = getline(&str, &len, stdin);
+        str[len - 1] = '\0';
+
+        t_timetable_put(ttable, ttime, str);
+
+        scanf("%d:%d:%d", &h, &m, &s);
+    }
+
+    t_timetable_print(ttable);
+
+    scanf("%d:%d:%d", &h, &m, &s);
+    while (h >= 0)
+    {
+        ttime = t_time_init(h, m, s);
+        str = t_timetable_get(ttable, ttime);
+
+        if (str)
+            printf("%02d:%02d:%02d => %s\n", h, m, s, str);
+        else
+            printf("%02d:%02d:%02d => nao encontrado\n", h, m, s);
+
+        scanf("%d:%d:%d", &h, &m, &s);
+    }
+
+    t_time_free(ttime);
+    t_timetable_free(ttable);
+}
