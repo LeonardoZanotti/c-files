@@ -102,11 +102,12 @@ void t_timetable_delete(t_timetable *ttable, t_time *key)
     {
         if (t_time_cmp((*ttable).table[i].key, key) == 0)
         {
-            for (int j = i; j < (*ttable).n; j++)
+            for (int j = i; j < (*ttable).n - 1; j++)
             {
                 (*ttable).table[j].key = (*ttable).table[j + 1].key;
                 (*ttable).table[j].value = (*ttable).table[j + 1].value;
             }
+            (*ttable).n--;
             break;
         }
     }
