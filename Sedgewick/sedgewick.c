@@ -88,6 +88,11 @@ void t_timetable_put(t_timetable *ttable, t_time *key, char *value)
 
 void t_timetable_print(t_timetable *ttable)
 {
+    for (int i = 0; i < (*ttable).n; i++)
+    {
+        t_timetable_item table_item = (*ttable).table[i];
+        printf("%02d:%02d:%02d => %s\n", t_time_get_h(table_item.key), t_time_get_m(table_item.key), t_time_get_s(table_item.key), table_item.value);
+    }
 }
 
 void t_timetable_free(t_timetable *ttable)
@@ -127,19 +132,19 @@ int main()
 
     t_timetable_print(ttable);
 
-    scanf("%d:%d:%d", &h, &m, &s);
-    while (h >= 0)
-    {
-        ttime = t_time_init(h, m, s);
-        str = t_timetable_get(ttable, ttime);
+    // scanf("%d:%d:%d", &h, &m, &s);
+    // while (h >= 0)
+    // {
+    //     ttime = t_time_init(h, m, s);
+    //     str = t_timetable_get(ttable, ttime);
 
-        if (str)
-            printf("%02d:%02d:%02d => %s\n", h, m, s, str);
-        else
-            printf("%02d:%02d:%02d => nao encontrado\n", h, m, s);
+    //     if (str)
+    //         printf("%02d:%02d:%02d => %s\n", h, m, s, str);
+    //     else
+    //         printf("%02d:%02d:%02d => nao encontrado\n", h, m, s);
 
-        scanf("%d:%d:%d", &h, &m, &s);
-    }
+    //     scanf("%d:%d:%d", &h, &m, &s);
+    // }
 
     t_time_free(ttime);
     t_timetable_free(ttable);
