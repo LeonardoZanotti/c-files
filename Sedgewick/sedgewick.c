@@ -72,10 +72,10 @@ void t_timetable_put(t_timetable *ttable, t_time *key, char *value)
 
     int i = 0, j;
 
-    while (i < (*ttable).n && t_time_cmp(key, (*ttable).table[i].key))
+    while (i < (*ttable).n && t_time_cmp(key, (*ttable).table[i].key) > 0)
         i++;
 
-    for (j = (*ttable).n; j >= i; j--)
+    for (j = (*ttable).n - 1; j >= i; j--)
     {
         (*ttable).table[j + 1].key = (*ttable).table[j].key;
         (*ttable).table[j + 1].value = (*ttable).table[j].value;
