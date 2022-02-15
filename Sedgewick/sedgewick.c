@@ -96,14 +96,53 @@ char *t_timetable_get(t_timetable *ttable, t_time *key)
     return NULL;
 }
 
-void t_timetable_delete(t_timetable *ttable, t_time *key);
+void t_timetable_delete(t_timetable *ttable, t_time *key)
+{
+    for (int i = 0; i < (*ttable).n; i++)
+    {
+        if (t_time_cmp((*ttable).table[i].key, key) == 0)
+        {
+            for (int j = i; j < (*ttable).n; j++)
+            {
+                (*ttable).table[j].key = (*ttable).table[j + 1].key;
+                (*ttable).table[j].value = (*ttable).table[j + 1].value;
+            }
+            break;
+        }
+    }
+}
 void t_timetable_contains(t_timetable *ttable, t_time *key);
-int t_timetable_is_empty(t_timetable *ttable);
-t_time t_timetable_size(t_timetable *ttable);
-t_time t_timetable_min(t_timetable *ttable);
-t_time t_timetable_delete_min(t_timetable *ttable);
-t_time t_timetable_delete_max(t_timetable *ttable);
-t_time t_timetable_max(t_timetable *ttable);
+
+int t_timetable_is_empty(t_timetable *ttable)
+{
+    return ((*ttable).n == 0);
+}
+
+int t_timetable_size(t_timetable *ttable)
+{
+    return (*ttable).size;
+}
+
+t_time *t_timetable_min(t_timetable *ttable)
+{
+    return (*ttable).table[0].key;
+}
+
+t_time *t_timetable_max(t_timetable *ttable)
+{
+    return (*ttable).table[(*ttable).n].key;
+}
+
+t_time t_timetable_delete_min(t_timetable *ttable)
+{
+    t_timetable_delete(ttable, t_timetable_min(ttable));
+}
+
+t_time t_timetable_delete_max(t_timetable *ttable)
+{
+    t_timetable_delete(ttable, t_timetable_max(ttable));
+}
+
 t_time t_timetable_floor(t_timetable *ttable, t_time *key);
 t_time t_timetable_ceil(t_timetable *ttable, t_time *key);
 t_time t_timetable_rank(t_timetable *ttable, t_time *key);
