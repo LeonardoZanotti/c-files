@@ -112,7 +112,20 @@ void t_timetable_delete(t_timetable *ttable, t_time *key)
         }
     }
 }
-void t_timetable_contains(t_timetable *ttable, t_time *key);
+
+int t_timetable_contains(t_timetable *ttable, t_time *key)
+{
+    int found = 0;
+    for (int i = 0; i < (*ttable).n; i++)
+    {
+        if (t_time_cmp((*ttable).table[i].key, key) == 0)
+        {
+            found = 1;
+            break;
+        }
+    }
+    return found;
+}
 
 int t_timetable_is_empty(t_timetable *ttable)
 {
@@ -144,8 +157,30 @@ t_time t_timetable_delete_max(t_timetable *ttable)
     t_timetable_delete(ttable, t_timetable_max(ttable));
 }
 
-t_time t_timetable_floor(t_timetable *ttable, t_time *key);
-t_time t_timetable_ceil(t_timetable *ttable, t_time *key);
+t_time *t_timetable_floor(t_timetable *ttable, t_time *key)
+{
+    t_time *ttime;
+    for (int i = 1; i < (*ttable).n; i++)
+    {
+        ttime = (*ttable).table[i - 1].key;
+        if (t_time_cmp((*ttable).table[i].key, key) == 1)
+            break;
+    }
+    return ttime;
+}
+
+t_time *t_timetable_ceil(t_timetable *ttable, t_time *key)
+{
+    t_time *ttime;
+    for (int i = (*ttable).n - 2; i >= 0; i++)
+    {
+        ttime = (*ttable).table[i + 1].key;
+        if (t_time_cmp((*ttable).table[i].key, key) == -1)
+            break;
+    }
+    return ttime;
+}
+
 t_time t_timetable_rank(t_timetable *ttable, t_time *key);
 int t_timetable_size_range(t_timetable *ttable, t_time *low, t_time *high);
 
