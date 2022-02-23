@@ -26,24 +26,49 @@ void insertionSort(int array[], int size)
     }
 }
 
-void merge(int *a, int l, int m, int r)
+void merge(int array[], int a1[], int a2[], int start)
 {
-    int i, j, k;
-    int *aux;
+    int size = (sizeof(a1) + sizeof(a2)) / sizeof(a1[0]);
 
-    aux = (int *)malloc(sizeof(int) * r + 1);
-
-    for (i = m + 1; i > l; i--)
-        aux[i - 1] = a[i - 1];
-    for (j = m; j < r; j++)
-        aux[r + m - j] = a[j + 1];
-
-    for (k = l; k <= r; k++)
+    int i, k = 0, j = 0;
+    for (i = start; i < size; i++)
     {
-        if (aux[j] < aux[i])
-            a[k] = aux[j--];
+        if (j > size / 2 || (k <= size / 2 && a1[k] < a2[j]))
+        {
+            array[i] = a1[k];
+            k++;
+        }
         else
-            a[k] = aux[i++];
+        {
+            array[i] = a2[j];
+            j++;
+        }
+    }
+}
+
+void mergeSort(int arr[], int size)
+{
+    int isSorted = 1, i;
+    int arr1[size], arr2[size];
+
+    while (isSorted)
+    {
+        isSorted = 0;
+        i = 0;
+
+        while (arr[i] <= arr[i + 1])
+        {
+            arr1[i] = arr[i];
+            i++;
+        }
+
+        i++;
+
+        while (arr[i] <= arr[i + 1])
+        {
+            arr2[i] = arr[i];
+            i++;
+        }
     }
 }
 
@@ -51,7 +76,8 @@ int main()
 {
     int data[] = {9, 5, 1, 4, 3};
     int size = sizeof(data) / sizeof(data[0]);
-    insertionSort(data, size);
+    mergeSort(data, size);
+    // insertionSort(data, size);
     printf("Sorted array in ascending order:\n");
     printArray(data, size);
 }
