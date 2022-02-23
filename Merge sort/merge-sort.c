@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define LIMIT 10
+
 void printArray(int array[], int size)
 {
     for (int i = 0; i < size; i++)
@@ -26,49 +28,70 @@ void insertionSort(int array[], int size)
     }
 }
 
-void merge(int array[], int a1[], int a2[], int start)
+void merge(int arr[], int l, int m, int h)
 {
-    int size = (sizeof(a1) + sizeof(a2)) / sizeof(a1[0]);
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = h - m;
 
-    int i, k = 0, j = 0;
-    for (i = start; i < size; i++)
+    int L[n1], R[n2];
+
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+
+    i = 0;
+    j = 0;
+    k = l;
+
+    while (i < n1 && j < n2)
     {
-        if (j > size / 2 || (k <= size / 2 && a1[k] < a2[j]))
+        if (L[i] <= R[j])
         {
-            array[i] = a1[k];
-            k++;
+            arr[k] = L[i];
+            i++;
         }
         else
         {
-            array[i] = a2[j];
+            arr[k] = R[j];
             j++;
         }
+        k++;
+    }
+
+    while (i < n1)
+    {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2)
+    {
+        arr[k] = R[j];
+        j++;
+        k++;
     }
 }
 
-void mergeSort(int arr[], int size)
+void mergeSort(int arr[], int l, int h)
 {
-    int isSorted = 1, i;
-    int arr1[size], arr2[size];
+    int notSorted = 0, i;
 
-    while (isSorted)
+    if (l < h)
     {
-        isSorted = 0;
-        i = 0;
+        int m = (l + h) / 2;
 
-        while (arr[i] <= arr[i + 1])
-        {
-            arr1[i] = arr[i];
-            i++;
-        }
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, h);
 
-        i++;
+        for (i = 0; i < h; i++)
+            if (arr[i] > arr[i + 1])
+                notSorted = 1;
 
-        while (arr[i] <= arr[i + 1])
-        {
-            arr2[i] = arr[i];
-            i++;
-        }
+        if (notSorted)
+            merge(arr, l, m, h);
     }
 }
 
@@ -76,7 +99,7 @@ int main()
 {
     int data[] = {9, 5, 1, 4, 3};
     int size = sizeof(data) / sizeof(data[0]);
-    mergeSort(data, size);
+    mergeSort(data, 0, size - 1);
     // insertionSort(data, size);
     printf("Sorted array in ascending order:\n");
     printArray(data, size);
