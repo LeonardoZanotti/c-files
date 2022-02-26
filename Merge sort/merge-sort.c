@@ -30,6 +30,14 @@ void insertionSort(int array[], int size)
 
 void merge(int arr[], int l, int m, int h)
 {
+    int size = h - l + 1;
+    if (size < LIMIT)
+    {
+        insertionSort(arr, size);
+        printf("dale");
+        return;
+    }
+
     int i, j, k;
     int n1 = m - l + 1;
     int n2 = h - m;
@@ -100,7 +108,6 @@ int main()
     int data[] = {9, 5, 1, 4, 3};
     int size = sizeof(data) / sizeof(data[0]);
     mergeSort(data, 0, size - 1);
-    // insertionSort(data, size);
     printf("Sorted array in ascending order:\n");
     printArray(data, size);
 }
