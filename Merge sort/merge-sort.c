@@ -11,9 +11,9 @@ void printArray(int array[], int size)
     printf("\n");
 }
 
-void insertionSort(int array[], int size)
+void insertionSort(int array[], int l, int h)
 {
-    for (int step = 1; step < size; step++)
+    for (int step = l + 1; step <= h; step++)
     {
         int key = array[step];
         int j = step - 1;
@@ -33,35 +33,32 @@ void merge(int arr[], int l, int m, int h)
     int size = h - l + 1;
     if (size < LIMIT)
     {
-        insertionSort(arr, size);
+        insertionSort(arr, l, h);
         return;
     }
 
     int i, j, k;
-    int n1 = m - l + 1;
-    int n2 = h - m;
+    int n1 = m;
+    int n2 = h;
 
-    int L[n1], R[n2];
+    int output[size];
 
-    for (i = 0; i < n1; i++)
-        L[i] = arr[l + i];
-    for (j = 0; j < n2; j++)
-        R[j] = arr[m + 1 + j];
+    i = l;
+    j = m;
+    k = 0;
 
-    i = 0;
-    j = 0;
-    k = l;
+    printf("%d %d %d %d %d\n", i, j, k, n1, n2);
 
     while (i < n1 && j < n2)
     {
-        if (L[i] <= R[j])
+        if (arr[i] <= arr[j])
         {
-            arr[k] = L[i];
+            output[k] = arr[i];
             i++;
         }
         else
         {
-            arr[k] = R[j];
+            output[k] = arr[j];
             j++;
         }
         k++;
@@ -69,17 +66,20 @@ void merge(int arr[], int l, int m, int h)
 
     while (i < n1)
     {
-        arr[k] = L[i];
+        output[k] = arr[i];
         i++;
         k++;
     }
 
     while (j < n2)
     {
-        arr[k] = R[j];
+        output[k] = arr[j];
         j++;
         k++;
     }
+
+    for (i = l; i < h; i++)
+        arr[i] = output[i];
 }
 
 void mergeSort(int arr[], int size)
