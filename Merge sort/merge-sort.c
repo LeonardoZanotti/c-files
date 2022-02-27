@@ -90,7 +90,6 @@ void mergeSort(int arr[], int size)
     {
         notSorted = 0;
         subIsSorted = 1;
-
         if (l >= size || m >= size)
             l = 0;
 
@@ -99,7 +98,7 @@ void mergeSort(int arr[], int size)
         while (m < size && arr[m] <= arr[m + 1])
             m++;
 
-        if (m != size)
+        if (m < size)
         {
             h = m + 1;
             while (h < size && arr[h] <= arr[h + 1])
@@ -110,7 +109,6 @@ void mergeSort(int arr[], int size)
             if (arr[i] < arr[i + 1])
                 subIsSorted = 0;
 
-        printf("%d %d %d\n", l, m, h);
         if (!subIsSorted)
             merge(arr, l, m, h);
 
@@ -119,24 +117,13 @@ void mergeSort(int arr[], int size)
             i++;
 
         l = h;
-        notSorted = i != size;
+        notSorted = i < size;
     }
-
-    // if (l < h)
-    // {
-    //     int m = (l + h) / 2;
-
-    //     mergeSort(arr, l, m);
-    //     mergeSort(arr, m + 1, h);
-
-    //     if (notSorted)
-    //         merge(arr, l, m, h);
-    // }
 }
 
 int main()
 {
-    int data[] = {9, 5, 1, 4, 3};
+    int data[] = {9, 5, 1, 4, 3, 15, 3, 7, 2, 8, 20, 5, 12, 11, 16};
     int size = sizeof(data) / sizeof(data[0]);
     mergeSort(data, size);
     printf("Sorted array in ascending order:\n");
