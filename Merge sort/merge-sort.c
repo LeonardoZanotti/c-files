@@ -34,7 +34,6 @@ void merge(int arr[], int l, int m, int h)
     if (size < LIMIT)
     {
         insertionSort(arr, size);
-        printf("dale");
         return;
     }
 
@@ -83,31 +82,63 @@ void merge(int arr[], int l, int m, int h)
     }
 }
 
-void mergeSort(int arr[], int l, int h)
+void mergeSort(int arr[], int size)
 {
-    int notSorted = 0, i;
+    int notSorted = 1, subIsSorted = 0, l = 0, m, h, i;
 
-    if (l < h)
+    while (notSorted)
     {
-        int m = (l + h) / 2;
+        notSorted = 0;
+        subIsSorted = 1;
 
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, h);
+        if (l >= size || m >= size)
+            l = 0;
 
-        for (i = 0; i < h; i++)
-            if (arr[i] > arr[i + 1])
-                notSorted = 1;
+        m = l + 1;
 
-        if (notSorted)
+        while (m < size && arr[m] <= arr[m + 1])
+            m++;
+
+        if (m != size)
+        {
+            h = m + 1;
+            while (h < size && arr[h] <= arr[h + 1])
+                h++;
+        }
+
+        for (i = l; i < h; i++)
+            if (arr[i] < arr[i + 1])
+                subIsSorted = 0;
+
+        printf("%d %d %d\n", l, m, h);
+        if (!subIsSorted)
             merge(arr, l, m, h);
+
+        i = 0;
+        while (arr[i] <= arr[i + 1])
+            i++;
+
+        l = h;
+        notSorted = i != size;
     }
+
+    // if (l < h)
+    // {
+    //     int m = (l + h) / 2;
+
+    //     mergeSort(arr, l, m);
+    //     mergeSort(arr, m + 1, h);
+
+    //     if (notSorted)
+    //         merge(arr, l, m, h);
+    // }
 }
 
 int main()
 {
     int data[] = {9, 5, 1, 4, 3};
     int size = sizeof(data) / sizeof(data[0]);
-    mergeSort(data, 0, size - 1);
+    mergeSort(data, size);
     printf("Sorted array in ascending order:\n");
     printArray(data, size);
 }
