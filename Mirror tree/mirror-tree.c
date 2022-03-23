@@ -8,7 +8,6 @@ typedef struct arvore
     struct arvore *dir;
 } Arvore;
 
-void arv_imprime(Arvore *a);
 int eh_espelho(Arvore *arv_a, Arvore *arv_b);
 Arvore *cria_espelho(Arvore *arv_a);
 
@@ -47,6 +46,15 @@ int arv_pertence(Arvore *a, char c)
     return a != NULL && (a->info == c || arv_pertence(a->dir, c) || arv_pertence(a->esq, c));
 }
 
+void arv_imprime(Arvore *a)
+{
+    if (a == NULL)
+        return;
+    arv_imprime(a->esq);
+    printf("%c \n", a->info);
+    arv_imprime(a->dir);
+}
+
 int main(int argc, char *argv[])
 {
     Arvore *a = arv_constroi(
@@ -69,5 +77,7 @@ int main(int argc, char *argv[])
                 cria_arv_vazia(),
                 cria_arv_vazia())));
     // printf("%d %d", arv_pertence(a, 'f'), arv_pertence(a, 's'));
+    arv_imprime(a);
+    arv_libera(a);
     return 0;
 }
