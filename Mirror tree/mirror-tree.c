@@ -8,9 +8,6 @@ typedef struct arvore
     struct arvore *dir;
 } Arvore;
 
-int eh_espelho(Arvore *arv_a, Arvore *arv_b);
-Arvore *cria_espelho(Arvore *arv_a);
-
 Arvore *cria_arv_vazia(void)
 {
     return NULL;
@@ -55,6 +52,13 @@ void arv_imprime(Arvore *a)
     arv_imprime(a->dir);
 }
 
+int eh_espelho(Arvore *arv_a, Arvore *arv_b)
+{
+    return (arv_a == NULL && arv_b == NULL) || ((arv_a != NULL && arv_b != NULL) && (arv_a->info == arv_b->info && eh_espelho(arv_a->esq, arv_b->dir) && eh_espelho(arv_a->dir, arv_b->esq)));
+}
+
+Arvore *cria_espelho(Arvore *arv_a);
+
 int main(int argc, char *argv[])
 {
     Arvore *a = arv_constroi(
@@ -76,8 +80,62 @@ int main(int argc, char *argv[])
                 'f',
                 cria_arv_vazia(),
                 cria_arv_vazia())));
+
+    Arvore *b = arv_constroi(
+        'a',
+        arv_constroi(
+            'c',
+            arv_constroi(
+                'f',
+                cria_arv_vazia(),
+                cria_arv_vazia()),
+            arv_constroi(
+                'e',
+                cria_arv_vazia(),
+                cria_arv_vazia())),
+        arv_constroi(
+            'b',
+            arv_constroi(
+                'd',
+                cria_arv_vazia(),
+                cria_arv_vazia()),
+            cria_arv_vazia()));
+
+    Arvore *c = arv_constroi(
+        'a',
+        arv_constroi(
+            'c',
+            arv_constroi(
+                'f',
+                cria_arv_vazia(),
+                cria_arv_vazia()),
+            arv_constroi(
+                'e',
+                cria_arv_vazia(),
+                cria_arv_vazia())),
+        arv_constroi(
+            'b',
+            arv_constroi(
+                'd',
+                cria_arv_vazia(),
+                cria_arv_vazia()),
+            arv_constroi(
+                'g',
+                cria_arv_vazia(),
+                cria_arv_vazia())));
+
     // printf("%d %d", arv_pertence(a, 'f'), arv_pertence(a, 's'));
     arv_imprime(a);
+    printf("\n");
+    arv_imprime(b);
+    printf("\n");
+    arv_imprime(c);
+    printf("\n");
+    printf("%d", eh_espelho(a, b));
+    printf("%d", eh_espelho(a, c));
+    printf("%d", eh_espelho(c, b));
     arv_libera(a);
+    arv_libera(b);
+    arv_libera(c);
     return 0;
 }
