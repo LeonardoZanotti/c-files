@@ -57,7 +57,12 @@ int eh_espelho(Arvore *arv_a, Arvore *arv_b)
     return (arv_a == NULL && arv_b == NULL) || ((arv_a != NULL && arv_b != NULL) && (arv_a->info == arv_b->info && eh_espelho(arv_a->esq, arv_b->dir) && eh_espelho(arv_a->dir, arv_b->esq)));
 }
 
-Arvore *cria_espelho(Arvore *arv_a);
+Arvore *cria_espelho(Arvore *arv_a)
+{
+    return arv_a == NULL
+               ? cria_arv_vazia()
+               : arv_constroi(arv_a->info, cria_espelho(arv_a->dir), cria_espelho(arv_a->esq));
+}
 
 int main(int argc, char *argv[])
 {
@@ -124,18 +129,28 @@ int main(int argc, char *argv[])
                 cria_arv_vazia(),
                 cria_arv_vazia())));
 
+    Arvore *a_esp = cria_espelho(a);
+
     // printf("%d %d", arv_pertence(a, 'f'), arv_pertence(a, 's'));
+
     arv_imprime(a);
     printf("\n");
-    arv_imprime(b);
+    // arv_imprime(b);
+    // printf("\n");
+    // arv_imprime(c);
+    // printf("\n");
+
+    arv_imprime(a_esp);
     printf("\n");
-    arv_imprime(c);
-    printf("\n");
-    printf("%d", eh_espelho(a, b));
-    printf("%d", eh_espelho(a, c));
-    printf("%d", eh_espelho(c, b));
+
+    // printf("%d", eh_espelho(a, b));
+    // printf("%d", eh_espelho(a, c));
+    // printf("%d", eh_espelho(c, b));
+    printf("%d", eh_espelho(a, a_esp));
+
     arv_libera(a);
     arv_libera(b);
     arv_libera(c);
+    arv_libera(a_esp);
     return 0;
 }
