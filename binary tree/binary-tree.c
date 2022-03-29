@@ -106,6 +106,11 @@ Arvore *remover(Arvore *a, int x)
     return (a);
 }
 
+int verifica_arv_vazia(Arvore *a)
+{
+    return (a == NULL);
+}
+
 Arvore *arv_libera(Arvore *a)
 {
     if (!verifica_arv_vazia(a))
