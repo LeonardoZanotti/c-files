@@ -106,6 +106,17 @@ Arvore *remover(Arvore *a, int x)
     return (a);
 }
 
+Arvore *arv_libera(Arvore *a)
+{
+    if (!verifica_arv_vazia(a))
+    {
+        arv_libera(a->esq);
+        arv_libera(a->dir);
+        free(a);
+    }
+    return NULL;
+}
+
 void print(Arvore *a, int spaces)
 {
     int i;
@@ -153,4 +164,6 @@ int main()
     printf("\n");
     print(a, 0);
     printf("\n");
+
+    arv_libera(a);
 }
