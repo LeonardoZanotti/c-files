@@ -140,7 +140,9 @@ void print(Arvore *a, int spaces)
 
 int arv_bin_check(Arvore *a)
 {
-    return 0;
+    return a == NULL
+               ? 1
+               : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
 }
 
 int main()
@@ -162,6 +164,8 @@ int main()
     print(a, 0);
     printf("\n");
 
+    printf("%d", arv_bin_check(a));
+
     a = remover(a, 45);
     a = remover(a, 50);
     a = remover(a, 90);
@@ -169,6 +173,8 @@ int main()
     printf("\n");
     print(a, 0);
     printf("\n");
+
+    printf("%d", arv_bin_check(a));
 
     arv_libera(a);
 }

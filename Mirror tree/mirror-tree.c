@@ -27,6 +27,13 @@ int verifica_arv_vazia(Arvore *a)
     return (a == NULL);
 }
 
+int arv_bin_check(Arvore *a)
+{
+    return a == NULL
+               ? 1
+               : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
+}
+
 Arvore *arv_libera(Arvore *a)
 {
     if (!verifica_arv_vazia(a))
@@ -133,20 +140,24 @@ int main(int argc, char *argv[])
 
     // printf("%d %d", arv_pertence(a, 'f'), arv_pertence(a, 's'));
 
+    printf("A:\n");
     arv_imprime(a);
     printf("\n");
+    printf("A é binária: %d\n", arv_bin_check(a));
     // arv_imprime(b);
     // printf("\n");
     // arv_imprime(c);
     // printf("\n");
 
+    printf("A_esp:\n");
     arv_imprime(a_esp);
     printf("\n");
+    printf("A_esp é binária: %d\n", arv_bin_check(a_esp));
 
-    // printf("%d", eh_espelho(a, b));
-    // printf("%d", eh_espelho(a, c));
-    // printf("%d", eh_espelho(c, b));
-    printf("%d", eh_espelho(a, a_esp));
+    // printf("B é espelho de a: %d", eh_espelho(a, b));
+    // printf("C é espelho de a: %d", eh_espelho(a, c));
+    // printf("B é espelho de c: %d", eh_espelho(c, b));
+    printf("A_esp é espelho de a: %d\n", eh_espelho(a, a_esp));
 
     arv_libera(a);
     arv_libera(b);
