@@ -29,6 +29,11 @@ int verifica_arv_vazia(Arvore *a)
 
 int arv_bin_check(Arvore *a)
 {
+    if (a != NULL && a->dir != NULL && a->esq != NULL)
+    {
+        printf("%c > %c = %d\n", a->info, a->esq->info, a->info > a->esq->info);
+        printf("%c < %c = %d\n", a->info, a->dir->info, a->info < a->dir->info);
+    }
     return a == NULL
                ? 1
                : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
@@ -136,6 +141,30 @@ int main(int argc, char *argv[])
                 cria_arv_vazia(),
                 cria_arv_vazia())));
 
+    // binary tree
+    Arvore *d = arv_constroi(
+        'd',
+        arv_constroi(
+            'b',
+            arv_constroi(
+                'a',
+                cria_arv_vazia(),
+                cria_arv_vazia()),
+            arv_constroi(
+                'c',
+                cria_arv_vazia(),
+                cria_arv_vazia())),
+        arv_constroi(
+            'f',
+            arv_constroi(
+                'e',
+                cria_arv_vazia(),
+                cria_arv_vazia()),
+            arv_constroi(
+                'g',
+                cria_arv_vazia(),
+                cria_arv_vazia())));
+
     Arvore *a_esp = cria_espelho(a);
 
     // printf("%d %d", arv_pertence(a, 'f'), arv_pertence(a, 's'));
@@ -159,9 +188,15 @@ int main(int argc, char *argv[])
     // printf("B é espelho de c: %d", eh_espelho(c, b));
     printf("A_esp é espelho de a: %d\n", eh_espelho(a, a_esp));
 
+    printf("D:\n");
+    arv_imprime(d);
+    printf("\n");
+    printf("D é binária: %d\n", arv_bin_check(d));
+
     arv_libera(a);
     arv_libera(b);
     arv_libera(c);
+    arv_libera(d);
     arv_libera(a_esp);
     return 0;
 }
