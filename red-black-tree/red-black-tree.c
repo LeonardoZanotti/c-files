@@ -146,6 +146,33 @@ int arv_rb_check(ArvoreRB *a)
              : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
 }
 
+ArvoreRB *rot_esq(ArvoreRB *no)
+{
+  ArvoreRB *tree = no->dir;
+  no->dir = tree->esq;
+  tree->esq = no;
+  tree->cor = no->cor;
+  no->cor = RED;
+  return (tree);
+}
+
+ArvoreRB *rot_dir(ArvoreRB *no)
+{
+  ArvoreRB *tree = no->esq;
+  no->esq = tree->dir;
+  tree->dir = no;
+  tree->cor = no->cor;
+  no->cor = RED;
+  return (tree);
+}
+
+void flip_cor(ArvoreRB *no)
+{
+  no->cor = RED;
+  no->esq->cor = BLACK;
+  no->dir->cor = BLACK;
+}
+
 int main()
 {
   ArvoreRB *a;
