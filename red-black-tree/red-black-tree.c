@@ -58,24 +58,19 @@ void printTreeOrder(ArvoreRB *a)
   printTreeOrder(a->dir);
 }
 
-void printTree(ArvoreRB *a, int spaces)
+void printTree(ArvoreRB *a, int height)
 {
-  int i;
-  for (i = 0; i < spaces; i++)
-    printf(" ");
-  if (!a)
+  if (a != NULL)
   {
-    printf("//\n");
-    return;
+    printf("%d - %d : %s\n", height, a->info, a->cor ? "RED" : "BLACK");
+    printTree(a->esq, height + 1);
+    printTree(a->dir, height + 1);
   }
-
-  printf("%d\n", a->info);
-  printTree(a->esq, spaces + 2);
-  printTree(a->dir, spaces + 2);
 }
 
 ArvoreRB *inserir(ArvoreRB *a, int v)
 {
+  int change = 0;
   if (a == NULL)
   {
     a = (ArvoreRB *)malloc(sizeof(ArvoreRB));
@@ -85,14 +80,20 @@ ArvoreRB *inserir(ArvoreRB *a, int v)
   }
   else if (v < a->info)
   {
+    change = a->esq == NULL;
     a->esq = inserir(a->esq, v);
-    a->cor = RED;
+    if (change)
+      a->esq->cor = RED;
   }
   else
   {
+    change = a->dir == NULL;
     a->dir = inserir(a->dir, v);
-    a->cor = RED;
+    if (change)
+      a->dir->cor = RED;
   }
+
+  change = 0;
 
   if (is_red_node(a->dir) && !is_red_node(a->esq))
     rot_esq(a);
@@ -180,13 +181,24 @@ int arv_bin_check(ArvoreRB *a)
 int main()
 {
   ArvoreRB *a;
-  inserir(a, 5);
-  inserir(a, 3);
-  inserir(a, 9);
-  inserir(a, 1);
-  inserir(a, 4);
-  inserir(a, 7);
-  printTree(a, 2);
-  printTreeOrder(a);
+  a = inserir(a, 5);
+  printTree(a, 1);
+  printf("\n");
+  a = inserir(a, 3);
+  printTree(a, 1);
+  printf("\n");
+  a = inserir(a, 9);
+  printTree(a, 1);
+  printf("\n");
+  a = inserir(a, 1);
+  printTree(a, 1);
+  printf("\n");
+  a = inserir(a, 4);
+  printTree(a, 1);
+  printf("\n");
+  a = inserir(a, 7);
+  printTree(a, 1);
+  printf("\n");
+  // printTreeOrder(a);
   arv_libera(a);
 }
