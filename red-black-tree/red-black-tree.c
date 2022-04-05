@@ -44,6 +44,18 @@ void flip_cor(ArvoreRB *no)
   no->dir->cor = BLACK;
 }
 
+ArvoreRB *fixRBTree(ArvoreRB *a)
+{
+  if (is_red_node(a->dir) && !is_red_node(a->esq))
+    a = rot_esq(a);
+  else if (is_red_node(a->esq) && is_red_node(a->esq->esq))
+    a = rot_dir(a);
+  else if (is_red_node(a->dir) && is_red_node(a->esq))
+    flip_cor(a);
+
+  return a;
+}
+
 int buscar(ArvoreRB *a, int v)
 {
   return a != NULL && (v < a->info ? buscar(a->esq, v) : (v > a->info ? buscar(a->dir, v) : 1));
@@ -95,14 +107,7 @@ ArvoreRB *inserir(ArvoreRB *a, int v)
 
   change = 0;
 
-  if (is_red_node(a->dir) && !is_red_node(a->esq))
-    rot_esq(a);
-  else if (is_red_node(a->esq) && is_red_node(a->esq->esq))
-    rot_dir(a);
-  else if (is_red_node(a->dir) && is_red_node(a->esq))
-    flip_cor(a);
-
-  return a;
+  return fixRBTree(a);
 }
 
 ArvoreRB *remover(ArvoreRB *a, int x)
@@ -152,7 +157,7 @@ ArvoreRB *remover(ArvoreRB *a, int x)
     }
   }
 
-  return (a);
+  return fixRBTree(a);
 }
 
 int verifica_arv_vazia(ArvoreRB *a)
@@ -203,23 +208,17 @@ int main()
 {
   ArvoreRB *a;
   a = inserir(a, 5);
-  printTree(a, 1);
-  printf("\n");
   a = inserir(a, 3);
-  printTree(a, 1);
-  printf("\n");
   a = inserir(a, 9);
-  printTree(a, 1);
-  printf("\n");
   a = inserir(a, 1);
-  printTree(a, 1);
-  printf("\n");
   a = inserir(a, 4);
-  printTree(a, 1);
-  printf("\n");
   a = inserir(a, 7);
+  a = inserir(a, 2);
+  a = inserir(a, 6);
+  a = inserir(a, 8);
+  a = inserir(a, 10);
   printTree(a, 1);
-  printf("\n%d", arv_rb_check(a, 0, get_tree_height(a)));
+  printf("\n%d\n", arv_rb_check(a, 0, get_tree_height(a)));
   // printTreeOrder(a);
   arv_libera(a);
 }
