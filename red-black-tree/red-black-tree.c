@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #define RED 1
-#define BLACK 0;
+#define BLACK 0
 
 typedef struct arvoreRB
 {
@@ -217,6 +217,11 @@ int main()
   a = inserir(a, 6);
   a = inserir(a, 8);
   a = inserir(a, 10);
+  printTree(a, 1);
+  printf("\n%d\n", arv_rb_check(a, 0, get_tree_height(a)));
+  a = remover(a, 1);
+  a = remover(a, 6);
+  a = remover(a, 8);
   printTree(a, 1);
   printf("\n%d\n", arv_rb_check(a, 0, get_tree_height(a)));
   // printTreeOrder(a);
