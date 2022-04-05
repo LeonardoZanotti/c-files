@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define RED 1
 #define BLACK 0
+#define RED 1
+#define DOUBLE_BLACK -1
 
 typedef struct arvoreRB
 {
@@ -113,15 +114,41 @@ ArvoreRB *inserir(ArvoreRB *a, int v)
 ArvoreRB *remover(ArvoreRB *a, int x)
 {
   ArvoreRB *aux, *pai_aux;
-  int filhos = 0, tmp;
+  int filhos = 0, tmp, isBlack;
 
   if (!a)
     return (NULL);
 
   if (a->info < x)
+  {
+    isBlack = !is_red_node(a->dir);
     a->dir = remover(a->dir, x);
+    if ((isBlack && is_red_node(a)) || (!isBlack && !is_red_node(a)))
+    {
+      if (a->dir == NULL)
+        a->cor = BLACK;
+      else if (a->dir->esq == NULL && a->dir->dir == NULL)
+        a->dir = BLACK;
+    }
+    else if (isBlack && !is_red_node(a))
+    {
+    }
+  }
   else if (a->info > x)
+  {
+    isBlack = !is_red_node(a->esq);
     a->esq = remover(a->esq, x);
+    if ((isBlack && is_red_node(a)) || (!isBlack && !is_red_node(a)))
+    {
+      if (a->esq == NULL)
+        a->cor = BLACK;
+      else if (a->esq->esq == NULL && a->esq->dir == NULL)
+        a->esq = BLACK;
+    }
+    else if (isBlack && !is_red_node(a))
+    {
+    }
+  }
   else
   {
     if (a->esq)
