@@ -178,6 +178,27 @@ int arv_bin_check(ArvoreRB *a)
              : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
 }
 
+int get_tree_height(ArvoreRB *a)
+{
+  int height = 0;
+  ArvoreRB *no = a;
+  while (no != NULL)
+  {
+    if (!is_red_node(no))
+      height++;
+    no = no->esq;
+  }
+  return height;
+}
+
+int arv_rb_check(ArvoreRB *a, int myHeight, int height)
+{
+  if (a == NULL)
+    return myHeight == height;
+
+  return arv_rb_check(a->esq, myHeight + !(is_red_node(a)), height) && arv_rb_check(a->dir, myHeight + !(is_red_node(a)), height);
+}
+
 int main()
 {
   ArvoreRB *a;
@@ -198,7 +219,7 @@ int main()
   printf("\n");
   a = inserir(a, 7);
   printTree(a, 1);
-  printf("\n");
+  printf("\n%d", arv_rb_check(a, 0, get_tree_height(a)));
   // printTreeOrder(a);
   arv_libera(a);
 }
