@@ -12,9 +12,36 @@ typedef struct arvoreRB
   struct arvoreRB *dir;
 } ArvoreRB;
 
-int eh_no_vermelho(ArvoreRB *no)
+int is_red_node(ArvoreRB *no)
 {
   return no && no->cor == RED;
+}
+
+ArvoreRB *rot_esq(ArvoreRB *no)
+{
+  ArvoreRB *tree = no->dir;
+  no->dir = tree->esq;
+  tree->esq = no;
+  tree->cor = no->cor;
+  no->cor = RED;
+  return (tree);
+}
+
+ArvoreRB *rot_dir(ArvoreRB *no)
+{
+  ArvoreRB *tree = no->esq;
+  no->esq = tree->dir;
+  tree->dir = no;
+  tree->cor = no->cor;
+  no->cor = RED;
+  return (tree);
+}
+
+void flip_cor(ArvoreRB *no)
+{
+  no->cor = RED;
+  no->esq->cor = BLACK;
+  no->dir->cor = BLACK;
 }
 
 int buscar(ArvoreRB *a, int v)
@@ -67,11 +94,11 @@ ArvoreRB *inserir(ArvoreRB *a, int v)
     a->cor = RED;
   }
 
-  if (a->dir && a->esq && a->dir->cor == RED && a->esq->cor == BLACK)
+  if (is_red_node(a->dir) && !is_red_node(a->esq))
     rot_esq(a);
-  else if (a->esq && a->esq->esq && a->esq->cor == RED && a->esq->esq->cor == RED)
+  else if (is_red_node(a->esq) && is_red_node(a->esq->esq))
     rot_dir(a);
-  else if (a->dir && a->esq && a->dir->cor == RED && a->esq->cor == RED)
+  else if (is_red_node(a->dir) && is_red_node(a->esq))
     flip_cor(a);
 
   return a;
@@ -150,33 +177,6 @@ int arv_bin_check(ArvoreRB *a)
              : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
 }
 
-ArvoreRB *rot_esq(ArvoreRB *no)
-{
-  ArvoreRB *tree = no->dir;
-  no->dir = tree->esq;
-  tree->esq = no;
-  tree->cor = no->cor;
-  no->cor = RED;
-  return (tree);
-}
-
-ArvoreRB *rot_dir(ArvoreRB *no)
-{
-  ArvoreRB *tree = no->esq;
-  no->esq = tree->dir;
-  tree->dir = no;
-  tree->cor = no->cor;
-  no->cor = RED;
-  return (tree);
-}
-
-void flip_cor(ArvoreRB *no)
-{
-  no->cor = RED;
-  no->esq->cor = BLACK;
-  no->dir->cor = BLACK;
-}
-
 int main()
 {
   ArvoreRB *a;
@@ -186,7 +186,7 @@ int main()
   inserir(a, 1);
   inserir(a, 4);
   inserir(a, 7);
-  printTree(a);
+  printTree(a, 2);
   printTreeOrder(a);
   arv_libera(a);
 }
