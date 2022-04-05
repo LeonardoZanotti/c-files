@@ -22,16 +22,16 @@ int buscar(ArvoreRB *a, int v)
   return a != NULL && (v < a->info ? buscar(a->esq, v) : (v > a->info ? buscar(a->dir, v) : 1));
 }
 
-void in_order(ArvoreRB *a)
+void printTreeOrder(ArvoreRB *a)
 {
   if (!a)
     return;
-  in_order(a->esq);
+  printTreeOrder(a->esq);
   printf("%d ", a->info);
-  in_order(a->dir);
+  printTreeOrder(a->dir);
 }
 
-void print(ArvoreRB *a, int spaces)
+void printTree(ArvoreRB *a, int spaces)
 {
   int i;
   for (i = 0; i < spaces; i++)
@@ -43,8 +43,107 @@ void print(ArvoreRB *a, int spaces)
   }
 
   printf("%d\n", a->info);
-  print(a->esq, spaces + 2);
-  print(a->dir, spaces + 2);
+  printTree(a->esq, spaces + 2);
+  printTree(a->dir, spaces + 2);
+}
+
+ArvoreRB *inserir(ArvoreRB *a, int v)
+{
+  if (a == NULL)
+  {
+    a = (ArvoreRB *)malloc(sizeof(ArvoreRB));
+    a->info = v;
+    a->esq = a->dir = NULL;
+  }
+  else if (v < a->info)
+  {
+    a->esq = inserir(a->esq, v);
+  }
+  else
+  {
+    a->dir = inserir(a->dir, v);
+  }
+  return a;
+}
+
+ArvoreRB *remover(ArvoreRB *a, int x)
+{
+  ArvoreRB *aux, *pai_aux;
+  int filhos = 0, tmp;
+
+  if (!a)
+    return (NULL);
+
+  if (a->info < x)
+    a->dir = remover(a->dir, x);
+  else if (a->info > x)
+    a->esq = remover(a->esq, x);
+  else
+  {
+    if (a->esq)
+      filhos++;
+    if (a->dir)
+      filhos++;
+
+    if (filhos == 0)
+    {
+      free(a);
+      return (NULL);
+    }
+    else if (filhos == 1)
+    {
+      aux = a->esq ? a->esq : a->dir;
+      free(a);
+      return (aux);
+    }
+    else
+    {
+      aux = a->esq;
+      pai_aux = a;
+      while (aux->dir)
+      {
+        pai_aux = aux;
+        aux = aux->dir;
+      }
+      tmp = a->info;
+      a->info = aux->info;
+      aux->info = tmp;
+      pai_aux->dir = remover(aux, tmp);
+      return (a);
+    }
+  }
+
+  return (a);
+}
+
+int verifica_arv_vazia(ArvoreRB *a)
+{
+  return (a == NULL);
+}
+
+ArvoreRB *arv_libera(ArvoreRB *a)
+{
+  if (!verifica_arv_vazia(a))
+  {
+    arv_libera(a->esq);
+    arv_libera(a->dir);
+    free(a);
+  }
+  return NULL;
+}
+
+int arv_bin_check(ArvoreRB *a)
+{
+  return a == NULL
+             ? 1
+             : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
+}
+
+int arv_rb_check(ArvoreRB *a)
+{
+  return a == NULL
+             ? 1
+             : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
 }
 
 int main()
