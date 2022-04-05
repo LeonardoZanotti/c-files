@@ -53,16 +53,27 @@ ArvoreRB *inserir(ArvoreRB *a, int v)
   {
     a = (ArvoreRB *)malloc(sizeof(ArvoreRB));
     a->info = v;
+    a->cor = BLACK;
     a->esq = a->dir = NULL;
   }
   else if (v < a->info)
   {
     a->esq = inserir(a->esq, v);
+    a->cor = RED;
   }
   else
   {
     a->dir = inserir(a->dir, v);
+    a->cor = RED;
   }
+
+  if (a->dir && a->esq && a->dir->cor == RED && a->esq->cor == BLACK)
+    rot_esq(a);
+  else if (a->esq && a->esq->esq && a->esq->cor == RED && a->esq->esq->cor == RED)
+    rot_dir(a);
+  else if (a->dir && a->esq && a->dir->cor == RED && a->esq->cor == RED)
+    flip_cor(a);
+
   return a;
 }
 
@@ -139,13 +150,6 @@ int arv_bin_check(ArvoreRB *a)
              : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
 }
 
-int arv_rb_check(ArvoreRB *a)
-{
-  return a == NULL
-             ? 1
-             : ((a->esq == NULL || a->info > a->esq->info) && (a->dir == NULL || a->info < a->dir->info) && arv_bin_check(a->esq) && arv_bin_check(a->dir));
-}
-
 ArvoreRB *rot_esq(ArvoreRB *no)
 {
   ArvoreRB *tree = no->dir;
@@ -176,4 +180,13 @@ void flip_cor(ArvoreRB *no)
 int main()
 {
   ArvoreRB *a;
+  inserir(a, 5);
+  inserir(a, 3);
+  inserir(a, 9);
+  inserir(a, 1);
+  inserir(a, 4);
+  inserir(a, 7);
+  printTree(a);
+  printTreeOrder(a);
+  arv_libera(a);
 }

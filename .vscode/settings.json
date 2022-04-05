@@ -10,5 +10,6 @@
         "algorithm": "c",
         "typeinfo": "c",
         "utility": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }
