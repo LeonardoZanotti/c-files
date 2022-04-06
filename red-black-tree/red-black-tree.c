@@ -3,7 +3,6 @@
 
 #define BLACK 0
 #define RED 1
-#define DOUBLE_BLACK -1
 
 typedef struct arvoreRB
 {
@@ -111,6 +110,9 @@ ArvoreRB *inserir(ArvoreRB *a, int v)
   return fixRBTree(a);
 }
 
+// https://iq.opengenus.org/red-black-tree-deletion/
+// http://www.stolerman.net/studies/cs521/red_black_trees.pdf
+// https://www.cs.purdue.edu/homes/ayg/CS251/slides/chap13c.pdf
 ArvoreRB *remover(ArvoreRB *a, int x)
 {
   ArvoreRB *aux, *pai_aux;
@@ -246,9 +248,12 @@ int main()
   a = inserir(a, 10);
   printTree(a, 1);
   printf("\n%d\n", arv_rb_check(a, 0, get_tree_height(a)));
-  a = remover(a, 1);
-  a = remover(a, 6);
-  a = remover(a, 8);
+  // a = remover(a, 1);
+  // a = remover(a, 6);
+  // a = remover(a, 8);
+  a = remover(a, 9);
+  a = remover(a, 4);
+  a = remover(a, 7);
   printTree(a, 1);
   printf("\n%d\n", arv_rb_check(a, 0, get_tree_height(a)));
   // printTreeOrder(a);
