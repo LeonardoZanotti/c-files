@@ -129,6 +129,7 @@ ArvoreRB *inserir(ArvoreRB *a, int v)
 // https://iq.opengenus.org/red-black-tree-deletion/
 // http://www.stolerman.net/studies/cs521/red_black_trees.pdf
 // https://www.cs.purdue.edu/homes/ayg/CS251/slides/chap13c.pdf
+// https://algs4.cs.princeton.edu/33balanced/RedBlackBST.java.html
 ArvoreRB *remover(ArvoreRB *a, int x)
 {
   ArvoreRB *aux, *pai_aux;
