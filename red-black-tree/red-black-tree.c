@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DOUBLE_BLACK -1
 #define BLACK 0
 #define RED 1
 
@@ -12,9 +13,24 @@ typedef struct arvoreRB
   struct arvoreRB *dir;
 } ArvoreRB;
 
+int is_double_black_node(ArvoreRB *no)
+{
+  return no && no->cor == DOUBLE_BLACK;
+}
+
+int is_black_node(ArvoreRB *no)
+{
+  return no && no->cor == BLACK;
+}
+
 int is_red_node(ArvoreRB *no)
 {
   return no && no->cor == RED;
+}
+
+int verifica_arv_vazia(ArvoreRB *a)
+{
+  return (a == NULL);
 }
 
 ArvoreRB *rot_esq(ArvoreRB *no)
@@ -46,7 +62,7 @@ void flip_cor(ArvoreRB *no)
 
 ArvoreRB *fixRBTree(ArvoreRB *a)
 {
-  if (is_red_node(a->dir) && !is_red_node(a->esq))
+  if (is_red_node(a->dir) && is_black_node(a->esq))
     a = rot_esq(a);
   else if (is_red_node(a->esq) && is_red_node(a->esq->esq))
     a = rot_dir(a);
@@ -123,32 +139,40 @@ ArvoreRB *remover(ArvoreRB *a, int x)
 
   if (a->info < x)
   {
-    isBlack = !is_red_node(a->dir);
+    isBlack = is_black_node(a->dir);
     a->dir = remover(a->dir, x);
-    if ((isBlack && is_red_node(a)) || (!isBlack && !is_red_node(a)))
+    if ((isBlack && is_red_node(a)) || (!isBlack && is_black_node(a)))
     {
       if (a->dir == NULL)
         a->cor = BLACK;
       else if (a->dir->esq == NULL && a->dir->dir == NULL)
         a->dir->cor = BLACK;
     }
-    else if (isBlack && !is_red_node(a))
-    {
-    }
+    else if (isBlack && is_black_node(a))
+      // a = rot_dir(a);
+      if (verifica_arv_vazia(a->dir) && verifica_arv_vazia(a->esq))
+        a->cor = DOUBLE_BLACK;
+      else if (!verifica_arv_vazia(a->dir))
+        a->dir->cor = DOUBLE_BLACK;
   }
   else if (a->info > x)
   {
-    isBlack = !is_red_node(a->esq);
+    isBlack = is_black_node(a->esq);
     a->esq = remover(a->esq, x);
-    if ((isBlack && is_red_node(a)) || (!isBlack && !is_red_node(a)))
+    if ((isBlack && is_red_node(a)) || (!isBlack && is_black_node(a)))
     {
       if (a->esq == NULL)
         a->cor = BLACK;
       else if (a->esq->esq == NULL && a->esq->dir == NULL)
         a->esq->cor = BLACK;
     }
-    else if (isBlack && !is_red_node(a))
+    else if (isBlack && is_black_node(a))
     {
+      // a = rot_esq(a);
+      if (verifica_arv_vazia(a->esq) && verifica_arv_vazia(a->dir))
+        a->cor = DOUBLE_BLACK;
+      else if (!verifica_arv_vazia(a->esq))
+        a->esq->cor = DOUBLE_BLACK;
     }
   }
   else
@@ -186,12 +210,47 @@ ArvoreRB *remover(ArvoreRB *a, int x)
     }
   }
 
-  return fixRBTree(a);
-}
+  // Checking double black
+  if (is_double_black_node(a->esq))
+  {
+    if (is_red_node(a->dir))
+      a = rot_esq(a);
+    if (is_black_node(a->dir) && is_black_node(a->dir->esq) && is_black_node(a->dir->dir))
+    {
+      a->cor = DOUBLE_BLACK;
+      a->dir->cor = RED;
+    }
+    if (is_black_node(a->dir) && is_red_node(a->dir->esq) && is_black_node(a->dir->dir))
+      a = rot_dir(a->dir);
+    if (is_black_node(a->dir) && is_black_node(a->dir->esq) && is_red_node(a->dir->dir))
+    {
+      a->dir->cor = a->cor;
+      a->dir->dir->cor = BLACK;
+      a = rot_esq(a);
+      a->cor = BLACK;
+    }
+  }
+  else if (is_double_black_node(a->dir))
+  {
+    if (is_red_node(a->esq))
+      a = rot_esq(a);
+    if (is_black_node(a->esq) && is_black_node(a->esq->esq) && is_black_node(a->esq->dir))
+    {
+      a->cor = DOUBLE_BLACK;
+      a->dir->cor = RED;
+    }
+    if (is_black_node(a->esq) && is_red_node(a->esq->esq) && is_black_node(a->esq->dir))
+      a = rot_dir(a->esq);
+    if (is_black_node(a->esq) && is_black_node(a->esq->esq) && is_red_node(a->esq->dir))
+    {
+      a->esq->cor = a->cor;
+      a->esq->dir->cor = BLACK;
+      a = rot_esq(a);
+      a->cor = BLACK;
+    }
+  }
 
-int verifica_arv_vazia(ArvoreRB *a)
-{
-  return (a == NULL);
+  return fixRBTree(a);
 }
 
 ArvoreRB *arv_libera(ArvoreRB *a)
@@ -218,7 +277,7 @@ int get_tree_height(ArvoreRB *a)
   ArvoreRB *no = a;
   while (no != NULL)
   {
-    if (!is_red_node(no))
+    if (is_black_node(no))
       height++;
     no = no->esq;
   }
