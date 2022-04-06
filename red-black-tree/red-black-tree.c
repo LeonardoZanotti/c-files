@@ -130,7 +130,7 @@ ArvoreRB *remover(ArvoreRB *a, int x)
       if (a->dir == NULL)
         a->cor = BLACK;
       else if (a->dir->esq == NULL && a->dir->dir == NULL)
-        a->dir = BLACK;
+        a->dir->cor = BLACK;
     }
     else if (isBlack && !is_red_node(a))
     {
@@ -145,7 +145,7 @@ ArvoreRB *remover(ArvoreRB *a, int x)
       if (a->esq == NULL)
         a->cor = BLACK;
       else if (a->esq->esq == NULL && a->esq->dir == NULL)
-        a->esq = BLACK;
+        a->esq->cor = BLACK;
     }
     else if (isBlack && !is_red_node(a))
     {
@@ -247,7 +247,8 @@ int main()
   a = inserir(a, 8);
   a = inserir(a, 10);
   printTree(a, 1);
-  printf("\n%d\n", arv_rb_check(a, 0, get_tree_height(a)));
+  printf("\nBINARY OK: %d\n", arv_bin_check(a));
+  printf("RED BLACK OK: %d\n\n", arv_rb_check(a, 0, get_tree_height(a)));
   // a = remover(a, 1);
   // a = remover(a, 6);
   // a = remover(a, 8);
@@ -255,7 +256,8 @@ int main()
   a = remover(a, 4);
   a = remover(a, 7);
   printTree(a, 1);
-  printf("\n%d\n", arv_rb_check(a, 0, get_tree_height(a)));
+  printf("\nBINARY OK: %d\n", arv_bin_check(a));
+  printf("RED BLACK OK: %d\n\n", arv_rb_check(a, 0, get_tree_height(a)));
   // printTreeOrder(a);
   arv_libera(a);
 }
